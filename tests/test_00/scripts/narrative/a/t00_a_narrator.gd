@@ -36,11 +36,21 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 			beat._action_tree = null
 		2:
 			beat._story_text = "Выбери, что будешь делать дальше."
-			beat._action_tree = T00_ActionNode.new ()
+			beat._action_tree = T00_Utils.fluent (
+				T00_ActionNode.new ()
+				.add_child (
+					T00_ObjectNode.new ()
+					.add_child (T00_Action.new ())
+				)
+				.add_child (
+					T00_ObjectNode.new ()
+					.add_child (T00_Action.new ())
+				)
+			)
 	
 	# Next iteration.
 	_step += 1
-	var max_step: int = 1
+	var max_step: int = 2
 	if _step > max_step:
 		_step = max_step
 	

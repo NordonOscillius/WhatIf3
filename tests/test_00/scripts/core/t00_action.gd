@@ -4,3 +4,6 @@ class_name T00_Action extends T00_ActionNode
 ## Экземпляр этого класса НЕ ДОЛЖЕН содержать потомков (_children.size () должен быть равен нулю).
 
 
+func get_panel_text () -> String:
+	
+	return "Abstract action"

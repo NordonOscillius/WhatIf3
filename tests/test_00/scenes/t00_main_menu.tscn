@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cvjuf6ylq6qdm"]
 
-[ext_resource type="Script" path="res://tests/test_00/scripts/t00_main_menu.gd" id="1_48ckq"]
+[ext_resource type="Script" path="res://tests/test_00/scripts/core/t00_main_menu.gd" id="1_bdlvm"]
 
 [node name="T00_MainMenu" type="Node2D"]
-script = ExtResource("1_48ckq")
+script = ExtResource("1_bdlvm")

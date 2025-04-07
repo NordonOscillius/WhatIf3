@@ -6,9 +6,11 @@ static var STATE_WAIT_INPUT: int = 1
 static var STATE_FADE_OUT: int = 2
 
 static var TOP_PANEL_HEIGHT: int = 50
-static var ACTION_PANEL_HEIGHT: int = 240
 static var TOP_PANEL_COLOR: Color = T00_Utils.hsl_to_rgb (0, 0, .04)
+static var ACTION_PANEL_HEIGHT: int = 240
 static var ACTION_PANEL_COLOR: Color = T00_Utils.hsl_to_rgb (0, 0, .04)
+static var ACTION_LABEL_SIZE: Vector2 = Vector2 (320, 24)
+static var ACTION_LABEL_SPACING: int = 4
 static var STORY_LABEL_BORDER_HORIZONTAL: int = 200
 static var STORY_LABEL_BORDER_VERTICAL: int = 60
 
@@ -22,6 +24,8 @@ var _cur_beat: T00_Beat
 var _selected_action: T00_Action = null
 
 var _story_label: Label
+## Массив, хранящий набор лейблов, представляющих варианты ответа.
+var _action_labels: Array[T00_ActionLabel] = []
 
 var _game: T00_Game
 
@@ -85,10 +89,51 @@ func _process (delta: float):
 				# Просим Повествователя дать нам следующий бит истории и меняем текст, отображаемый на экране.
 				_cur_beat = _game._narrator.get_next_beat (_selected_action)
 				_story_label.text = _cur_beat._story_text
+				# Обновляем панель действий.
+				update_action_panel ()
 				# Начинаем делать текст видимым.
 				_state = STATE_FADE_IN
 			
 			_story_label.modulate = Color (1, 1, 1, _fade_ratio)
+
+
+func update_action_panel ():
+	
+	var i: int
+	
+	# Удаляем старые лейблы.
+	i = _action_labels.size ()
+	while i:
+		i -= 1
+		var removed_label: Label = _action_labels.pop_back ()
+		remove_child (removed_label)
+		removed_label.queue_free ()
+	
+	# Если дерево отсутствует, выходим.
+	var tree: T00_ActionNode = _cur_beat._action_tree
+	if !tree:
+		return
+	
+	var num_root_children: int = tree.num_children
+	
+	var viewport_size: Vector2 = get_viewport_rect ().size
+	const top_border: float = 10
+	var actions_start_y: float = viewport_size.y - ACTION_PANEL_HEIGHT + top_border
+	
+	# Добавляем новые лейблы.
+	i = 0
+	var cur_y: float = actions_start_y
+	while i < num_root_children:
+		var label: Label = T00_ActionLabel.new ()
+		label.text = tree.get_child_at (i).get_panel_text ()
+		label.position = Vector2 (200, cur_y)
+		label.size = ACTION_LABEL_SIZE
+		_action_labels.push_back (label)
+		add_child (label)
+		
+		i += 1
+		cur_y += ACTION_LABEL_SIZE.y + ACTION_LABEL_SPACING
+	pass
 
 
 func _draw ():
@@ -127,7 +172,6 @@ func on_gui_input (event: InputEvent):
 				# Клик в любое место экрана срабатывает только при отсутствии выбора. Игрок не выбрал ничего.
 				_selected_action = null
 				_state = STATE_FADE_OUT
-				#print ("CLICK")
 
 
 func on_story_label_draw ():
