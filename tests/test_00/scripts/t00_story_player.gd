@@ -18,6 +18,8 @@ var _fade_speed: float = 4.0
 var _fade_ratio: float = .0
 ## Текущий бит истории. Получаем из Повествователя.
 var _cur_beat: T00_Beat
+## Действие, которое игрок выбрал в фазе STATE_WAIT_INPUT.
+var _selected_action: T00_Action = null
 
 var _story_label: Label
 
@@ -46,7 +48,6 @@ func _ready ():
 	_story_label.position.x = (viewport_size.x - _story_label.size.x) * .5
 	_story_label.position.y = TOP_PANEL_HEIGHT + STORY_LABEL_BORDER_VERTICAL
 	_story_label.text = _cur_beat._story_text
-	#_story_label.text = "Это просто какой-то текст. Смирись с этим.\n\nНеважно, сколько строк текста здесь будет отображено. Они все будут выравниваться по центру."
 	_story_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_story_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_story_label.modulate = Color (1, 1, 1, 0)
@@ -81,6 +82,10 @@ func _process (delta: float):
 			_fade_ratio -= delta * _fade_speed
 			if _fade_ratio < .0 || is_zero_approx (_fade_ratio):
 				_fade_ratio = .0
+				# Просим Повествователя дать нам следующий бит истории и меняем текст, отображаемый на экране.
+				_cur_beat = _game._narrator.get_next_beat (_selected_action)
+				_story_label.text = _cur_beat._story_text
+				# Начинаем делать текст видимым.
 				_state = STATE_FADE_IN
 			
 			_story_label.modulate = Color (1, 1, 1, _fade_ratio)
@@ -108,6 +113,9 @@ func on_viewport_size_changed ():
 
 func on_gui_input (event: InputEvent):
 	
+	if _state != STATE_WAIT_INPUT:
+		return
+	
 	if !_cur_beat:
 		return
 	
@@ -116,7 +124,10 @@ func on_gui_input (event: InputEvent):
 		var mb_event: InputEventMouseButton = event as InputEventMouseButton
 		if mb_event:
 			if mb_event.pressed && mb_event.button_index == MOUSE_BUTTON_LEFT && mb_event.global_position.y > TOP_PANEL_HEIGHT:
-				print ("CLICK")
+				# Клик в любое место экрана срабатывает только при отсутствии выбора. Игрок не выбрал ничего.
+				_selected_action = null
+				_state = STATE_FADE_OUT
+				#print ("CLICK")
 
 
 func on_story_label_draw ():

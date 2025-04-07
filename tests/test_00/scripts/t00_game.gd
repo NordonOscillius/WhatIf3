@@ -24,7 +24,8 @@ func _ready ():
 	_background.draw.connect (on_background_draw)
 	_canvas_layer.add_child (_background)
 	
-	_narrator = T00_Narrator.new ()
+	_narrator = T00_A_Narrator.new ()
+	#_narrator = T00_Narrator.new ()
 	
 	_story_player = T00_StoryPlayer.new (self)
 	_canvas_layer.add_child (_story_player)
