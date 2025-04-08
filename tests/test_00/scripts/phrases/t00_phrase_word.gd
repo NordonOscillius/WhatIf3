@@ -11,6 +11,6 @@ func _init (word: T00_UsedWord):
 	_word = word
 
 
-func get_string () -> String:
+func get_text () -> String:
 	
 	return _word.get_form ()

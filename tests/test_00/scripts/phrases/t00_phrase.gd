@@ -11,13 +11,13 @@ func add_part (part: T00_PhrasePart) -> T00_Phrase:
 	return self
 
 
-func get_string () -> String:
+func get_text () -> String:
 	
 	var result: String = ""
 	var num_parts: int = _parts.size ()
 	var i: int = 0
 	while i < num_parts:
-		result += _parts[i].get_string ()
+		result += _parts[i].get_text ()
 		result += " "
 		i += 1
 	

@@ -8,6 +8,7 @@ var _background: Sprite2D
 
 var _story_player: T00_StoryPlayer
 var _narrator: T00_Narrator
+var _world: T00_World
 
 
 func _ready ():
@@ -30,8 +31,11 @@ func _ready ():
 	_story_player = T00_StoryPlayer.new (self)
 	_canvas_layer.add_child (_story_player)
 	
+	_world = T00_World.new ()
+	
 	T00_Globals.game = self
 	T00_Globals.story_player = _story_player
+	T00_Globals.world = _world
 
 
 func _process (delta: float):

@@ -11,6 +11,6 @@ func _init (string: String):
 	_string = string
 
 
-func get_string () -> String:
+func get_text () -> String:
 	
 	return _string

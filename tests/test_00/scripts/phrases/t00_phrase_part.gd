@@ -6,7 +6,7 @@ class_name T00_PhrasePart extends RefCounted
 var _type: int
 
 
-func get_string () -> String:
+func get_text () -> String:
 	
 	printerr ("Abstract method")
 	return ""

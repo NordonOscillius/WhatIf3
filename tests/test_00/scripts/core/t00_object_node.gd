@@ -19,4 +19,4 @@ func __name (value: T00_Phrase) -> T00_ObjectNode:
 
 func get_panel_text () -> String:
 	
-	return "[Abstract object]" if _name == null else _name.get_string ()
+	return "[Abstract object]" if _name == null else _name.get_text ()
