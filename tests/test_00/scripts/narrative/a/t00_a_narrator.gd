@@ -24,6 +24,7 @@ func _init ():
 func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	
 	var i: int
+	var w: T00_A_Words = T00_A_Globals.words
 	
 	print ("Test Narrator: step ", _step)
 	
@@ -34,18 +35,40 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 			beat._story_text = "В кабинете царил полумрак, разгоняемый разве что единственной лампой, стоявшей на заваленном бумагами столе."
 			beat._action_tree = null
 		1:
-			beat._story_text = "Я работаю " + _hero._occupation._male_name.get_form_for_case_and_number (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE) + "."
+			beat._story_text = "Я работаю " + _hero._occupation._male_name.get_form (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE) + "."
 			beat._action_tree = null
 		2:
 			beat._story_text = "Выбери, что будешь делать дальше."
-			beat._action_tree = T00_ActionNode.new ()
-			i = 0
-			while i < 6:
-				beat._action_tree.add_child (
+			beat._action_tree = T00_Utils.fluent (
+				T00_ActionNode.new ()
+				.add_child (
 					T00_ObjectNode.new ()
+					.__name (
+						T00_Phrase.new ()
+						.add_part (
+							T00_PhraseWord.new (
+								T00_UsedNoun.new ()
+								.__noun (w.brodyaga)
+								.__usage (
+									T00_NounUsage.new ()
+									.__case (T00_WordCase.NOMINATIVE)
+									.__number (T00_WordNumber.SINGLE)
+								)
+							)
+						)
+					)
 					.add_child (T00_Action.new ())
 				)
-				i += 1
+			)
+			
+			#beat._action_tree = T00_ActionNode.new ()
+			#i = 0
+			#while i < 9:
+				#beat._action_tree.add_child (
+					#T00_ObjectNode.new ()
+					#.add_child (T00_Action.new ())
+				#)
+				#i += 1
 	
 	# Next iteration.
 	_step += 1

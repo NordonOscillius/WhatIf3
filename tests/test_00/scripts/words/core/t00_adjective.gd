@@ -1,4 +1,4 @@
-class_name T00_Adjective extends RefCounted
+class_name T00_Adjective extends T00_Lexeme
 
 
 ## Формы множественного числа для разных падежей.
@@ -39,6 +39,30 @@ func __neuter_single_forms (value: T00_AdjCaseForms) -> T00_Adjective:
 # ==================================================
 # ===================== COMMON =====================
 # ==================================================
+
+func get_form (gender: int, number: int, animacy: int, case: int) -> String:
+	
+	if number == T00_WordNumber.PLURAL:
+		return _plural_forms.get_form_for_case_and_animacy (case, animacy)
+	
+	match gender:
+		T00_WordGender.MASCULINE:
+			return _masculine_single_forms.get_form_for_case_and_animacy (case, animacy)
+		T00_WordGender.FEMININE:
+			return _feminine_single_forms.get_form_for_case_and_animacy (case, animacy)
+		T00_WordGender.NEUTER:
+			return _neuter_single_forms.get_form_for_case_and_animacy (case, animacy)
+		_:
+			printerr ("Wrong value for gender.")
+			return ""
+
+
+func get_form_for (usage: T00_WordUsage) -> String:
+	
+	var adj_usage: T00_AdjUsage = usage as T00_AdjUsage
+	assert (adj_usage != null)
+	return get_form (adj_usage._gender, adj_usage._number, adj_usage._animacy, adj_usage._case)
+
 
 func get_form_for_noun (noun: T00_Noun, number: int, case: int) -> String:
 	

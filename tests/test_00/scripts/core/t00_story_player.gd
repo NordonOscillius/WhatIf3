@@ -13,7 +13,7 @@ static var ACTION_LABEL_SIZE: Vector2 = Vector2 (280, 24)
 static var ACTION_LABEL_SPACING: Vector2 = Vector2 (32, 4)
 ## Смещение по вертикали от ВЕРХНЕГО КРАЯ ПАНЕЛИ ДЕЙСТВИЙ (не от лейбла пути).
 static var ACTION_LABEL_OFFSET_Y: int = 40
-static var ACTION_LABEL_COLUMN_CAPACITY: int = 7
+static var ACTION_LABEL_COLUMN_CAPACITY: int = 6
 static var PATH_LABEL_OFFSET_Y: int = 10
 static var PATH_LABEL_HEIGHT: int = 24
 static var PATH_LABEL_BORDER_HORIZONTAL: int = 200

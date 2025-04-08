@@ -1,4 +1,4 @@
-class_name T00_Verb extends RefCounted
+class_name T00_Verb extends T00_Lexeme
 
 # Инфинитив.
 var _infinitive: String
@@ -103,8 +103,12 @@ func __future_third_plural (value: String) -> T00_Verb:
 # ===================== COMMON =====================
 # ==================================================
 
-## Возвращает форму глагола (за исключением инфинитива) по его времени, лицу, роду и числу.
+## Возвращает форму глагола по его времени, лицу, роду и числу. Если в качестве всех параметров указаны значения UNKNOWN, то метод вернет инфинитив.
 func get_form (tense: int, person: int, gender: int, number: int) -> String:
+	
+	# Особый случай: нужно вернуть инфинитив.
+	if tense == T00_WordTense.UNKNOWN && person == T00_WordPerson.UNKNOWN && gender == T00_WordGender.UNKNOWN && number == T00_WordNumber.UNKNOWN:
+		return _infinitive
 	
 	match tense:
 		T00_WordTense.PAST:
@@ -177,6 +181,13 @@ func get_form (tense: int, person: int, gender: int, number: int) -> String:
 	
 	printerr ("Не знаю, как мы дошли до такой ошибки. Этого не может быть. Никак.")
 	return ""
+
+
+func get_form_for (usage: T00_WordUsage) -> String:
+	
+	var verb_usage: T00_VerbUsage = usage as T00_VerbUsage
+	assert (verb_usage != null)
+	return get_form (verb_usage._tense, verb_usage._person, verb_usage._gender, verb_usage._number)
 
 
 ## Возвращает форму глагола, которую можно употребить с существительным noun в числе number и времени tense. По умолчанию используется третье лицо ("Птица поет", "Корабль плыл"), но при необходимости можно указать первое или второе лицо, чтобы в дальнейшем заменить существительное местоимением, которое его заменяет: "Я (Иван) пою", "Он (Иван) поет".

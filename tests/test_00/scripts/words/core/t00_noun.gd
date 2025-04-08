@@ -1,4 +1,4 @@
-class_name T00_Noun extends RefCounted
+class_name T00_Noun extends T00_Lexeme
 
 
 var _single_forms: T00_NounCaseForms
@@ -34,7 +34,8 @@ func __animacy (value: int) -> T00_Noun:
 # ===================== COMMON =====================
 # ==================================================
 
-func get_form_for_case_and_number (case: int, number: int) -> String:
+#func get_form_for_case_and_number (case: int, number: int) -> String:
+func get_form (case: int, number: int) -> String:
 	
 	match number:
 		T00_WordNumber.SINGLE:
@@ -44,4 +45,12 @@ func get_form_for_case_and_number (case: int, number: int) -> String:
 		_:
 			printerr ("Unknown value for 'number' parameter (T00_WordNumber).")
 			return ""
+
+
+func get_form_for (usage: T00_WordUsage) -> String:
+	
+	var noun_usage: T00_NounUsage = usage as T00_NounUsage
+	assert (noun_usage != null)
+	return get_form (noun_usage._case, noun_usage._number)
+
 
