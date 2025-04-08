@@ -9,23 +9,34 @@ static var TOP_PANEL_HEIGHT: int = 50
 static var TOP_PANEL_COLOR: Color = T00_Utils.hsl_to_rgb (0, 0, .04)
 static var ACTION_PANEL_HEIGHT: int = 240
 static var ACTION_PANEL_COLOR: Color = T00_Utils.hsl_to_rgb (0, 0, .04)
-static var ACTION_LABEL_SIZE: Vector2 = Vector2 (320, 24)
-static var ACTION_LABEL_SPACING: int = 4
+static var ACTION_LABEL_SIZE: Vector2 = Vector2 (280, 24)
+static var ACTION_LABEL_SPACING: Vector2 = Vector2 (32, 4)
+## Смещение по вертикали от ВЕРХНЕГО КРАЯ ПАНЕЛИ ДЕЙСТВИЙ (не от лейбла пути).
+static var ACTION_LABEL_OFFSET_Y: int = 40
+static var ACTION_LABEL_COLUMN_CAPACITY: int = 7
+static var PATH_LABEL_OFFSET_Y: int = 10
+static var PATH_LABEL_HEIGHT: int = 24
+static var PATH_LABEL_BORDER_HORIZONTAL: int = 200
 static var STORY_LABEL_BORDER_HORIZONTAL: int = 200
 static var STORY_LABEL_BORDER_VERTICAL: int = 60
 
 var _state: int = STATE_FADE_IN
-var _fade_speed: float = 4.0
+var _fade_speed: float = 8.0
 ## Непрозрачность элементов на экране. Единица соответствует полностью видимому интерфейсу.
 var _fade_ratio: float = .0
 ## Текущий бит истории. Получаем из Повествователя.
 var _cur_beat: T00_Beat
 ## Действие, которое игрок выбрал в фазе STATE_WAIT_INPUT.
 var _selected_action: T00_Action = null
+## Узел дерева действий, в котором мы находимся и относительно которого следует отображать список доступных узлов и действий.
+var _entered_node: T00_ActionNode = null
 
+## Центральный лейбл с текстом истории.
 var _story_label: Label
 ## Массив, хранящий набор лейблов, представляющих варианты ответа.
 var _action_labels: Array[T00_ActionLabel] = []
+## Лейбл, отображающий путь до текущего узла (_entered_node) в дереве действий.
+var _path_label: T00_PathLabel
 
 var _game: T00_Game
 
@@ -42,6 +53,7 @@ func _ready ():
 	# Получаем первый бит истории от Повествователя.
 	_cur_beat = _game._narrator.get_next_beat (null)
 	
+	# Центральный лейбл истории.
 	_story_label = Label.new ()
 	_story_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var story_label_size: Vector2 = Vector2 (
@@ -58,6 +70,15 @@ func _ready ():
 	#_story_label.draw.connect (on_story_label_draw)
 	_story_label.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child (_story_label)
+	
+	# Лейбл пути.
+	_path_label = T00_PathLabel.new ()
+	_path_label.text = get_path_label_empty_text ()
+	_path_label.size = Vector2 (viewport_size.x - PATH_LABEL_BORDER_HORIZONTAL * 2, PATH_LABEL_HEIGHT)
+	_path_label.position = Vector2 ((viewport_size.x - _path_label.size.x) * .5, viewport_size.y - ACTION_PANEL_HEIGHT + PATH_LABEL_OFFSET_Y)
+	_path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_path_label.modulate = Color (1, 1, 1, 0)
+	add_child (_path_label)
 	
 	_fade_ratio = .0
 	
@@ -77,7 +98,9 @@ func _process (delta: float):
 				_fade_ratio = 1.0
 				_state = STATE_WAIT_INPUT
 			
+			# Непрозрачность.
 			_story_label.modulate = Color (1, 1, 1, _fade_ratio)
+			set_action_labels_opacity (_fade_ratio)
 		
 		STATE_WAIT_INPUT:
 			return
@@ -86,54 +109,125 @@ func _process (delta: float):
 			_fade_ratio -= delta * _fade_speed
 			if _fade_ratio < .0 || is_zero_approx (_fade_ratio):
 				_fade_ratio = .0
-				# Просим Повествователя дать нам следующий бит истории и меняем текст, отображаемый на экране.
+				# Просим Повествователя дать нам следующий бит истории.
 				_cur_beat = _game._narrator.get_next_beat (_selected_action)
+				# Меняем центральный текст.
 				_story_label.text = _cur_beat._story_text
+				# Меняем узел, в котором находимся, на корень дерева. Если _action_tree == null, то и текущий узел будет отсутствовать.
+				_entered_node = _cur_beat._action_tree
 				# Обновляем панель действий.
 				update_action_panel ()
 				# Начинаем делать текст видимым.
 				_state = STATE_FADE_IN
 			
+			# Непрозрачность.
 			_story_label.modulate = Color (1, 1, 1, _fade_ratio)
+			set_action_labels_opacity (_fade_ratio)
 
 
 func update_action_panel ():
 	
-	var i: int
-	
 	# Удаляем старые лейблы.
-	i = _action_labels.size ()
+	var i: int = _action_labels.size ()
 	while i:
 		i -= 1
 		var removed_label: Label = _action_labels.pop_back ()
 		remove_child (removed_label)
 		removed_label.queue_free ()
 	
+	# Устанавливаем текст для лейбла пути.
+	if _entered_node:
+		_path_label.text = get_path_label_useful_text ()
+	else:
+		_path_label.text = get_path_label_empty_text ()
+	
 	# Если дерево отсутствует, выходим.
 	var tree: T00_ActionNode = _cur_beat._action_tree
 	if !tree:
 		return
 	
-	var num_root_children: int = tree.num_children
+	#var node: T00_ActionNode = _entered_node
+	#if !_entered_node:
+		#return
+	
+	var num_node_children: int = _entered_node.num_children
 	
 	var viewport_size: Vector2 = get_viewport_rect ().size
-	const top_border: float = 10
-	var actions_start_y: float = viewport_size.y - ACTION_PANEL_HEIGHT + top_border
+	var actions_start_y: float = viewport_size.y - ACTION_PANEL_HEIGHT + ACTION_LABEL_OFFSET_Y
+	
+	# Сколько лейблов нужно добавить. Пока что так.
+	var num_labels_to_add: int = num_node_children
+	var num_columns: int = int (ceilf (float (num_labels_to_add) / float (ACTION_LABEL_COLUMN_CAPACITY)))
+	# Ширина группы, состоящей из всех колонок.
+	var group_width: float = ACTION_LABEL_SIZE.x * num_columns + ACTION_LABEL_SPACING.x * (num_columns - 1)
+	var actions_start_x: float = (viewport_size.x - group_width) * .5
+	# На совсем худой конец, чтобы было видно, что косяк.
+	if actions_start_x < 0:
+		actions_start_x = 0
 	
 	# Добавляем новые лейблы.
-	i = 0
-	var cur_y: float = actions_start_y
-	while i < num_root_children:
-		var label: Label = T00_ActionLabel.new ()
-		label.text = tree.get_child_at (i).get_panel_text ()
-		label.position = Vector2 (200, cur_y)
-		label.size = ACTION_LABEL_SIZE
-		_action_labels.push_back (label)
-		add_child (label)
+	var column_index: int = 0
+	var num_labels_added: int = 0
+	var cur_x: float = actions_start_x
+	while column_index < num_columns:
+		var cur_y: float = actions_start_y
+		var label_inner_index: int = 0
+		while label_inner_index < ACTION_LABEL_COLUMN_CAPACITY:
+			var cur_node: T00_ActionNode = _entered_node.get_child_at (num_labels_added)
+			var label: Label = T00_ActionLabel.new (cur_node)
+			label.text = cur_node.get_panel_text ()
+			label.position = Vector2 (cur_x, cur_y)
+			label.size = ACTION_LABEL_SIZE
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			_action_labels.push_back (label)
+			add_child (label)
+			
+			# Next iteration.
+			label_inner_index += 1
+			num_labels_added += 1
+			cur_y += ACTION_LABEL_SIZE.y + ACTION_LABEL_SPACING.y
+			if num_labels_added >= num_labels_to_add:
+				break
 		
-		i += 1
-		cur_y += ACTION_LABEL_SIZE.y + ACTION_LABEL_SPACING
+		column_index += 1
+		cur_x += ACTION_LABEL_SIZE.x + ACTION_LABEL_SPACING.x
+	
 	pass
+
+
+func set_action_labels_opacity (opacity: float):
+	
+	var mod_color: Color = Color (1, 1, 1, opacity)
+	
+	var i: int = _action_labels.size ()
+	while i:
+		i -= 1
+		_action_labels[i].modulate = mod_color
+	
+	_path_label.modulate = mod_color
+
+
+func get_path_label_empty_text () -> String:
+	
+	return "----------------"
+
+
+func get_path_label_useful_text () -> String:
+	
+	if _entered_node.is_root ():
+		return get_path_label_empty_text ()
+	
+	var result: String = ""
+	var nodes: Array[T00_ActionNode] = _entered_node.get_path_to_root ()
+	# Исключаем корневой узел.
+	var i: int = nodes.size () - 1
+	while i:
+		i -= 1
+		result += nodes[i].get_panel_text ()
+		result += "/"
+	
+	# Отрезаем последний слеш.
+	return result.substr (0, result.length () - 1)
 
 
 func _draw ():
@@ -150,6 +244,10 @@ func _draw ():
 	# Устанавливаем размер self вручную, чтобы он регистрировал клики мышью.
 	size = viewport_size
 
+
+# ==================================================
+# ==================== HANDLERS ====================
+# ==================================================
 
 func on_viewport_size_changed ():
 	
@@ -177,3 +275,31 @@ func on_gui_input (event: InputEvent):
 func on_story_label_draw ():
 	
 	_story_label.draw_rect (Rect2 (Vector2.ZERO, _story_label.size), Color (Color.AQUA, .2))
+
+
+func on_action_label_pressed (label: T00_ActionLabel):
+	
+	var node: T00_ActionNode = label._node
+	var action: T00_Action = node as T00_Action
+	
+	# Если кликнули по лейблу действия, запоминаем выбранное действие и запускаем затемнение экрана.
+	if action:
+		_selected_action = action
+		_state = STATE_FADE_OUT
+	# Если кликнули по предмету, обновляем лейблы на панели действий.
+	else:
+		_entered_node = node
+		update_action_panel ()
+
+
+func on_path_label_pressed ():
+	
+	var parent_node: T00_ActionNode = _entered_node._parent
+	if parent_node:
+		_entered_node = parent_node
+		update_action_panel ()
+	# Если уже находимся в корневой ноде.
+	else:
+		pass
+
+

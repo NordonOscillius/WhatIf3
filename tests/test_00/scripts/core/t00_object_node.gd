@@ -4,4 +4,4 @@ class_name T00_ObjectNode extends T00_ActionNode
 
 func get_panel_text () -> String:
 	
-	return "Abstract object"
+	return "[Abstract object]"

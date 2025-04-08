@@ -76,6 +76,11 @@ func get_child_at (index: int) -> T00_ActionNode:
 	return _children[index]
 
 
+func get_child_index (child: T00_ActionNode) -> int:
+	
+	return _children.find (child)
+
+
 func is_root () -> bool:
 	
 	return _parent == null
@@ -94,7 +99,31 @@ func get_root () -> T00_ActionNode:
 	return null
 
 
-## Возвращает строку, с помощью которой этот узел будет отображаться на панели действий. Для узлов-объектов это название объекта; для узлов-действий это буквальное название действия или сконструированное в рантайме действие (в зависимости от названия объекта, над которым производится действие).
+## Возвращает путь от корневого узла дерева до текущего узла. В возвращенном массиве первым элементом является корневой узел дерева, последним - текущая нода.
+func get_path_from_root () -> Array[T00_ActionNode]:
+	
+	var path: Array[T00_ActionNode] = []
+	var cur_node: T00_ActionNode = self
+	while cur_node:
+		path.push_front (cur_node)
+		cur_node = cur_node._parent
+	
+	return path
+
+
+## Возвращает путь от текущего узла до корневого. В возвращенном массиве первым элементом является текущий узел, последним - корневой узел дерева.
+func get_path_to_root () -> Array[T00_ActionNode]:
+	
+	var path: Array[T00_ActionNode] = []
+	var cur_node: T00_ActionNode = self
+	while cur_node:
+		path.push_back (cur_node)
+		cur_node = cur_node._parent
+	
+	return path
+
+
+## (Abstract) Возвращает строку, с помощью которой этот узел будет отображаться на панели действий. Для узлов-объектов это название объекта; для узлов-действий это буквальное название действия или сконструированное в рантайме действие (в зависимости от названия объекта, над которым производится действие).
 func get_panel_text () -> String:
 	
 	return ""
