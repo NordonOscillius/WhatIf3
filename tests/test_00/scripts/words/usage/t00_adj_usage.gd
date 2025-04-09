@@ -35,6 +35,11 @@ static func create_initial () -> T00_AdjUsage:
 	return T00_AdjUsage.new ().to_initial ()
 
 
+func clone () -> T00_WordUsage:
+	
+	return T00_AdjUsage.new ().setup (_gender, _number, _animacy, _case)
+
+
 # ==================================================
 # ================== INITIALIZERS ==================
 # ==================================================

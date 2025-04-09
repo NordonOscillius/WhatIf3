@@ -12,7 +12,7 @@ var _gender: int
 var _number: int
 
 
-func setup (tense, person, gender, number) -> T00_VerbUsage:
+func setup (tense: int, person: int, gender: int, number: int) -> T00_VerbUsage:
 	
 	_tense = tense
 	_person = person
@@ -33,6 +33,11 @@ func to_infinitive () -> T00_VerbUsage:
 static func create_infinitive () -> T00_VerbUsage:
 	
 	return T00_VerbUsage.new ().to_infinitive ()
+
+
+func clone () -> T00_WordUsage:
+	
+	return T00_VerbUsage.new ().setup (_tense, _person, _gender, _number)
 
 
 # ==================================================

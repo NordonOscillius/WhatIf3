@@ -26,6 +26,31 @@ var _future_third_single: String
 var _future_third_plural: String
 
 
+func setup (infinitive: String, past_masculine: String, past_feminine: String, past_neuter: String, past_plural: String,
+	present_first_single: String, present_first_plural: String, present_second_single: String, present_second_plural: String, present_third_single: String, present_third_plural: String,
+	future_first_single: String, future_first_plural: String, future_second_single: String, future_second_plural: String, future_third_single: String, future_third_plural: String):
+	
+	_infinitive = infinitive
+	_past_masculine = past_masculine
+	_past_feminine = past_feminine
+	_past_neuter = past_neuter
+	_past_plural = past_plural
+	
+	_present_first_single = present_first_single
+	_present_first_plural = present_first_plural
+	_present_second_single = present_second_single
+	_present_second_plural = present_second_plural
+	_present_third_single = present_third_single
+	_present_third_plural = present_third_plural
+	
+	_future_first_single = future_first_single
+	_future_first_plural = future_first_plural
+	_future_second_single = future_second_single
+	_future_second_plural = future_second_plural
+	_future_third_single = future_third_single
+	_future_third_plural = future_third_plural
+
+
 # ==================================================
 # ================== INITIALIZERS ==================
 # ==================================================

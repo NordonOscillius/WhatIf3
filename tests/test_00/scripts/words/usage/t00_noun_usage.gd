@@ -27,6 +27,11 @@ static func create_initial () -> T00_NounUsage:
 	return T00_NounUsage.new ().to_initial ()
 
 
+func clone () -> T00_WordUsage:
+	
+	return T00_NounUsage.new ().setup (_case, _number)
+
+
 # ==================================================
 # ================== INITIALIZERS ==================
 # ==================================================
