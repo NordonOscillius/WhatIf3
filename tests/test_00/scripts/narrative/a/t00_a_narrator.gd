@@ -8,6 +8,9 @@ var _randomizer: RandomNumberGenerator
 
 var _hero: T00_A_Hero
 
+# Tests.
+var _story: S01_Story
+
 
 func _init ():
 	
@@ -18,6 +21,9 @@ func _init ():
 	T00_A_Globals.words = _words
 	
 	_hero = T00_A_Hero.new (self)
+	
+	# Test.
+	_story = S01_Story.new ()
 
 
 func get_next_beat (action: T00_Action = null) -> T00_Beat:
