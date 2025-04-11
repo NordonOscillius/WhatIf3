@@ -16,6 +16,7 @@ func _init ():
 	
 	_randomizer = RandomNumberGenerator.new ()
 	_randomizer.seed = 1
+	T00_A_Globals.randomizer = _randomizer
 	
 	_words = T00_A_Words.new ()
 	T00_A_Globals.words = _words

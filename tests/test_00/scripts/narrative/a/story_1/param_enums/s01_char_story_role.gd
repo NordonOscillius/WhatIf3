@@ -1,4 +1,4 @@
-class_name S01_CharStoryRole extends RefCounted
+class_name S01_CharStoryRole extends S01_ParamEnum
 ## Перечислитель Значений Параметров категории "Роль персонажа в истории".
 
 

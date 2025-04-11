@@ -1,4 +1,4 @@
-class_name S01_FamilyRelation extends RefCounted
+class_name S01_FamilyRelation extends S01_ParamEnum
 ## Перечислитель Значений Параметров категории "Родственная связь".
 
 
