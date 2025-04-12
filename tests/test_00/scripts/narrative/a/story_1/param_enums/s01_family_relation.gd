@@ -18,3 +18,33 @@ static var GRANDDAUGHTER: S01_StringParamValue = create_param_value (&"granddaug
 static func create_param_value (value: StringName) -> S01_StringParamValue:
 	
 	return S01_StringParamValue.new (S01_ParamClass.FAMILY_RELATION, value)
+
+
+static func get_choices_for_x_to_hero_relation () -> Array[S01_ParamValue]:
+	
+	return [FATHER, MOTHER, GRANDFATHER, GRANDMOTHER, BROTHER, SISTER]
+
+
+## Инвертирует родственную связь param_value, используя пол другого лица. Например, если param_value - отец FATHER, то метод вернет сына SON или дочь DAUGHTER в зависимости от значения gender.
+static func invert (param_value: S01_StringParamValue, gender: S01_StringParamValue) -> S01_StringParamValue:
+	
+	if gender.equals (S01_Gender.UNKNOWN):
+		printerr ("Unknown gender.")
+		return null
+	
+	var gender_is_male: bool = gender.equals (S01_Gender.MALE)
+	
+	match param_value._value:
+		FATHER.value: return SON if gender_is_male else DAUGHTER
+		MOTHER.value: return SON if gender_is_male else DAUGHTER
+		GRANDFATHER.value: return GRANDSON if gender_is_male else GRANDDAUGHTER
+		GRANDMOTHER.value: return GRANDSON if gender_is_male else GRANDDAUGHTER
+		BROTHER.value: return BROTHER if gender_is_male else SISTER
+		SISTER.value: return BROTHER if gender_is_male else SISTER
+		SON.value: return FATHER if gender_is_male else MOTHER
+		DAUGHTER.value: return FATHER if gender_is_male else MOTHER
+		GRANDSON.value: return GRANDFATHER if gender_is_male else GRANDMOTHER
+		GRANDDAUGHTER.value: return GRANDFATHER if gender_is_male else GRANDMOTHER
+	
+	printerr ("Can't invert family relation.")
+	return null

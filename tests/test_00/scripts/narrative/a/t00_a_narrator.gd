@@ -40,7 +40,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	
 	match _step:
 		0:
-			beat._story_text = "В кабинете царил полумрак, разгоняемый разве что единственной лампой, стоявшей на заваленном бумагами столе."
+			beat._story_text = _story.get_text_for_outline__location ()
 			beat._action_tree = null
 		1:
 			beat._story_text = "Я работаю " + _hero._occupation._male_name.get_form (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE) + "."

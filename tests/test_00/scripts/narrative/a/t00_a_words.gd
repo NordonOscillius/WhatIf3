@@ -81,6 +81,25 @@ var stoyat: T00_Verb
 
 
 # ==================================================
+# ==================== HELPERS =====================
+# ==================================================
+
+func get_all_male_names () -> Array[T00_Noun]:
+	
+	return [male_name_braian, male_name_gregori, male_name_deniel, male_name_devid, male_name_edvin, male_name_kevin, male_name_kris, male_name_lester, male_name_metiyu, male_name_oliver, male_name_stiven, male_name_tom, male_name_trevis]
+
+
+func get_all_female_names () -> Array[T00_Noun]:
+	
+	return [female_name_ayris, female_name_amanda, female_name_betti, female_name_dzheyn, female_name_dzhil, female_name_gven, female_name_greys, female_name_kristina, female_name_monika, female_name_patritsiya, female_name_samanta, female_name_veronika]
+
+
+func get_all_last_names () -> Array[T00_Noun]:
+	
+	return [last_name_bell, last_name_braun, last_name_devis, last_name_grey, last_name_harris, last_name_holl, last_name_kuper, last_name_morris, last_name_teilor, last_name_uayt, last_name_uoker, last_name_yang]
+
+
+# ==================================================
 # ====================== INIT ======================
 # ==================================================
 

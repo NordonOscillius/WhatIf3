@@ -4,6 +4,8 @@ class_name S01_ParamClass extends RefCounted
 
 ## StringName для категории "Родственные связи".
 static var FAMILY_RELATION: StringName = &"family_relation"
+## StringName для категории "Дружеские связи".
+static var FRIENDSHIP_RELATION: StringName = &"friendship_relation"
 ## StringName для категории "Роль персонажа в истории".
 static var CHAR_STORY_ROLE: StringName = &"char_story_role"
 ## StringName для категории "Тип места Интродакшена".
@@ -20,9 +22,11 @@ static var OCCUPATION: StringName = &"occupation"
 static var CLUE_CONTAINER_TYPE: StringName = &"clue_container_type"
 ## StringName для категории "Тип предмета".
 static var ITEM_TYPE: StringName = &"item_type"
+## StringName для категории "Место проживания".
+static var LIVING_PLACE: StringName = &"living_place"
+## StringName для категории "Пол".
+static var GENDER: StringName = &"gender"
 
 # Not implemented yet.
 
-static var FRIENDSHIP_RELATION: StringName = &"friendship_relation"
-static var GENDER: StringName = &"gender"
 static var AGE: StringName = &"age"

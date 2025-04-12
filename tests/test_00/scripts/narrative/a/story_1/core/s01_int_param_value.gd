@@ -38,6 +38,18 @@ func get_value_variant () -> Variant:
 	return _value
 
 
+func equals (param_value: S01_ParamValue, deny_null_param: bool = false) -> bool:
+	
+	if !param_value && deny_null_param:
+		printerr ("Trying to compare S01_ParamValue instance with null.")
+		assert (false)
+	
+	var int_param_value: S01_IntParamValue = param_value as S01_IntParamValue
+	if !int_param_value:
+		return false
+	return _value == int_param_value._value
+
+
 # ==================================================
 # ==================== ACCESSORS ===================
 # ==================================================

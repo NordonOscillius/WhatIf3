@@ -40,6 +40,14 @@ func get_value_variant () -> Variant:
 	return null
 
 
+## Возвращает true, если и классы (категории) _param_class, и значения обоих объектов S01_ParamValue совпадают. Если переданный параметр param_value равен null, то при deny_null_param == false метод вернет false, а при deny_null_param == true создаст исключение.
+func equals (param_value: S01_ParamValue, deny_null_param: bool = false) -> bool:
+	
+	printerr ("Abstract method.")
+	assert (false)
+	return false
+
+
 func as_int_param_value () -> S01_IntParamValue:
 	
 	return self as S01_IntParamValue
