@@ -32,6 +32,14 @@ func copy_to (param_value: S01_ParamValue):
 	assert (false)
 
 
+## Возвращает значение value, определенное в одном из подклассов этого класса.
+func get_value_variant () -> Variant:
+	
+	printerr ("Abstract method.")
+	assert (false)
+	return null
+
+
 func as_int_param_value () -> S01_IntParamValue:
 	
 	return self as S01_IntParamValue
@@ -46,10 +54,26 @@ func as_string_param_value () -> S01_StringParamValue:
 # ====================== UTILS =====================
 # ==================================================
 
-## Выбирает один из вариантов экземпляра S01_ParamValue из массива choices (с равной вероятностью) и возвращает этот экземпляр (по ссылке).
-static func pick_from_array (choices: Array[S01_ParamValue]) -> S01_ParamValue:
+## Используя T00_A_Globals.randomizer, псевдослучайным образом выбирает один из вариантов экземпляра S01_ParamValue из массива choices (все варианты считаются равновероятными) и возвращает этот экземпляр по ссылке.
+static func pick_random_param_value (choices: Array[S01_ParamValue]) -> S01_ParamValue:
 	
 	var index: int = T00_A_Globals.randomizer.randi_range (0, choices.size () - 1)
+	return choices[index]
+
+
+static func pick_random_int_param_value (choices: Array[S01_IntParamValue]) -> S01_IntParamValue:
+	
+	var index: int = T00_A_Globals.randomizer.randi_range (0, choices.size () - 1)
+	return choices[index]
+
+
+static func pick_random_string_param_value (choices: Array[S01_StringParamValue]) -> S01_StringParamValue:
+	
+	var index: int = T00_A_Globals.randomizer.randi_range (0, choices.size () - 1)
+	#index = T00_A_Globals.randomizer.randi_range (0, choices.size () - 1)
+	# Debug.
+	#print ("DEBUG: ", index, ", ", choices, ", ", choices.size ())
+	
 	return choices[index]
 
 

@@ -20,3 +20,9 @@ static func create_param_value (value: StringName) -> S01_StringParamValue:
 static func get_choices_for_story () -> Array[S01_StringParamValue]:
 	
 	return [POLICE_OFFICER, STRANGER, COURIER]
+
+
+## Случайный образом возвращает одно из Значений Параметра этого перечислителя (используется глобальный рандомайзер).
+static func pick_random_for_story () -> S01_StringParamValue:
+	
+	return S01_ParamValue.pick_random_string_param_value (get_choices_for_story ())

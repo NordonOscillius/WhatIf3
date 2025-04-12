@@ -15,7 +15,7 @@ var _story: S01_Story
 func _init ():
 	
 	_randomizer = RandomNumberGenerator.new ()
-	_randomizer.seed = 1
+	#_randomizer.seed = 123
 	T00_A_Globals.randomizer = _randomizer
 	
 	_words = T00_A_Words.new ()
@@ -25,6 +25,8 @@ func _init ():
 	
 	# Test.
 	_story = S01_Story.new ()
+	T00_A_Globals.story = _story
+	_story.generate ()
 
 
 func get_next_beat (action: T00_Action = null) -> T00_Beat:

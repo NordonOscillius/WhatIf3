@@ -10,6 +10,16 @@ static var CHAR_STORY_ROLE: StringName = &"char_story_role"
 static var INTRODUCTION_PLACE_TYPE: StringName = &"introduction_place_type"
 ## StringName для категории "Тип Интродьюсера".
 static var INTRODUCER_TYPE: StringName = &"introducer_type"
+## StringName для категории "Роль Локации в истории".
+static var LOCATION_STORY_ROLE: StringName = &"location_story_role"
+## StringName для категории "Тип Локации".
+static var LOCATION_TYPE: StringName = &"location_type"
+## StringName для категории "Род деятельности персонажа".
+static var OCCUPATION: StringName = &"occupation"
+## StringName для категории "Тип контейнера с зацепкой".
+static var CLUE_CONTAINER_TYPE: StringName = &"clue_container_type"
+## StringName для категории "Тип предмета".
+static var ITEM_TYPE: StringName = &"item_type"
 
 # Not implemented yet.
 

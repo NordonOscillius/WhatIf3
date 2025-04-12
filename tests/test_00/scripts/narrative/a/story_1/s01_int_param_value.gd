@@ -33,6 +33,11 @@ func copy_to (param_value: S01_ParamValue):
 	int_param_value._value = _value
 
 
+func get_value_variant () -> Variant:
+	
+	return _value
+
+
 # ==================================================
 # ==================== ACCESSORS ===================
 # ==================================================

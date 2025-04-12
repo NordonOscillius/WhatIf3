@@ -61,3 +61,4 @@ static func hsl_to_rgb (hue: float, saturation: float, lightness: float, alpha: 
 				blue = color
 				
 	return Color (red, green, blue, alpha)
+

@@ -16,7 +16,20 @@ static func create_param_value (value: StringName) -> S01_StringParamValue:
 	return S01_StringParamValue.new (S01_ParamClass.INTRODUCTION_PLACE_TYPE, value)
 
 
-## Возвращает массив, содержащий все варианты Значений Параметра класса INTRODUCTION_PLACE_TYPE, приемлемые для истории S01_Story.
-static func get_choices_for_story () -> Array[S01_StringParamValue]:
+## Случайный образом возвращает одно из Значений Параметра этого перечислителя (используется глобальный рандомайзер).
+static func select_for_story () -> S01_StringParamValue:
 	
-	return [HERO_HOME, HERO_WORK, POLICE_OFFICE]
+	var story: S01_Story = T00_A_Globals.story
+	var introducer_type: S01_ParamValue = story.get_param (S01_Story.PNAME__INTRODUCER_TYPE)
+	var choices: Array[S01_ParamValue]
+	match introducer_type.get_value_variant ():
+		S01_IntroducerType.POLICE_OFFICER.value:
+			return POLICE_OFFICE
+		S01_IntroducerType.STRANGER.value:
+			return HERO_HOME
+		S01_IntroducerType.COURIER.value:
+			choices = [HERO_HOME, HERO_WORK]
+			return S01_ParamValue.pick_random_param_value (choices)
+	
+	printerr ("Couldn't select a param value for IntroductionPlaceType; introducer_type = ", introducer_type.get_value_variant ())
+	return null
