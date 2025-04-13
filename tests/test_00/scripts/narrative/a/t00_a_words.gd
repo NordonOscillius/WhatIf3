@@ -67,6 +67,15 @@ var last_name_yang: T00_LastName
 
 
 # ==================================================
+# ================== ADJECTIVES ====================
+# ==================================================
+
+var chorniy: T00_Adjective
+var malenkiy: T00_Adjective
+var prozrachniy: T00_Adjective
+
+
+# ==================================================
 # ===================== VERBS ======================
 # ==================================================
 
@@ -107,6 +116,7 @@ func get_all_last_names () -> Array[T00_LastName]:
 func _init ():
 	
 	init_nouns ()
+	init_adjectives ()
 	init_verbs ()
 	init_male_names ()
 	init_female_names ()
@@ -227,6 +237,33 @@ func init_nouns ():
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
+
+
+func init_adjectives ():
+	
+	chorniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("черный", "черного", "черному", "черного", "черный", "черным", "черном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("черная", "черной", "черной", "черную", "черную", "черной", "черной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("черное", "черного", "черному", "черное", "черное", "черным", "черном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("черные", "черных", "черным", "черных", "черные", "черными", "черных"))
+	)
+	malenkiy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("маленький", "маленького", "маленькому", "маленького", "маленький", "маленьким", "маленьком"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("маленькая", "маленькой", "маленькой", "маленькую", "маленькую", "маленькой", "маленькой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("маленькое", "маленького", "маленькому", "маленькое", "маленькое", "маленьким", "маленьком"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("маленькие", "маленьких", "маленьким", "маленьких", "маленькие", "маленькими", "маленьких"))
+	)
+	prozrachniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("прозрачный", "прозрачного", "прозрачному", "прозрачного", "прозрачный", "прозрачным", "прозрачном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("прозрачная", "прозрачной", "прозрачной", "прозрачную", "прозрачную", "прозрачной", "прозрачной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("прозрачное", "прозрачного", "прозрачному", "прозрачное", "прозрачное", "прозрачным", "прозрачном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("прозрачные", "прозрачных", "прозрачным", "прозрачных", "прозрачные", "прозрачными", "прозрачных"))
+	)
+	
+	pass
 
 
 func init_verbs ():

@@ -18,6 +18,19 @@ var _instrumental: String
 var _prepositional: String
 
 
+func setup (nominative: String, genitive: String, dative: String, accusative_animate: String, accusative_inanimate: String, instrumental: String, prepositional: String) -> T00_AdjCaseForms:
+	
+	_nominative = nominative
+	_genitive = genitive
+	_dative = dative
+	_accusative_animate = accusative_animate
+	_accusative_inanimate = accusative_inanimate
+	_instrumental = instrumental
+	_prepositional = prepositional
+	
+	return self
+
+
 # ==================================================
 # ================== INITIALIZERS ==================
 # ==================================================

@@ -192,6 +192,13 @@ func get_outline_text () -> String:
 		if hero_full_name_is_clarification:
 			result += ","
 	
+	# Test phrase nodes.
+	var w: T00_A_Words = T00_A_Globals.words
+	var phrase: T00_AdjArrayNounPhrase = (
+		T00_AdjArrayNounPhrase.new ().setup ([w.malenkiy, w.chorniy], w.brodyaga)
+	)
+	print ("LOOK WHAT WE HAVE HERE: мы видим ", phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE)))
+	
 	return result
 
 
