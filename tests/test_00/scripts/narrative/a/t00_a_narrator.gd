@@ -8,8 +8,10 @@ var _randomizer: RandomNumberGenerator
 
 var _hero: T00_A_Hero
 
-# Tests.
+## Генерирующаяся История.
 var _story: S01_Story
+## Шаблон текста, управляющий ходом событий.
+var _template: S01_TextTemplate
 
 
 func _init ():
@@ -27,45 +29,14 @@ func _init ():
 	_story = S01_Story.new ()
 	T00_A_Globals.story = _story
 	_story.generate ()
+	
+	# Получаем текстовый шаблон.
+	_template = _story.get_template ()
 
 
 func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	
-	var i: int
-	var w: T00_A_Words = T00_A_Globals.words
-	
-	print ("Test Narrator: step ", _step)
-	
-	var beat: T00_Beat = T00_Beat.new ()
-	
-	match _step:
-		0:
-			beat._story_text = _story.get_outline_text ()
-			beat._action_tree = null
-		1:
-			beat._story_text = "Я работаю " + _hero._occupation._male_name.get_form (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE) + "."
-			beat._action_tree = null
-		2:
-			beat._story_text = "Выбери, что будешь делать дальше."
-			beat._action_tree = T00_Utils.fluent (
-				T00_ActionNode.new ()
-				.add_child (
-					T00_ObjectNode.new ()
-					.__name ("бродяга")
-					.add_child (T00_Action.new ())
-				)
-			)
-	
-	# Next iteration.
-	_step += 1
-	var max_step: int = 2
-	if _step > max_step:
-		_step = max_step
-	
-	_beat = beat
-	_book.push_back (beat)
-	
-	return beat
+	return _template.get_next_beat (action)
 
 
 func generate_story ():

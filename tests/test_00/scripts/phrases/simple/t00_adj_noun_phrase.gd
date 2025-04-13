@@ -22,8 +22,12 @@ func __noun (value: T00_Noun) -> T00_AdjNounPhrase:
 	return self
 
 
-func get_form_for (usage: T00_NounUsage) -> String:
+## Параметр usage должен являться экземпляром T00_NounUsage.
+func get_form_for (usage: T00_WordUsage) -> String:
 	
-	var noun_string: String = _noun.get_form_for (usage)
-	var adj_string: String = _adjective.get_form_for_noun (_noun, usage._number, usage._case)
+	var noun_usage: T00_NounUsage = usage as T00_NounUsage
+	assert (noun_usage)
+	
+	var noun_string: String = _noun.get_form_for (noun_usage)
+	var adj_string: String = _adjective.get_form_for_noun (_noun, noun_usage._number, noun_usage._case)
 	return adj_string + " " + noun_string

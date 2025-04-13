@@ -4,4 +4,6 @@ class_name T00_Thing extends RefCounted
 
 func get_phrase_for (purpose: T00_PhrasePurpose) -> T00_SimplePhrase:
 	
+	printerr ("Not implemented.")
+	assert (false)
 	return null

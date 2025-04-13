@@ -22,20 +22,23 @@ func __noun (value: T00_Noun) -> T00_AdjArrayNounPhrase:
 	return self
 
 
-func get_form_for (usage: T00_NounUsage) -> String:
+func get_form_for (usage: T00_WordUsage) -> String:
+	
+	var noun_usage: T00_NounUsage = usage as T00_NounUsage
+	if !noun_usage:
+		printerr ("The 'usage' parameter should be a T00_NounUsage instance.")
+		return ""
 	
 	var result: String = ""
-	
-	var noun_string: String = _noun.get_form_for (usage)
 	
 	var num_adjectives: int = _adjectives.size ()
 	var i: int = 0
 	while i < num_adjectives:
 		var adjective: T00_Adjective = _adjectives[i]
-		result += adjective.get_form_for_noun (_noun, usage._number, usage._case)
+		result += adjective.get_form_for_noun (_noun, noun_usage._number, noun_usage._case)
 		result += " "
 		
 		i += 1
 	
-	result += noun_string
+	result += _noun.get_form_for (noun_usage)
 	return result

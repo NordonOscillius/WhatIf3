@@ -90,6 +90,22 @@ func get_or_clarify_hero_occupation () -> S01_ParamValue:
 # ====================== TEXT ======================
 # ==================================================
 
+func get_template () -> S01_TextTemplate:
+	
+	match get_param (PNAME__INTRODUCER_TYPE).get_value_variant ():
+		S01_IntroducerType.POLICE_OFFICER.value:
+			return S01_PoliceTemplate.new ()
+		S01_IntroducerType.COURIER.value:
+			return S01_PoliceTemplate.new ()
+			#return S01_CourierTemplate.new ()
+		S01_IntroducerType.STRANGER.value:
+			return S01_PoliceTemplate.new ()
+			#return S01_StrangerTemplate.new ()
+	
+	printerr ("Unknown introducer type.")
+	return null
+
+
 func get_text_for_outline__location () -> String:
 	
 	var intro_location: S01_Location = get_introduction_location ()

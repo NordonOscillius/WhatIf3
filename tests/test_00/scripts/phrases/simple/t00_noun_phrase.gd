@@ -10,6 +10,9 @@ func __noun (value: T00_Noun) -> T00_NounPhrase:
 	return self
 
 
-func get_form_for (usage: T00_NounUsage) -> String:
+## Параметр usage должен являться экземпляром T00_NounUsage.
+func get_form_for (usage: T00_WordUsage) -> String:
 	
-	return _noun.get_form_for (usage)
+	var noun_usage: T00_NounUsage = usage as T00_NounUsage
+	assert (noun_usage)
+	return _noun.get_form_for (noun_usage)
