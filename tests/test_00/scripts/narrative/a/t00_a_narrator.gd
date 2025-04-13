@@ -40,7 +40,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	
 	match _step:
 		0:
-			beat._story_text = _story.get_text_for_outline__location ()
+			beat._story_text = _story.get_outline_text ()
 			beat._action_tree = null
 		1:
 			beat._story_text = "Я работаю " + _hero._occupation._male_name.get_form (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE) + "."
@@ -51,20 +51,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 				T00_ActionNode.new ()
 				.add_child (
 					T00_ObjectNode.new ()
-					.__name (
-						T00_Phrase.new ()
-						.add_part (
-							T00_PhraseWord.new (
-								T00_UsedNoun.new ()
-								.__noun (w.brodyaga)
-								.__usage (
-									T00_NounUsage.new ()
-									.__case (T00_WordCase.NOMINATIVE)
-									.__number (T00_WordNumber.SINGLE)
-								)
-							)
-						)
-					)
+					.__name ("бродяга")
 					.add_child (T00_Action.new ())
 				)
 			)

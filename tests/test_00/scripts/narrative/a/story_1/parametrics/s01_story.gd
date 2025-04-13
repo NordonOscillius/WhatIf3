@@ -127,13 +127,72 @@ func get_text_for_outline__location () -> String:
 	return ""
 
 
-func get_text_for_outline__action () -> String:
+func get_outline_text () -> String:
 	
+	# Здесь мы пытаемся применить шаблон текста и смотрим, что из этого получается.
+	# Шаблон такой: "В [место] приходит [лицо]".
 	
+	var intro_location: S01_Location = get_introduction_location ()
+	var location_type: S01_ParamValue = intro_location.get_location_type ()
 	
-	printerr ("Not implemented.")
-	assert (false)
-	return ""
+	var need_introducer_full_name: bool = false
+	var need_hero_full_name: bool = false
+	var hero_full_name_case: int
+	var hero_full_name_is_clarification: bool = false
+	var introducer_discovered: bool = false
+	
+	var hero_living_place_text: String
+	if S01_LivingPlace.APARTMENT.equals (_hero.get_living_place ()):
+		hero_living_place_text = "В квартиру главного героя"
+		hero_full_name_case = T00_WordCase.GENITIVE
+		hero_full_name_is_clarification = false
+	elif S01_LivingPlace.HOUSE.equals (_hero.get_living_place ()):
+		hero_living_place_text = "В дом, где живет главный герой,"
+		hero_full_name_case = T00_WordCase.NOMINATIVE
+		hero_full_name_is_clarification = true
+	
+	var result: String
+	match location_type.get_value_variant ():
+		S01_LocationType.POLICE_CABINET.value:
+			result = "В кабинет детектива"
+			need_introducer_full_name = true
+		S01_LocationType.CALL_CENTER_OPEN_SPACE.value:
+			result = "В кабинет колл-центра, где работает главный герой,"
+			need_hero_full_name = true
+			hero_full_name_case = T00_WordCase.NOMINATIVE
+			hero_full_name_is_clarification = true
+		S01_LocationType.CLASSROOM.value:
+			result = "В класс школы, где работает главный герой,"
+			need_hero_full_name = true
+			hero_full_name_case = T00_WordCase.NOMINATIVE
+			hero_full_name_is_clarification = true
+		S01_LocationType.LAWYER_OFFICE.value:
+			result = "В офис юридической конторы, где работает главный герой"
+			need_hero_full_name = true
+			hero_full_name_case = T00_WordCase.NOMINATIVE
+			hero_full_name_is_clarification = false
+		S01_LocationType.HALLWAY.value:
+			result = hero_living_place_text
+			need_hero_full_name = true
+		S01_LocationType.APARTMENT_ENTRANCE.value:
+			result = hero_living_place_text
+			need_hero_full_name = true
+		S01_LocationType.FRONT_YARD.value:
+			result = hero_living_place_text
+			need_hero_full_name = true
+	
+	if need_introducer_full_name:
+		result += " " + _introducer._first_name.get_form (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE)
+		result += " " + _introducer._last_name.get_form (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE, S01_Gender.get_word_gender_by_param (_introducer.get_gender ()))
+		introducer_discovered = true
+	
+	if need_hero_full_name:
+		result += " " + _hero._first_name.get_form (hero_full_name_case, T00_WordNumber.SINGLE)
+		result += " " + _hero._last_name.get_form (hero_full_name_case, T00_WordNumber.SINGLE, S01_Gender.get_word_gender_by_param (_hero.get_gender ()))
+		if hero_full_name_is_clarification:
+			result += ","
+	
+	return result
 
 
 func get_introduction_location () -> S01_Location:

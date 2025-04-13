@@ -13,7 +13,7 @@ static var PNAME__LIVING_PLACE: StringName = &"living_place"
 static var PNAME__GENDER: StringName = &"gender"
 
 var _first_name: T00_Noun
-var _last_name: T00_Noun
+var _last_name: T00_LastName
 
 
 func _init ():
@@ -47,15 +47,15 @@ func pick_random_first_name_by_gender (exclude: Array[T00_Noun] = []):
 	_first_name = choices[index]
 
 
-func pick_random_last_name (exclude: Array[T00_Noun] = []):
+func pick_random_last_name (exclude: Array[T00_LastName] = []):
 	
-	var choices: Array[T00_Noun] = T00_A_Globals.words.get_all_last_names ()
+	var choices: Array[T00_LastName] = T00_A_Globals.words.get_all_last_names ()
 	
 	# Удаляем из массива всех вариантов все элементы из exclude.
 	var num_exclusions: int = exclude.size ()
 	var i: int = 0
 	while i < num_exclusions:
-		var cur_exclusion: T00_Noun = exclude[i]
+		var cur_exclusion: T00_LastName = exclude[i]
 		var match_index: int = choices.find (cur_exclusion)
 		if match_index >= 0:
 			choices.remove_at (match_index)

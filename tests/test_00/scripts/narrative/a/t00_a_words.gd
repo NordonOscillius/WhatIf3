@@ -52,18 +52,18 @@ var female_name_samanta: T00_Noun
 var female_name_veronika: T00_Noun
 
 # Фамилии.
-var last_name_bell: T00_Noun
-var last_name_braun: T00_Noun
-var last_name_devis: T00_Noun
-var last_name_grey: T00_Noun
-var last_name_harris: T00_Noun
-var last_name_holl: T00_Noun
-var last_name_kuper: T00_Noun
-var last_name_morris: T00_Noun
-var last_name_teilor: T00_Noun
-var last_name_uayt: T00_Noun
-var last_name_uoker: T00_Noun
-var last_name_yang: T00_Noun
+var last_name_bell: T00_LastName
+var last_name_braun: T00_LastName
+var last_name_devis: T00_LastName
+var last_name_grey: T00_LastName
+var last_name_harris: T00_LastName
+var last_name_holl: T00_LastName
+var last_name_kuper: T00_LastName
+var last_name_morris: T00_LastName
+var last_name_teilor: T00_LastName
+var last_name_uayt: T00_LastName
+var last_name_uoker: T00_LastName
+var last_name_yang: T00_LastName
 
 
 # ==================================================
@@ -94,7 +94,7 @@ func get_all_female_names () -> Array[T00_Noun]:
 	return [female_name_ayris, female_name_amanda, female_name_betti, female_name_dzheyn, female_name_dzhil, female_name_gven, female_name_greys, female_name_kristina, female_name_monika, female_name_patritsiya, female_name_samanta, female_name_veronika]
 
 
-func get_all_last_names () -> Array[T00_Noun]:
+func get_all_last_names () -> Array[T00_LastName]:
 	
 	return [last_name_bell, last_name_braun, last_name_devis, last_name_grey, last_name_harris, last_name_holl, last_name_kuper, last_name_morris, last_name_teilor, last_name_uayt, last_name_uoker, last_name_yang]
 
@@ -110,6 +110,7 @@ func _init ():
 	init_verbs ()
 	init_male_names ()
 	init_female_names ()
+	init_last_names ()
 
 
 func init_nouns ():
@@ -471,88 +472,76 @@ func init_female_names ():
 func init_last_names ():
 	
 	last_name_bell = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Белл", "Белла", "Беллу", "Белла", "Беллом", "Белле"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Белл", "Белла", "Беллу", "Белла", "Беллом", "Белле"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Белл", "Белл", "Белл", "Белл", "Белл", "Белл"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Беллы", "Беллов", "Беллам", "Беллов", "Беллами", "Беллах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_braun = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Браун", "Брауна", "Брауну", "Брауна", "Брауном", "Брауне"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Браун", "Брауна", "Брауну", "Брауна", "Брауном", "Брауне"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Браун", "Браун", "Браун", "Браун", "Браун", "Браун"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Брауны", "Браунов", "Браунам", "Браунов", "Браунами", "Браунах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_devis = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Дэвис", "Дэвиса", "Дэвису", "Дэвиса", "Дэвисом", "Дэвисе"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Дэвис", "Дэвиса", "Дэвису", "Дэвиса", "Дэвисом", "Дэвисе"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Дэвис", "Дэвис", "Дэвис", "Дэвис", "Дэвис", "Дэвис"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Дэвисы", "Дэвисов", "Дэвисам", "Дэвисов", "Дэвисами", "Дэвисах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_grey = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Грей", "Грея", "Грею", "Грея", "Греем", "Грее"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Грей", "Грея", "Грею", "Грея", "Греем", "Грее"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Грей", "Грей", "Грей", "Грей", "Грей", "Грей"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Греи", "Греев", "Греям", "Греев", "Греями", "Греях"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_harris = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Харрис", "Харриса", "Харрису", "Харриса", "Харрисом", "Харрисе"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Харрис", "Харриса", "Харрису", "Харриса", "Харрисом", "Харрисе"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Харрис", "Харрис", "Харрис", "Харрис", "Харрис", "Харрис"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Харрисы", "Харрисов", "Харрисам", "Харрисов", "Харрисами", "Харрисах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_holl = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Холл", "Холла", "Холлу", "Холла", "Холлом", "Холле"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Холл", "Холла", "Холлу", "Холла", "Холлом", "Холле"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Холл", "Холл", "Холл", "Холл", "Холл", "Холл"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Холлы", "Холлов", "Холлам", "Холлов", "Холлами", "Холлах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_kuper = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Купер", "Купер", "Купер", "Купер", "Купер", "Купер"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Купер", "Купера", "Куперу", "Купера", "Купером", "Купере"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Купер", "Купер", "Купер", "Купер", "Купер", "Купер"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Куперы", "Куперов", "Куперам", "Куперов", "Куперами", "Куперах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_morris = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Моррис", "Морриса", "Моррису", "Морриса", "Моррисом", "Моррисе"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Моррис", "Морриса", "Моррису", "Морриса", "Моррисом", "Моррисе"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Моррис", "Моррис", "Моррис", "Моррис", "Моррис", "Моррис"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Моррисы", "Моррисов", "Моррисам", "Моррисов", "Моррисами", "Моррисах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_teilor = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Тейлор", "Тейлора", "Тейлору", "Тейлора", "Тейлором", "Тейлоре"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Тейлор", "Тейлора", "Тейлору", "Тейлора", "Тейлором", "Тейлоре"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Тейлор", "Тейлор", "Тейлор", "Тейлор", "Тейлор", "Тейлор"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Тейлоры", "Тейлоров", "Тейлорам", "Тейлоров", "Тейлорами", "Тейлорах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_uayt = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Уайт", "Уайта", "Уайту", "Уайта", "Уайтом", "Уайте"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Уайт", "Уайта", "Уайту", "Уайта", "Уайтом", "Уайте"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Уайт", "Уайт", "Уайт", "Уайт", "Уайт", "Уайт"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Уайты", "Уайтов", "Уайтам", "Уайтов", "Уайтами", "Уайтах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_uoker = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Уокер", "Уокера", "Уокеру", "Уокера", "Уокером", "Уокере"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Уокер", "Уокера", "Уокеру", "Уокера", "Уокером", "Уокере"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Уокер", "Уокер", "Уокер", "Уокер", "Уокер", "Уокер"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Уокеры", "Уокеров", "Уокерам", "Уокеров", "Уокерами", "Уокерах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	last_name_yang = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("Янг", "Янга", "Янгу", "Янга", "Янгом", "Янге"))
+		T00_LastName.new ()
+		.__masculine_single_forms (T00_NounCaseForms.new ().setup ("Янг", "Янга", "Янгу", "Янга", "Янгом", "Янге"))
+		.__feminine_single_forms (T00_NounCaseForms.new ().setup ("Янг", "Янг", "Янг", "Янг", "Янг", "Янг"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("Янги", "Янгов", "Янгам", "Янгов", "Янгами", "Янгах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
 	)
 	
 	pass

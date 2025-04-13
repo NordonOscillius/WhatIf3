@@ -35,3 +35,17 @@ static func get_for_family_relation (family_relation: S01_StringParamValue) -> S
 	
 	printerr ("Unknown family relation.")
 	return null
+
+
+## Возвращает константу класса T00_WordGender, соответствующую полу param_value.value. Если param_value.value == S01_Gender.UNKNOWN, то метод вернет -1.
+static func get_word_gender_by_param (param_value: S01_ParamValue) -> int:
+	
+	var string_param_value: S01_StringParamValue = param_value as S01_StringParamValue
+	assert (string_param_value)
+	match string_param_value._value:
+		S01_Gender.UNKNOWN.value: return -1
+		S01_Gender.MALE.value: return T00_WordGender.MASCULINE
+		S01_Gender.FEMALE.value: return T00_WordGender.FEMININE
+	
+	printerr ("Unknown gender value.")
+	return -1

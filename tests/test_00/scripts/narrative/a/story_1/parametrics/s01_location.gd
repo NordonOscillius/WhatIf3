@@ -11,3 +11,14 @@ static var PNAME__LOCATION_TYPE: StringName = &"location_type"
 func _init ():
 	
 	_name = &"location"
+
+
+# ==================================================
+# ==================== SHORTCUTS ===================
+# ==================================================
+
+func get_story_role () -> S01_StringParamValue:
+	return get_param (PNAME__STORY_ROLE)
+
+func get_location_type () -> S01_StringParamValue:
+	return get_param (PNAME__LOCATION_TYPE)
