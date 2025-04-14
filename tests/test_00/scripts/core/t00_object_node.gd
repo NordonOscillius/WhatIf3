@@ -9,6 +9,9 @@ var _name: String
 #var _thing: T00_Thing
 #var _inspection_level: int = 0
 
+## Ссылка на внутриигровой объект, Параметрик, которому соответствует этот узел.
+var _target: S01_Parametric
+
 
 # ==================================================
 # ================== INITIALIZERS ==================
@@ -16,6 +19,10 @@ var _name: String
 
 func __name (value: String) -> T00_ObjectNode:
 	_name = value
+	return self
+
+func __target (value: S01_Parametric) -> T00_ObjectNode:
+	_target = value
 	return self
 
 #func __thing (value: T00_Thing) -> T00_ObjectNode:

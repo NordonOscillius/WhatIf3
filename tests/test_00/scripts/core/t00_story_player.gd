@@ -294,6 +294,9 @@ func on_action_label_pressed (label: T00_ActionLabel):
 
 func on_path_label_pressed ():
 	
+	if !_entered_node:
+		return
+	
 	var parent_node: T00_ActionNode = _entered_node._parent
 	if parent_node:
 		_entered_node = parent_node

@@ -55,12 +55,17 @@ func generate ():
 	_introducer.pick_random_first_name_by_gender ([_hero._first_name])
 	_introducer.pick_random_last_name ([_hero._last_name])
 	# Как показывать Интродьюсера на панели действий.
-	_introducer.set_param (S01_Parametric.PNAME__ACTION_PANEL_NAME, S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, T00_RankLastNamePhrase.new ().setup (w.leytenant, _introducer._last_name, S01_Gender.get_word_gender_by_param(_introducer.get_gender ()))))
-	#_introducer.set_param (S01_Parametric.PNAME__ACTION_PANEL_NAME, S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, T00_NounPhrase.new ().setup (w.leytenant)))
+	_introducer.set_param (S01_Parametric.PNAME__ACTION_PANEL_NAME, S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, T00_RankLastNamePhrase.new ().setup (w.leytenant, _introducer._last_name, S01_Gender.get_word_gender_by_param (_introducer.get_gender ()))))
 	add_child (_introducer)
 	
 	set_param (PNAME__INTRODUCER_TYPE, S01_IntroducerType.pick_random_for_story ())
 	set_param (PNAME__INTRODUCTION_PLACE_TYPE, S01_IntroductionPlaceType.select_for_story ())
+	
+	# Ages.
+	_introducer.set_param (S01_Person.PNAME__AGE, S01_Age.select_for_introducer ())
+	var x_and_hero_ages: Array[S01_IntParamValue] = S01_Age.select_for_x_and_hero ()
+	_x.set_param (S01_Person.PNAME__AGE, x_and_hero_ages[0])
+	_hero.set_param (S01_Person.PNAME__AGE, x_and_hero_ages[1])
 	
 	var intro_location: S01_Location = S01_Location.new ()
 	intro_location.set_param (S01_Location.PNAME__STORY_ROLE, S01_LocationStoryRole.INTRODUCTION_PLACE)
@@ -120,7 +125,7 @@ func create_action_tree () -> T00_ActionNode:
 			else:
 				panel_name = "какой-то объект"
 			
-			var object_node: T00_ObjectNode = T00_ObjectNode.new ().__name (panel_name)
+			var object_node: T00_ObjectNode = T00_ObjectNode.new ().__name (panel_name).__target (cur_interactive)
 			action_tree.add_child (object_node)
 			
 			var num_actions: int = cur_interactive.num_actions
@@ -282,3 +287,21 @@ func get_introduction_location () -> S01_Location:
 			return location
 	
 	return null
+
+
+# ==================================================
+# ==================== SHORTCUTS ===================
+# ==================================================
+
+func get_introducer_type () -> S01_StringParamValue:
+	return get_param (PNAME__INTRODUCER_TYPE)
+
+func get_introduction_place_type () -> S01_StringParamValue:
+	return get_param (PNAME__INTRODUCTION_PLACE_TYPE)
+
+func get_x_to_hero_relation () -> S01_StringParamValue:
+	return get_param (PNAME__X_TO_HERO_RELATION)
+
+func get_hero_to_x_relation () -> S01_StringParamValue:
+	return get_param (PNAME__HERO_TO_X_RELATION)
+

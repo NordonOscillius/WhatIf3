@@ -32,6 +32,7 @@ static var GENDER: StringName = &"gender"
 ## StringName для категории "Название объекта, отображаемое на панели действий" (PhraseParamValue).
 static var ACTION_PANEL_NAME: StringName = &"action_panel_name"
 
-# Not implemented yet.
+# Int Param Values.
 
+## StringName для категории "Возраст" (IntParamValue).
 static var AGE: StringName = &"age"

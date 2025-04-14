@@ -11,6 +11,8 @@ static var PNAME__OCCUPATION: StringName = &"occupation"
 static var PNAME__LIVING_PLACE: StringName = &"living_place"
 # Название параметра для пола Человека.
 static var PNAME__GENDER: StringName = &"gender"
+# Название параметра для возраста Человека (IntParamValue).
+static var PNAME__AGE: StringName = &"age"
 
 var _first_name: T00_Noun
 var _last_name: T00_LastName
@@ -81,3 +83,6 @@ func get_living_place () -> S01_StringParamValue:
 
 func get_gender () -> S01_StringParamValue:
 	return get_param (PNAME__GENDER)
+
+func get_age () -> S01_IntParamValue:
+	return get_param (PNAME__AGE)
