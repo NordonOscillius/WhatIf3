@@ -9,6 +9,7 @@ static var BUTTON_SPACING: float = 8.0
 
 var _canvas_layer: CanvasLayer
 var _background: Sprite2D
+var _name_label: Label
 var _start_button: Button
 var _quit_button: Button
 
@@ -30,6 +31,14 @@ func _ready ():
 	_background = Sprite2D.new ()
 	_background.draw.connect (on_background_draw)
 	_canvas_layer.add_child (_background)
+	
+	_name_label = Label.new ()
+	_name_label.text = "История Икс"
+	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_name_label.add_theme_font_size_override ("font_size", 60)
+	_name_label.add_theme_color_override ("font_color", T00_Utils.hsl_to_rgb (0, 0, .7))
+	_canvas_layer.add_child (_name_label)
 	
 	_start_button = create_and_add_button ("Новая игра", on_start_button_pressed)
 	_quit_button = create_and_add_button ("Выйти", on_quit_button_pressed)
@@ -86,6 +95,10 @@ func on_viewport_size_changed ():
 		
 		cur_y += BUTTON_HEIGHT + BUTTON_SPACING
 		i += 1
+	
+	_name_label.size = Vector2 (view_width, 90)
+	_name_label.position.x = 0
+	_name_label.position.y = (button_group_top_y - _name_label.size.y) * .5
 
 
 func on_start_button_pressed ():
