@@ -22,9 +22,10 @@ func setup (type: StringName) -> T00_Action:
 	
 	_type = type
 	_name = _names_by_type[type]
+	
 	return self
 
 
 func get_panel_text () -> String:
 	
-	return "Abstract action"
+	return "Abstract action" if !_name else _name

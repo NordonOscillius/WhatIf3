@@ -48,14 +48,18 @@ func equals (param_value: S01_ParamValue, deny_null_param: bool = false) -> bool
 	return false
 
 
+# ==================================================
+# ==================== CASTING =====================
+# ==================================================
+
 func as_int_param_value () -> S01_IntParamValue:
-	
 	return self as S01_IntParamValue
 
-
 func as_string_param_value () -> S01_StringParamValue:
-	
 	return self as S01_StringParamValue
+
+func as_phrase_param_value () -> S01_PhraseParamValue:
+	return self as S01_PhraseParamValue
 
 
 # ==================================================

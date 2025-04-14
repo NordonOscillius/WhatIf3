@@ -26,14 +26,18 @@ func _init ():
 
 func generate ():
 	
+	var w: T00_A_Words = T00_A_Globals.words
+	
 	_hero = S01_Hero.new ()
 	_hero.set_param (S01_Person.PNAME__STORY_ROLE, S01_CharStoryRole.HERO)
 	_hero.set_param (S01_Person.PNAME__GENDER, S01_Gender.select_random ())
 	_hero.pick_random_first_name_by_gender ()
 	_hero.pick_random_last_name ()
+	add_child (_hero)
 	
 	_x = S01_X.new ()
 	_x.set_param (S01_Person.PNAME__STORY_ROLE, S01_CharStoryRole.X)
+	add_child (_x)
 	
 	# Кем Икс приходится герою (родственник или друг), кем герой приходится Иксу и пол Икса.
 	var x_to_hero_relation: S01_ParamValue = select_x_to_hero_relation ()
@@ -50,6 +54,10 @@ func generate ():
 	_introducer.set_param (S01_Person.PNAME__GENDER, S01_Gender.select_random ())
 	_introducer.pick_random_first_name_by_gender ([_hero._first_name])
 	_introducer.pick_random_last_name ([_hero._last_name])
+	# Как показывать Интродьюсера на панели действий.
+	_introducer.set_param (S01_Parametric.PNAME__ACTION_PANEL_NAME, S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, T00_RankLastNamePhrase.new ().setup (w.leytenant, _introducer._last_name, S01_Gender.get_word_gender_by_param(_introducer.get_gender ()))))
+	#_introducer.set_param (S01_Parametric.PNAME__ACTION_PANEL_NAME, S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, T00_NounPhrase.new ().setup (w.leytenant)))
+	add_child (_introducer)
 	
 	set_param (PNAME__INTRODUCER_TYPE, S01_IntroducerType.pick_random_for_story ())
 	set_param (PNAME__INTRODUCTION_PLACE_TYPE, S01_IntroductionPlaceType.select_for_story ())
@@ -58,12 +66,14 @@ func generate ():
 	intro_location.set_param (S01_Location.PNAME__STORY_ROLE, S01_LocationStoryRole.INTRODUCTION_PLACE)
 	intro_location.set_param (S01_Location.PNAME__LOCATION_TYPE, S01_LocationType.select_for_intro_location ())
 	_locations.push_back (intro_location)
+	add_child (intro_location)
 	
 	_hero.set_param (S01_Person.PNAME__LIVING_PLACE, S01_LivingPlace.select_for_hero (_hero))
 	
 	# Генерируется с предметами внутри, включая зацепку.
 	_clue_container = S01_ClueContainer.new ()
 	_clue_container.generate ()
+	add_child (_clue_container)
 	
 	pass
 
@@ -84,6 +94,49 @@ func get_or_clarify_hero_occupation () -> S01_ParamValue:
 		_hero.set_param (S01_Person.PNAME__OCCUPATION, occupation)
 	
 	return occupation
+
+
+## Обходит все интерактивные объекты, вложенные в эту Историю, и собирает по ним дерево действий, которое затем можно использовать для отображения действий на панели действий.
+func create_action_tree () -> T00_ActionNode:
+	
+	var action_tree: T00_ActionNode
+	
+	var interactive_objects: Array[S01_Parametric] = []
+	collect_interactive_children (interactive_objects)
+	if interactive_objects.size ():
+		action_tree = T00_ActionNode.new ()
+		var num_interactives: int = interactive_objects.size ()
+		var i: int = 0
+		while i < num_interactives:
+			var cur_interactive: S01_Parametric = interactive_objects[i]
+			var panel_name_param: S01_PhraseParamValue = cur_interactive.get_action_panel_name ()
+			var panel_name: String
+			if panel_name_param:
+				# А как мы узнаем, какой вообще тип WordUsage нам нужен?
+				# Получается, абстракция в этом случае заруинила всю идею.
+				# Хотя сейчас мне повезло: во всех конкретных реализация get_form_for() используются NounUsage.
+				# Наверное, это из-за того, что мы действуем НАД ОБЪЕКТОМ.
+				panel_name = panel_name_param._value.get_form_for (T00_NounUsage.create_initial ())
+			else:
+				panel_name = "какой-то объект"
+			
+			var object_node: T00_ObjectNode = T00_ObjectNode.new ().__name (panel_name)
+			action_tree.add_child (object_node)
+			
+			var num_actions: int = cur_interactive.num_actions
+			var j: int = 0
+			while j < num_actions:
+				var object_action: T00_Action = cur_interactive.get_action_at (j)
+				var tree_action: T00_Action = T00_Action.new ().setup (object_action._type)
+				object_node.add_child (tree_action)
+				
+				j += 1
+			
+			i += 1
+	else:
+		action_tree = null
+	
+	return action_tree
 
 
 # ==================================================

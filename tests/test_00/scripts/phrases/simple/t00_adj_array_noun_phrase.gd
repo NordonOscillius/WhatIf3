@@ -13,6 +13,13 @@ func setup (adjectives: Array[T00_Adjective], noun: T00_Noun) -> T00_AdjArrayNou
 	return self
 
 
+## Этот метод создает дубликат массива _adjectives, но сами объекты внутри него не клонируются.
+func clone_shallow () -> T00_SimplePhrase:
+	
+	var adj_copy: Array[T00_Adjective] = _adjectives.duplicate (false)
+	return T00_AdjArrayNounPhrase.new ().setup (adj_copy, _noun)
+
+
 func __adjectives (value: Array[T00_Adjective]) -> T00_AdjArrayNounPhrase:
 	_adjectives = value
 	return self
@@ -42,3 +49,31 @@ func get_form_for (usage: T00_WordUsage) -> String:
 	
 	result += _noun.get_form_for (noun_usage)
 	return result
+
+
+## Возвращает true, если _noun обеих фраз ссылаются на одно и то же существительное, а все элементы _adjectives - на одни и те же прилагательные (порядок имеет значение). Если phrase == null, то при нестрогой проверке метод вернет false, а при строгой кинет исключение.
+func equals (phrase: T00_SimplePhrase, deny_null_param: bool = false) -> bool:
+	
+	if !phrase && deny_null_param:
+		printerr ("Trying to compare T00_SimplePhrase instance with null.")
+		assert (false)
+	
+	var adj_noun_phrase: T00_AdjArrayNounPhrase = phrase as T00_AdjArrayNounPhrase
+	if !adj_noun_phrase:
+		return false
+	
+	if _noun == adj_noun_phrase._noun:
+		return false
+	
+	if _adjectives.size () != adj_noun_phrase._adjectives.size ():
+		return false
+	
+	var num_adjectives: int = _adjectives.size ()
+	var i: int = 0
+	while i < num_adjectives:
+		if _adjectives[i] != adj_noun_phrase._adjectives[i]:
+			return false
+		i += 1
+	
+	return true
+

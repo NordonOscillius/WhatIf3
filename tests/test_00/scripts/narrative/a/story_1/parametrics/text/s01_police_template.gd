@@ -21,7 +21,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	if !_flow_sentences.size ():
 		match _state:
 			STATE_EXPOSITION:
-				generate_sentences_for_exposition ()
+				generate_flow_for_exposition ()
 		pass
 	
 	# Если в очереди еще остались непоказанные предложения, показываем очередное.
@@ -45,7 +45,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	return beat
 
 
-func generate_sentences_for_exposition ():
+func generate_flow_for_exposition ():
 	
 	var story: S01_Story = T00_A_Globals.story
 	var w: T00_A_Words = T00_A_Globals.words
@@ -77,5 +77,41 @@ func generate_sentences_for_exposition ():
 	s2 += story._introducer._last_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE, S01_Gender.get_word_gender_by_param (introducer_gender))
 	s2 += "."
 	
+	# Сделаем кого-нибудь интерактивным.
+	story._introducer.create_and_add_action (T00_Action.GREET)
+	
+	## Соберем все интерактивные объекты.
+	#var interactive_objects: Array[S01_Parametric] = []
+	#story.collect_interactive_children (interactive_objects)
+	#if interactive_objects.size ():
+		#_flow_action_tree = T00_ActionNode.new ()
+		#var num_interactives: int = interactive_objects.size ()
+		#var i: int = 0
+		#while i < num_interactives:
+			#var cur_interactive: S01_Parametric = interactive_objects[i]
+			#var panel_name_param: S01_PhraseParamValue = cur_interactive.get_action_panel_name ()
+			#var panel_name: String
+			#if panel_name_param:
+				#panel_name = panel_name_param._value.get_form_for (T00_NounUsage.create_initial ())
+			#else:
+				#panel_name = "какой-то объект"
+			#
+			#var object_node: T00_ObjectNode = T00_ObjectNode.new ().__name (panel_name)
+			#_flow_action_tree.add_child (object_node)
+			#
+			#var num_actions: int = cur_interactive.num_actions
+			#var j: int = 0
+			#while j < num_actions:
+				#var object_action: T00_Action = cur_interactive.get_action_at (j)
+				#var tree_action: T00_Action = T00_Action.new ().setup (object_action._type)
+				#object_node.add_child (tree_action)
+				#
+				#j += 1
+			#
+			#i += 1
+	#else:
+		#_flow_action_tree = null
+	
 	_flow_sentences = [s1, s2]
+	_flow_action_tree = story.create_action_tree ()
 	_flow_next_state = STATE_GETTING_TO_TABLE

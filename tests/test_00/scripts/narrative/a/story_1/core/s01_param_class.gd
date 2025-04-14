@@ -27,6 +27,11 @@ static var LIVING_PLACE: StringName = &"living_place"
 ## StringName для категории "Пол".
 static var GENDER: StringName = &"gender"
 
+# Phrase Param Values.
+
+## StringName для категории "Название объекта, отображаемое на панели действий" (PhraseParamValue).
+static var ACTION_PANEL_NAME: StringName = &"action_panel_name"
+
 # Not implemented yet.
 
 static var AGE: StringName = &"age"
