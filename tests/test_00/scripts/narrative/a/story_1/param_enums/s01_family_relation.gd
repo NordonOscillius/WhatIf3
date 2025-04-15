@@ -48,3 +48,23 @@ static func invert (param_value: S01_StringParamValue, gender: S01_StringParamVa
 	
 	printerr ("Can't invert family relation.")
 	return null
+
+
+static func get_phrase_official (family_relation: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match family_relation.value:
+		FATHER.value: return T00_NounPhrase.new ().setup (w.otets)
+		MOTHER.value: return T00_NounPhrase.new ().setup (w.mat_)
+		GRANDFATHER.value: return T00_NounPhrase.new ().setup (w.ded)
+		GRANDMOTHER.value: return T00_NounPhrase.new ().setup (w.babushka)
+		BROTHER.value: return T00_NounPhrase.new ().setup (w.brat)
+		SISTER.value: return T00_NounPhrase.new ().setup (w.sestra)
+		SON.value: return T00_NounPhrase.new ().setup (w.syn)
+		DAUGHTER.value: return T00_NounPhrase.new ().setup (w.doch)
+		GRANDSON.value: return T00_NounPhrase.new ().setup (w.vnuk)
+		GRANDDAUGHTER.value: return T00_NounPhrase.new ().setup (w.vnuchka)
+	
+	printerr ("Unknown family relation type.")
+	return null

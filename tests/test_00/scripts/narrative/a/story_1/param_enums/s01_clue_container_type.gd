@@ -30,9 +30,9 @@ static func select_for_clue (clue: S01_ClueContainerItem) -> S01_StringParamValu
 	var clue_type: S01_ParamValue = clue.get_param (S01_ClueContainerItem.PNAME__ITEM_TYPE)
 	match clue_type.get_value_variant ():
 		S01_ItemType.TOKEN_MARK.value:
-			return S01_ParamValue.pick_random_string_param_value ([TRANSPARENT_BAG, PAPER_BAG])
+			return S01_ParamValue.pick_random_string_param_value ([TRANSPARENT_BAG, PAPER_BAG, BOX])
 		S01_ItemType.SMALL_KEY.value:
-			return S01_ParamValue.pick_random_string_param_value ([TRANSPARENT_BAG, PAPER_BAG])
+			return S01_ParamValue.pick_random_string_param_value ([TRANSPARENT_BAG, PAPER_BAG, BOX])
 		S01_ItemType.SHAPED_STONE.value:
 			return S01_ParamValue.pick_random_string_param_value ([PAPER_BAG, CYLINER_BUNDLE, BOX])
 		S01_ItemType.SHEET_OF_PAPER.value:

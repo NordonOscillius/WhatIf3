@@ -47,3 +47,40 @@ func get_items () -> Array[S01_ClueContainerItem]:
 		i += 1
 	
 	return result
+
+
+func get_description_short () -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match get_container_type ().value:
+		S01_ClueContainerType.TRANSPARENT_BAG.value: return T00_NounPhrase.new ().setup (w.paket)
+		S01_ClueContainerType.PAPER_BAG.value: return T00_NounPhrase.new ().setup (w.paket)
+		S01_ClueContainerType.CYLINER_BUNDLE.value: return T00_NounPhrase.new ().setup (w.svyortok)
+		S01_ClueContainerType.BOX.value: return T00_NounPhrase.new ().setup (w.korobka)
+	
+	printerr ("Unknown container type.")
+	return null
+
+
+func get_description_long () -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match get_container_type ().value:
+		S01_ClueContainerType.TRANSPARENT_BAG.value: return T00_AdjArrayNounPhrase.new ().setup ([w.nebolshoy, w.prozrachniy], w.paket)
+		S01_ClueContainerType.PAPER_BAG.value: return T00_AdjArrayNounPhrase.new ().setup ([w.nebolshoy, w.bumazhnyi], w.paket)
+		S01_ClueContainerType.CYLINER_BUNDLE.value: return T00_AdjArrayNounPhrase.new ().setup ([w.prodolgovatiy, w.krugliy], w.svyortok)
+		S01_ClueContainerType.BOX.value: return T00_AdjNounPhrase.new ().setup (w.nebolshoy, w.korobka)
+	
+	printerr ("Unknown container type.")
+	return null
+
+
+# ==================================================
+# ==================== SHORTCUTS ===================
+# ==================================================
+
+func get_container_type () -> S01_StringParamValue:
+	return get_param (PNAME__CONTAINER_TYPE)
+
