@@ -5,6 +5,7 @@ static var PNAME__CONTAINER_TYPE: StringName = &"container_type"
 static var PNAME__HEAVINESS: StringName = &"heaviness"
 
 #var _items: Array = []
+var _clue_item: S01_ClueContainerItem
 
 
 func _init ():
@@ -15,11 +16,11 @@ func _init ():
 func generate ():
 	
 	# Генерируем предмет зацепки.
-	var clue: S01_ClueContainerItem = S01_ClueContainerItem.new ()
-	clue._is_clue = true
-	clue.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.select_for_clue ())
+	_clue_item = S01_ClueContainerItem.new ()
+	_clue_item._is_clue = true
+	_clue_item.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.select_for_clue ())
 	#_items.push_back (clue)
-	add_child (clue)
+	add_child (_clue_item)
 	
 	# Если Интродакшен происходит в полицейском участке, то нужно передать наследство и ключ от дома.
 	var story: S01_Story = T00_A_Globals.story
@@ -31,7 +32,7 @@ func generate ():
 		add_child (key)
 	
 	# Подбираем тип контейнера по типу зацепки.
-	set_param (PNAME__CONTAINER_TYPE, S01_ClueContainerType.select_for_clue (clue))
+	set_param (PNAME__CONTAINER_TYPE, S01_ClueContainerType.select_for_clue (_clue_item))
 	# Устанавливаем название контейнера на панели действий.
 	set_param (PNAME__ACTION_PANEL_NAME, S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, get_description_short ()))
 	# Устанавливаем параметр "Оценка тяжести" в зависимости от того, какие предметы находятся в контейнере.

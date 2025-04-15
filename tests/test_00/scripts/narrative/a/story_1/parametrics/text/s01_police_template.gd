@@ -256,14 +256,19 @@ func generate_flow_for_clue_container_inspect ():
 	var s1: String = ""
 	match story._clue_container.get_container_type ().value:
 		S01_ClueContainerType.TRANSPARENT_BAG.value:
-			s1 += "Это был самый обычный полиэтиленовый пакет." if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Пакет был самый обычный "
+			s1 += "Это был самый обычный полиэтиленовый пакет." if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на пакет у себя в руках: самый обычный, из прозрачного полиэтилена."
+			var items: Array[S01_ClueContainerItem] = story._clue_container.get_items ()
+			var num_items: int = items.size ()
+			if num_items == 1:
+				s1 += " На его дне лежал "
 		S01_ClueContainerType.PAPER_BAG.value:
 			s1 += "Он " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Пакет "
 		S01_ClueContainerType.CYLINER_BUNDLE.value:
 			if _last_object_mentioned == MENTION_CLUE_CONTAINER:
-				s1 += "Он оказался тяжелее, чем я думал, и отдавал холодом - как будто железная болванка или камень, завернутый в большой лист бумаги."
+				s1 += "Он оказался тяжелее, чем я думал, и был холодным - как будто внутри, под бумажной оберткой, находился кусок железа или камень."
+				#s1 += "Он оказался тяжелее, чем я думал, и был холодным - как будто железная болванка или камень, завернутый в большой лист бумаги."
 			else:
-				s1 += "Я покачал сверток в руке. Для своего размера он был достаточно тяжелым – словно булыжник обернули листом бумаги."
+				s1 += "Я покачал сверток в руке. Для своего размера он был достаточно тяжелым – как будто булыжник обернули листом бумаги."
 			s1 += "Он " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Сверток "
 		S01_ClueContainerType.BOX.value:
 			s1 += "Она " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Коробка "

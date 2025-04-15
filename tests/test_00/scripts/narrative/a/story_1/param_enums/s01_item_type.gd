@@ -44,3 +44,19 @@ static func get_heaviness_assessment (item_type: S01_StringParamValue) -> S01_St
 	
 	printerr ("Unknown item type.")
 	return null
+
+
+static func get_description_short (item_type: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	match item_type.value:
+		TOKEN_MARK.value: return S01_Heaviness.LIGHT
+		SMALL_KEY.value: return S01_Heaviness.LIGHT
+		SHAPED_STONE.value: return S01_Heaviness.HEAVY
+		SHEET_OF_PAPER.value: return S01_Heaviness.LIGHT
+		STONE_BOX.value: return S01_Heaviness.HEAVY
+		HOUSE_KEY.value: return S01_Heaviness.LIGHT
+	
+	printerr ("Unknown item type.")
+	return null
+
+

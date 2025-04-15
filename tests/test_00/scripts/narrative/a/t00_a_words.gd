@@ -16,6 +16,9 @@ var doctor: T00_Noun
 var drug: T00_Noun
 var fermer: T00_Noun
 var leytenant: T00_Noun
+var kamen: T00_Noun
+var klyuch: T00_Noun
+var klyuchik: T00_Noun
 var korobka: T00_Noun
 var mat_: T00_Noun
 var neznakomets: T00_Noun
@@ -38,6 +41,7 @@ var vnuchka: T00_Noun
 var vnuk: T00_Noun
 var vrach: T00_Noun
 var yurist: T00_Noun
+var zheton: T00_Noun
 
 # Имена (мужские).
 var male_name_braian: T00_Noun
@@ -210,11 +214,32 @@ func init_nouns ():
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
+	kamen = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("камень", "камня", "камню", "камень", "камнем", "камне"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("камни", "камней", "камням", "камни", "камнями", "камнях"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
 	fermer = T00_Utils.fluent (
 		T00_Noun.new ()
 		.__single_forms (T00_NounCaseForms.new ().setup ("фермер", "фермера", "фермеру", "фермера", "фермером", "фермере"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("фермеры", "фермеров", "фермерам", "фермеров", "фермерами", "фермерах"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	klyuch = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("ключ", "ключа", "ключу", "ключ", "ключом", "ключе"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("ключи", "ключей", "ключам", "ключи", "ключами", "ключах"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	klyuchik = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("ключик", "ключика", "ключику", "ключик", "ключиком", "ключике"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("ключики", "ключиков", "ключикам", "ключики", "ключиками", "ключиках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
 	korobka = T00_Utils.fluent (
@@ -223,6 +248,13 @@ func init_nouns ():
 		.__plural_forms (T00_NounCaseForms.new ().setup ("коробки", "коробок", "коробкам", "коробки", "коробками", "коробках"))
 		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.FEMININE)
+	)
+	leytenant = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("лейтенант", "лейтенанта", "лейтенанту", "лейтенанта", "лейтенантом", "лейтенанте"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("лейтенанты", "лейтенантов", "лейтенантам", "лейтенантов", "лейтенантами", "лейтенантах"))
+		.__animacy (T00_WordAnimacy.ANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
 	)
 	mat_ = T00_Utils.fluent (
 		T00_Noun.new ()
@@ -249,13 +281,6 @@ func init_nouns ():
 		T00_Noun.new ()
 		.__single_forms (T00_NounCaseForms.new ().setup ("отец", "отца", "отцу", "отца", "отцом", "отце"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("отцы", "отцов", "отцам", "отцов", "отцами", "отцах"))
-		.__animacy (T00_WordAnimacy.ANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
-	)
-	leytenant = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("лейтенант", "лейтенанта", "лейтенанту", "лейтенанта", "лейтенантом", "лейтенанте"))
-		.__plural_forms (T00_NounCaseForms.new ().setup ("лейтенанты", "лейтенантов", "лейтенантам", "лейтенантов", "лейтенантами", "лейтенантах"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
@@ -376,6 +401,13 @@ func init_nouns ():
 		.__single_forms (T00_NounCaseForms.new ().setup ("юрист", "юриста", "юристу", "юриста", "юристом", "юристе"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("юристы", "юристов", "юристам", "юристов", "юристами", "юристах"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	zheton = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("жетон", "жетона", "жетону", "жетон", "жетоном", "жетоне"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("жетоны", "жетонов", "жетонам", "жетоны", "жетонами", "жетонах"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
 
