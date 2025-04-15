@@ -7,11 +7,13 @@ class_name T00_Action extends T00_ActionNode
 static var GREET: StringName = &"greet"
 static var INSPECT: StringName = &"inspect"
 static var COME_UP: StringName = &"come_up"
+static var ASK_ABOUT_CLUE_CONTAINER: StringName = &"ask_about_clue_container"
 
 static var _names_by_type: Dictionary = {
 	GREET: "поздороваться",
 	INSPECT: "осмотреть",
 	COME_UP: "подойти",
+	ASK_ABOUT_CLUE_CONTAINER: "спросить, что внутри",
 }
 
 var _type: StringName
@@ -41,3 +43,10 @@ func get_target () -> S01_Parametric:
 		return null
 	
 	return object_node._target
+
+
+## Подменяет стандартное название действия, используемое для типа action_type, на новую строку new_name. Параметр action_type - константа класса T00_Action.
+static func replace_name_for_type (action_type: StringName, new_name: String):
+	
+	_names_by_type[action_type] = new_name
+

@@ -26,6 +26,8 @@ static var ITEM_TYPE: StringName = &"item_type"
 static var LIVING_PLACE: StringName = &"living_place"
 ## StringName для категории "Пол".
 static var GENDER: StringName = &"gender"
+## StringName для категории "Оценка тяжести предмета".
+static var HEAVINESS: StringName = &"heaviness"
 
 # Phrase Param Values.
 

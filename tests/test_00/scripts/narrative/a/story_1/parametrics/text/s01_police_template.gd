@@ -9,9 +9,13 @@ static var INTRODUCER_POSE_SITTING_BACK: int = 1
 
 static var INTRODUCER_ACTION_WAITING_TO_COME_UP: int = 0
 static var INTRODUCER_ACTION_WAITING_FOR_QUESTIONS: int = 1
+static var INTRODUCER_ACTION_WAITING_FOR_SIGNING: int = 2
 
 static var HERO_LOCATION_NEAR_DOOR: int = 0
 static var HERO_LOCATION_NEAR_TABLE: int = 1
+
+static var MENTION_NONE: StringName = &"none"
+static var MENTION_CLUE_CONTAINER: StringName = &"clue_container"
 
 var _state: int = STATE_EXPOSITION
 
@@ -26,6 +30,7 @@ var _door_is_closed: bool = false
 var _hero_location: int = HERO_LOCATION_NEAR_DOOR
 var _introducer_pose: int = INTRODUCER_POSE_SITTING_STRAIGHT
 var _introducer_action: int = INTRODUCER_ACTION_WAITING_TO_COME_UP
+var _last_object_mentioned: StringName
 
 
 func get_next_beat (action: T00_Action = null) -> T00_Beat:
@@ -41,15 +46,18 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 				generate_flow_for_exposition ()
 			STATE_INTRODUCTION:
 				if action:
-					# Если поздоровались с Интродьюсером.
-					if action._type == T00_Action.GREET && action.get_target () == story._introducer:
-						generate_flow_for_greeting_introducer ()
-					elif action._type == T00_Action.INSPECT && action.get_target () == story._introducer:
-						generate_flow_for_introducer_look ()
-					elif action._type == T00_Action.COME_UP && action.get_target () == story._introducer:
-						generate_flow_for_coming_up ()
-				
-				pass
+					var action_target: S01_Parametric = action.get_target ()
+					var action_type: StringName = action._type
+					if action_target == story._introducer:
+						if action_type == T00_Action.GREET:
+							generate_flow_for_greeting_introducer ()
+						elif action_type == T00_Action.INSPECT:
+							generate_flow_for_introducer_look ()
+						elif action_type == T00_Action.COME_UP:
+							generate_flow_for_coming_up ()
+					elif action_target == story._clue_container:
+						if action_type == T00_Action.INSPECT:
+							generate_flow_for_clue_container_inspect ()
 	
 	# Если в очереди еще остались непоказанные предложения, показываем очередное.
 	# Теперь эта проверка является излишней.
@@ -136,7 +144,10 @@ func generate_flow_for_introducer_look ():
 			s1 += "что я займу место напротив."
 		pass
 	elif _introducer_action == INTRODUCER_ACTION_WAITING_FOR_QUESTIONS:
-		pass
+		#s1 += "Офицер смотрел на меня внимательно, как будто ожидая встречных вопросов."
+		s1 += "Офицер "
+		s1 += "смотрел " if introducer_is_male else "смотрела "
+		s1 += "на меня выжидающе, как будто желая узнать, что я буду делать дальше."
 	
 	story._introducer.remove_action (T00_Action.INSPECT)
 	
@@ -221,11 +232,45 @@ func generate_flow_for_coming_up ():
 	s4 += story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
 	s4 += " в руки."
 	
+	_last_object_mentioned = MENTION_CLUE_CONTAINER
+	
 	_hero_location = HERO_LOCATION_NEAR_TABLE
+	_introducer_action = INTRODUCER_ACTION_WAITING_FOR_QUESTIONS
+	_introducer_pose = INTRODUCER_POSE_SITTING_STRAIGHT
 	story._introducer.remove_action (T00_Action.COME_UP)
 	story._introducer.remove_action (T00_Action.GREET)
+	# Подменяем название действия.
+	T00_Action.replace_name_for_type (T00_Action.ASK_ABOUT_CLUE_CONTAINER, "спросить про " + story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE)))
+	story._introducer.create_and_add_action (T00_Action.ASK_ABOUT_CLUE_CONTAINER)
+	story._clue_container.create_and_add_action (T00_Action.INSPECT)
 	
 	_flow_sentences = [s1, s2, s3, s4]
+	_flow_action_tree = story.create_action_tree ()
+
+
+func generate_flow_for_clue_container_inspect ():
+	
+	var story: S01_Story = T00_A_Globals.story
+	var clue_container_phrase: T00_SimplePhrase = story._clue_container.get_description_short ()
+	
+	var s1: String = ""
+	match story._clue_container.get_container_type ().value:
+		S01_ClueContainerType.TRANSPARENT_BAG.value:
+			s1 += "Это был самый обычный полиэтиленовый пакет." if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Пакет был самый обычный "
+		S01_ClueContainerType.PAPER_BAG.value:
+			s1 += "Он " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Пакет "
+		S01_ClueContainerType.CYLINER_BUNDLE.value:
+			if _last_object_mentioned == MENTION_CLUE_CONTAINER:
+				s1 += "Он оказался тяжелее, чем я думал, и отдавал холодом - как будто железная болванка или камень, завернутый в большой лист бумаги."
+			else:
+				s1 += "Я покачал сверток в руке. Для своего размера он был достаточно тяжелым – словно булыжник обернули листом бумаги."
+			s1 += "Он " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Сверток "
+		S01_ClueContainerType.BOX.value:
+			s1 += "Она " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Коробка "
+	
+	story._clue_container.remove_action (T00_Action.INSPECT)
+	
+	_flow_sentences = [s1]
 	_flow_action_tree = story.create_action_tree ()
 
 

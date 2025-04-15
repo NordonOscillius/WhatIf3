@@ -13,3 +13,15 @@ var _is_clue: bool
 func _init ():
 	
 	_name = &"clue container item"
+
+
+# ==================================================
+# ==================== SHORTCUTS ===================
+# ==================================================
+
+func get_item_type () -> S01_StringParamValue:
+	return get_param (PNAME__ITEM_TYPE)
+
+func get_heaviness_assessment () -> S01_StringParamValue:
+	return S01_ItemType.get_heaviness_assessment (get_item_type ())
+
