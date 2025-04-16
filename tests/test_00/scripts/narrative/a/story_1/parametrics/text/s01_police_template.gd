@@ -37,6 +37,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	
 	var i: int
 	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
 	
 	var beat: T00_Beat = T00_Beat.new ()
 	
@@ -251,27 +252,52 @@ func generate_flow_for_coming_up ():
 func generate_flow_for_clue_container_inspect ():
 	
 	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
 	var clue_container_phrase: T00_SimplePhrase = story._clue_container.get_description_short ()
 	
 	var s1: String = ""
 	match story._clue_container.get_container_type ().value:
+		
 		S01_ClueContainerType.TRANSPARENT_BAG.value:
 			s1 += "Это был самый обычный полиэтиленовый пакет." if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на пакет у себя в руках: самый обычный, из прозрачного полиэтилена."
 			var items: Array[S01_ClueContainerItem] = story._clue_container.get_items ()
 			var num_items: int = items.size ()
 			if num_items == 1:
-				s1 += " На его дне лежал "
-		S01_ClueContainerType.PAPER_BAG.value:
-			s1 += "Он " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Пакет "
-		S01_ClueContainerType.CYLINER_BUNDLE.value:
-			if _last_object_mentioned == MENTION_CLUE_CONTAINER:
-				s1 += "Он оказался тяжелее, чем я думал, и был холодным - как будто внутри, под бумажной оберткой, находился кусок железа или камень."
-				#s1 += "Он оказался тяжелее, чем я думал, и был холодным - как будто железная болванка или камень, завернутый в большой лист бумаги."
+				s1 += " На его дне "
+				# Лежал или лежала.
+				var item_phrase: T00_SimplePhrase = S01_ItemType.get_description_uninspected (items[0].get_item_type())
+				s1 += w.lezhat.get_form_for_noun (item_phrase.get_subject (), T00_WordTense.PAST, T00_WordNumber.SINGLE)
+				# Маленький черный предмет.
+				s1 += item_phrase.get_form_for (T00_NounUsage.create_initial ())
+				s1 += "."
+			# Ну мы ведь знаем, что предметов будет точно не больше двух, да? :/
 			else:
-				s1 += "Я покачал сверток в руке. Для своего размера он был достаточно тяжелым – как будто булыжник обернули листом бумаги."
-			s1 += "Он " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Сверток "
+				s1 += " На его дне лежала пара предметов."
+		
+		S01_ClueContainerType.PAPER_BAG.value:
+			s1 += "Он был сделан из желтой бумаги" if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на пакет у себя в руках: обычный желтый бумажный пакет"
+		
+		S01_ClueContainerType.CYLINER_BUNDLE.value:
+			if _last_object_mentioned != MENTION_CLUE_CONTAINER:
+				s1 += "Я посмотрел на сверток у себя в руках. "
+			s1 += "Он был округлым, почти цилиндрической формы – как тубус, обернутый бумагой"
+			var heaviness: S01_StringParamValue = story._clue_container.get_heaviness ()
+			if S01_Heaviness.LIGHT.equals (heaviness):
+				s1 += ", и совсем легким для своего размера."
+			elif S01_Heaviness.HEAVY.equals (heaviness):
+				s1 += ", и тяжелым, как будто внутри был кусок металла или камень."
+			else:
+				s1 += "."
+		
 		S01_ClueContainerType.BOX.value:
-			s1 += "Она " if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Коробка "
+			s1 += "Она была небольшой, сантиметров пятнадцать в длину" if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на коробочку у себя в руках. Она была небольшой, сантиметров пятцадцать в длину"
+			var heaviness: S01_StringParamValue = story._clue_container.get_heaviness ()
+			if S01_Heaviness.LIGHT.equals (heaviness):
+				s1 += ", и совсем легкой, как будто бы пустой."
+			elif S01_Heaviness.HEAVY.equals (heaviness):
+				s1 += ", и довольно тяжелой – по крайней мере, тяжелее, чем мне поначалу показалось."
+			else:
+				s1 += "."
 	
 	story._clue_container.remove_action (T00_Action.INSPECT)
 	

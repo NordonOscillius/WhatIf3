@@ -77,3 +77,7 @@ func equals (phrase: T00_SimplePhrase, deny_null_param: bool = false) -> bool:
 	
 	return true
 
+
+func get_subject () -> T00_Noun:
+	
+	return _noun

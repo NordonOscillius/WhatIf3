@@ -52,3 +52,7 @@ func equals (phrase: T00_SimplePhrase, deny_null_param: bool = false) -> bool:
 	return _noun == adj_noun_phrase._noun && _adjective == adj_noun_phrase._adjective
 
 
+func get_subject () -> T00_Noun:
+	
+	return _noun
+

@@ -29,7 +29,8 @@ static func create_param_value (value: StringName) -> S01_StringParamValue:
 ## Случайным образом выбирает Значение Параметра для зацепки.
 static func select_for_clue () -> S01_StringParamValue:
 	
-	return S01_ParamValue.pick_random_string_param_value ([TOKEN_MARK, SMALL_KEY, SHAPED_STONE, SHEET_OF_PAPER, STONE_BOX])
+	return S01_ParamValue.pick_random_string_param_value ([TOKEN_MARK, SHAPED_STONE, SHEET_OF_PAPER, STONE_BOX])
+	#return S01_ParamValue.pick_random_string_param_value ([TOKEN_MARK, SMALL_KEY, SHAPED_STONE, SHEET_OF_PAPER, STONE_BOX])
 
 ## Возвращает Значение Параметра категории "Оценка тяжести предмета" по Значению Параметра категории "Тип предмета".
 static func get_heaviness_assessment (item_type: S01_StringParamValue) -> S01_StringParamValue:
@@ -48,13 +49,54 @@ static func get_heaviness_assessment (item_type: S01_StringParamValue) -> S01_St
 
 static func get_description_short (item_type: S01_StringParamValue) -> T00_SimplePhrase:
 	
+	var w: T00_A_Words = T00_A_Globals.words
+	
 	match item_type.value:
-		TOKEN_MARK.value: return S01_Heaviness.LIGHT
-		SMALL_KEY.value: return S01_Heaviness.LIGHT
-		SHAPED_STONE.value: return S01_Heaviness.HEAVY
-		SHEET_OF_PAPER.value: return S01_Heaviness.LIGHT
-		STONE_BOX.value: return S01_Heaviness.HEAVY
-		HOUSE_KEY.value: return S01_Heaviness.LIGHT
+		TOKEN_MARK.value: return T00_NounPhrase.new ().setup (w.zheton)
+		SMALL_KEY.value: return T00_NounPhrase.new ().setup (w.klyuchik)
+		SHAPED_STONE.value: return T00_NounPhrase.new ().setup (w.kamen)
+		SHEET_OF_PAPER.value: return T00_NounPhrase.new ().setup (w.listok)
+		STONE_BOX.value: return T00_NounPhrase.new ().setup (w.shkatulka)
+		HOUSE_KEY.value: return T00_NounPhrase.new ().setup (w.klyuch)
+	
+	printerr ("Unknown item type.")
+	return null
+
+
+static func get_description_medium (item_type: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match item_type.value:
+		TOKEN_MARK.value: return T00_AdjNounPhrase.new ().setup (w.chorniy, w.zheton)
+		SMALL_KEY.value: return T00_AdjNounPhrase.new ().setup (w.malenkiy, w.klyuchik)
+		SHAPED_STONE.value: return T00_AdjNounPhrase.new ().setup (w.figurniy, w.kamen)
+		SHEET_OF_PAPER.value: return T00_NounConstPhrase.new ().setup (w.list, " бумаги")
+		STONE_BOX.value: return T00_AdjNounPhrase.new ().setup (w.kamenniy, w.shkatulka)
+		HOUSE_KEY.value: return T00_NounConstPhrase.new ().setup (w.klyuch, " от дома")
+	
+	printerr ("Unknown item type.")
+	return null
+
+
+static func get_description_uninspected (item_type: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match item_type.value:
+		TOKEN_MARK.value: return T00_AdjArrayNounPhrase.new ().setup ([w.malenkiy, w.chorniy], w.predmet)
+		SMALL_KEY.value: return T00_AdjNounPhrase.new ().setup (w.malenkiy, w.klyuchik)
+		SHAPED_STONE.value: return T00_AdjNounPhrase.new ().setup (w.figurniy, w.kamen)
+		SHEET_OF_PAPER.value: return T00_NounConstPhrase.new ().setup (w.list, " бумаги")
+		STONE_BOX.value: return T00_AdjNounPhrase.new ().setup (w.kamenniy, w.shkatulka)
+		HOUSE_KEY.value:
+			return T00_CompoundPhrase.new ().setup (
+				[
+					T00_AdjPhrase.new ().setup (w.bolshoy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE),
+					T00_CompoundNounPhrase.new ().setup (w.klyuch, w.babochka, true)
+				],
+				1
+			)
 	
 	printerr ("Unknown item type.")
 	return null

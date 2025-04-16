@@ -25,6 +25,14 @@ func equals (phrase: T00_SimplePhrase, deny_null_param: bool = false) -> bool:
 	return false
 
 
+## Возвращает существительное, которое можно использовать в качестве подлежащего или дополнения (Что лежало? - Камень). Не для каждой простой фразы можно использовать этот метод; например, T00_AdjPhrase на такой запрос вернет null (или бросит исключение, я еще не решил).
+func get_subject () -> T00_Noun:
+	
+	printerr ("Abstract method.")
+	assert (false)
+	return null
+
+
 func as_noun_phrase () -> T00_NounPhrase:
 	return self as T00_NounPhrase
 

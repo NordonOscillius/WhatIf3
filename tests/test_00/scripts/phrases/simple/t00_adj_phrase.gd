@@ -56,3 +56,10 @@ func equals (phrase: T00_SimplePhrase, deny_null_param: bool = false) -> bool:
 	
 	return _adjective == adj_phrase._adjective && _gender == adj_phrase._gender && _animacy == adj_phrase._animacy
 
+
+func get_subject () -> T00_Noun:
+	
+	printerr ("Impossible to define this phrase's subject (it's implicit).")
+	assert (false)
+	return null
+

@@ -130,3 +130,6 @@ func get_word_gender () -> int:
 func get_container_type () -> S01_StringParamValue:
 	return get_param (PNAME__CONTAINER_TYPE)
 
+func get_heaviness () -> S01_StringParamValue:
+	return get_param (PNAME__HEAVINESS)
+

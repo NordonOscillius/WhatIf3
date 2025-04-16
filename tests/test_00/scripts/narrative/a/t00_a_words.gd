@@ -6,6 +6,7 @@ class_name T00_A_Words extends RefCounted
 # ==================================================
 
 var avtoslesar: T00_Noun
+var babochka: T00_Noun
 var babushka: T00_Noun
 var brat: T00_Noun
 var brodyaga: T00_Noun
@@ -15,11 +16,13 @@ var doch: T00_Noun
 var doctor: T00_Noun
 var drug: T00_Noun
 var fermer: T00_Noun
-var leytenant: T00_Noun
 var kamen: T00_Noun
 var klyuch: T00_Noun
 var klyuchik: T00_Noun
 var korobka: T00_Noun
+var leytenant: T00_Noun
+var list: T00_Noun
+var listok: T00_Noun
 var mat_: T00_Noun
 var neznakomets: T00_Noun
 var neznakomka: T00_Noun
@@ -28,8 +31,10 @@ var paket: T00_Noun
 var pensioner: T00_Noun
 var plotnik: T00_Noun
 var podruga: T00_Noun
+var predmet: T00_Noun
 var prodavets: T00_Noun
 var sestra: T00_Noun
+var shkatulka: T00_Noun
 var stroitel: T00_Noun
 var svyortok: T00_Noun
 var syn: T00_Noun
@@ -91,8 +96,11 @@ var last_name_yang: T00_LastName
 # ================== ADJECTIVES ====================
 # ==================================================
 
+var bolshoy: T00_Adjective
 var bumazhnyi: T00_Adjective
 var chorniy: T00_Adjective
+var figurniy: T00_Adjective
+var kamenniy: T00_Adjective
 var krugliy: T00_Adjective
 var malenkiy: T00_Adjective
 var nebolshoy: T00_Adjective
@@ -107,6 +115,7 @@ var znakomyi: T00_Adjective
 
 var govorit: T00_Verb
 var kazatsya: T00_Verb
+var lezhat: T00_Verb
 var nagnutsya: T00_Verb
 var pokazat: T00_Verb
 var priglashat: T00_Verb
@@ -157,6 +166,13 @@ func init_nouns ():
 		.__plural_forms (T00_NounCaseForms.new ().setup ("автослесари", "автослесарей", "автослесарям", "автослесарей", "автослесарями", "автослесарях"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
+	)
+	babochka = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("бабочка", "бабочки", "бабочке", "бабочку", "бабочкой", "бабочке"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("бабочки", "бабочек", "бабочкам", "бабочек", "бабочками", "бабочках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.FEMININE)
 	)
 	babushka = T00_Utils.fluent (
 		T00_Noun.new ()
@@ -214,18 +230,18 @@ func init_nouns ():
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
-	kamen = T00_Utils.fluent (
-		T00_Noun.new ()
-		.__single_forms (T00_NounCaseForms.new ().setup ("камень", "камня", "камню", "камень", "камнем", "камне"))
-		.__plural_forms (T00_NounCaseForms.new ().setup ("камни", "камней", "камням", "камни", "камнями", "камнях"))
-		.__animacy (T00_WordAnimacy.INANIMATE)
-		.__gender (T00_WordGender.MASCULINE)
-	)
 	fermer = T00_Utils.fluent (
 		T00_Noun.new ()
 		.__single_forms (T00_NounCaseForms.new ().setup ("фермер", "фермера", "фермеру", "фермера", "фермером", "фермере"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("фермеры", "фермеров", "фермерам", "фермеров", "фермерами", "фермерах"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	kamen = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("камень", "камня", "камню", "камень", "камнем", "камне"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("камни", "камней", "камням", "камни", "камнями", "камнях"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
 	klyuch = T00_Utils.fluent (
@@ -254,6 +270,20 @@ func init_nouns ():
 		.__single_forms (T00_NounCaseForms.new ().setup ("лейтенант", "лейтенанта", "лейтенанту", "лейтенанта", "лейтенантом", "лейтенанте"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("лейтенанты", "лейтенантов", "лейтенантам", "лейтенантов", "лейтенантами", "лейтенантах"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	list = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("лист", "листа", "листу", "лист", "листом", "листе"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("листы", "листов", "листам", "листы", "листами", "листах"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	listok = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("листок", "листка", "листку", "листок", "листком", "листке"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("листки", "листков", "листкам", "листки", "листками", "листках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
 	mat_ = T00_Utils.fluent (
@@ -312,6 +342,13 @@ func init_nouns ():
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.FEMININE)
 	)
+	predmet = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("предмет", "предмета", "предмету", "предмет", "предметом", "предмете"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("предметы", "предметов", "предметам", "предметы", "предметами", "предметах"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
 	prodavets = T00_Utils.fluent (
 		T00_Noun.new ()
 		.__single_forms (T00_NounCaseForms.new ().setup ("продавец", "продавца", "продавцу", "продавца", "продавцом", "продавце"))
@@ -324,6 +361,13 @@ func init_nouns ():
 		.__single_forms (T00_NounCaseForms.new ().setup ("сестра", "сестры", "сестре", "сестру", "сестрой", "сестре"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("сестры", "сестер", "сестрам", "сестер", "сестрами", "сестрах"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
+		.__gender (T00_WordGender.FEMININE)
+	)
+	shkatulka = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("шкатулка", "шкатулки", "шкатулке", "шкатулку", "шкатулкой", "шкатулке"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("шкатулки", "шкатулок", "шкатулкам", "шкатулки", "шкатулками", "шкатулках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.FEMININE)
 	)
 	stroitel = T00_Utils.fluent (
@@ -414,6 +458,13 @@ func init_nouns ():
 
 func init_adjectives ():
 	
+	bolshoy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("большой", "большого", "большому", "большого", "большой", "большим", "большом"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("большая", "большой", "большой", "большую", "большую", "большой", "большой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("большое", "большого", "большому", "большое", "большое", "большим", "большом"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("большие", "больших", "большим", "больших", "большие", "большими", "больших"))
+	)
 	bumazhnyi = (
 		T00_Adjective.new ()
 		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("бумажный", "бумажного", "бумажному", "бумажного", "бумажный", "бумажным", "бумажном"))
@@ -427,6 +478,20 @@ func init_adjectives ():
 		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("черная", "черной", "черной", "черную", "черную", "черной", "черной"))
 		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("черное", "черного", "черному", "черное", "черное", "черным", "черном"))
 		.__plural_forms (T00_AdjCaseForms.new ().setup ("черные", "черных", "черным", "черных", "черные", "черными", "черных"))
+	)
+	figurniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("фигурный", "фигурного", "фигурному", "фигурного", "фигурный", "фигурным", "фигурном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("фигурная", "фигурной", "фигурной", "фигурную", "фигурную", "фигурной", "фигурной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("фигурное", "фигурного", "фигурному", "фигурное", "фигурное", "фигурным", "фигурном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("фигурные", "фигурных", "фигурным", "фигурных", "фигурные", "фигурными", "фигурных"))
+	)
+	kamenniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("каменный", "каменного", "каменному", "каменного", "каменный", "каменным", "каменном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("каменная", "каменной", "каменной", "каменную", "каменную", "каменной", "каменной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("каменное", "каменного", "каменному", "каменное", "каменное", "каменным", "каменном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("каменные", "каменных", "каменным", "каменных", "каменные", "каменными", "каменных"))
 	)
 	krugliy = (
 		T00_Adjective.new ()
@@ -476,6 +541,8 @@ func init_adjectives ():
 
 func init_verbs ():
 	
+	print ("VERBS START")
+	
 	govorit = T00_Verb.new ().setup (
 		"говорить", "говорил", "говорила", "говорило", "говорили",
 		"говорю", "говорим", "говоришь", "говорите", "говорит", "говорят",
@@ -485,6 +552,11 @@ func init_verbs ():
 		"казаться", "казался", "казалась", "казалось", "казались",
 		"кажусь", "кажемся", "кажешься", "кажетесь", "кажется", "кажутся",
 		"буду казаться", "будем казаться", "будешь казаться", "будете казаться", "будет казаться", "будут казаться"
+	)
+	lezhat = T00_Verb.new ().setup (
+		"лежать", "лежал", "лежала", "лежало", "лежали",
+		"лежу", "лежим", "лежишь", "лежите", "лежит", "лежат",
+		"буду лежать", "будем лежать", "будешь лежать", "будете лежать", "будет лежать", "будут лежать"
 	)
 	nagnutsya = T00_Verb.new ().setup (
 		"нагнуться", "нагнулся", "нагнулась", "нагнулось", "нагнулись",
@@ -516,6 +588,9 @@ func init_verbs ():
 		"стою", "стоим", "стоишь", "стоите", "стоит", "стоят",
 		"буду стоять", "будем стоять", "будешь стоять", "будете стоять", "будет стоять", "будут стоять"
 	)
+	
+	print ("VERBS END")
+	print ("govorit: ", govorit)
 	
 	pass
 

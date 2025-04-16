@@ -61,3 +61,10 @@ func equals (phrase: T00_SimplePhrase, deny_null_param: bool = false) -> bool:
 	
 	return _rank_noun == typed_phrase._rank_noun && _last_name == typed_phrase._last_name
 
+
+func get_subject () -> T00_Noun:
+	
+	printerr ("It's impossible to define a subject for this phrase.")
+	assert (false)
+	return null
+
