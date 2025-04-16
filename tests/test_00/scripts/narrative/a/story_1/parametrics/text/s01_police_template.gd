@@ -15,7 +15,9 @@ static var HERO_LOCATION_NEAR_DOOR: int = 0
 static var HERO_LOCATION_NEAR_TABLE: int = 1
 
 static var MENTION_NONE: StringName = &"none"
+static var MENTION_POLICEMAN: StringName = &"policeman"
 static var MENTION_CLUE_CONTAINER: StringName = &"clue_container"
+static var MENTION_CLUE_UNINSPECTED: StringName = &"clue_uninspected"
 
 var _state: int = STATE_EXPOSITION
 
@@ -30,6 +32,9 @@ var _door_is_closed: bool = false
 var _hero_location: int = HERO_LOCATION_NEAR_DOOR
 var _introducer_pose: int = INTRODUCER_POSE_SITTING_STRAIGHT
 var _introducer_action: int = INTRODUCER_ACTION_WAITING_TO_COME_UP
+## Герой изучил зацепку и готов вот-вот получить флешбэк.
+var _hero_inspected_clue: bool = false
+var _hero_knows_about_testament: bool = false
 var _last_object_mentioned: StringName
 
 
@@ -56,6 +61,8 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 							generate_flow_for_introducer_look ()
 						elif action_type == T00_Action.COME_UP:
 							generate_flow_for_coming_up ()
+						elif action_type == T00_Action.ASK_ABOUT_CLUE_CONTAINER:
+							generate_flow_for_asking_about_container ()
 					elif action_target == story._clue_container:
 						if action_type == T00_Action.INSPECT:
 							generate_flow_for_clue_container_inspect ()
@@ -97,7 +104,7 @@ func generate_flow_for_exposition ():
 	if !introducer_is_male && !S01_Gender.FEMALE.equals (introducer_gender):
 		printerr ("Unknown introducer gender.")
 	
-	var s1: String = " – Присаживайтесь, "
+	var s1: String = " — Присаживайтесь, "
 	if hero_is_male:
 		s1 += "мистер "
 	else:
@@ -112,9 +119,11 @@ func generate_flow_for_exposition ():
 	s2 += "лейтенант "
 	s2 += story._introducer._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE) + " "
 	s2 += story._introducer._last_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE, S01_Gender.get_word_gender_by_param (introducer_gender))
-	s2 += " – "
+	s2 += " — "
 	s2 += get_introducer_first_description ()
 	s2 += "."
+	
+	_last_object_mentioned = MENTION_POLICEMAN
 	
 	# Сделаем кого-нибудь интерактивным.
 	story._introducer.create_and_add_action (T00_Action.GREET)
@@ -149,6 +158,11 @@ func generate_flow_for_introducer_look ():
 		s1 += "Офицер "
 		s1 += "смотрел " if introducer_is_male else "смотрела "
 		s1 += "на меня выжидающе, как будто желая узнать, что я буду делать дальше."
+	elif _introducer_action == INTRODUCER_ACTION_WAITING_FOR_SIGNING:
+		s1 += "Офицер "
+		s1 += "ждала, когда я подпишу бумаги."
+	
+	_last_object_mentioned = MENTION_POLICEMAN
 	
 	story._introducer.remove_action (T00_Action.INSPECT)
 	
@@ -163,10 +177,10 @@ func generate_flow_for_greeting_introducer ():
 	var introducer_is_male: bool = get_introducer_is_male ()
 	var hero_is_male: bool = get_hero_is_male ()
 	
-	var s1: String = " – Здравствуйте, "
+	var s1: String = " — Здравствуйте, "
 	s1 += "мистер " if introducer_is_male else "миссис "
 	s1 += story._introducer._last_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE, S01_Gender.get_word_gender_by_param (introducer.get_gender ()))
-	s1 += "! – Я "
+	s1 += "! — Я "
 	s1 += "шагнул " if hero_is_male else "шагнула "
 	s1 += "вглубь кабинета и "
 	s1 += "прикрыл " if hero_is_male else "прикрыла "
@@ -175,6 +189,8 @@ func generate_flow_for_greeting_introducer ():
 	s1 += "приветственный жест и "
 	s1 += "откинулся " if introducer_is_male else "откинулась "
 	s1 += "на спинку кресла."
+	
+	_last_object_mentioned = MENTION_POLICEMAN
 	
 	_door_is_closed = true
 	_introducer_pose = INTRODUCER_POSE_SITTING_BACK
@@ -202,7 +218,7 @@ func generate_flow_for_coming_up ():
 	s1 += "на твердый неудобный стул."
 	
 	var s2: String = ""
-	s2 += " – Я не задержу вас надолго, – "
+	s2 += " — Я не задержу вас надолго, — "
 	s2 += "успокоил " if introducer_is_male else "успокоила "
 	s2 += "меня лейтенант.\n\n"
 	s2 += "Он нагнулся " if introducer_is_male else "Она нагнулась "
@@ -212,7 +228,7 @@ func generate_flow_for_coming_up ():
 	s2 += "."
 	
 	var s3: String = ""
-	s3 += " – Как я вам и "
+	s3 += " — Как я вам и "
 	s3 += "говорил, " if introducer_is_male else "говорила, "
 	s3 += "мы закрываем дело об исчезновении "
 	s3 += "вашего " if x_is_male else "вашей "
@@ -223,10 +239,10 @@ func generate_flow_for_coming_up ():
 	s3 += "пропавшим" if x_is_male else "пропавшей"
 	s3 += ". Срок давности прошел, все работы проведены, никаких зацепок в "
 	s3 += "его " if x_is_male else "ее "
-	s3 += "доме найдено не было; так что больше мы ничего не можем для вас сделать. А это, – "
+	s3 += "доме найдено не было; так что больше мы ничего не можем для вас сделать. А это, — "
 	s3 += "он протянул мне " if introducer_is_male else "она протянула мне "
 	s3 += story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
-	s3 += ", – велено передать вам."
+	s3 += ", — велено передать вам."
 	
 	var s4: String = "Я "
 	s4 += "взял " if hero_is_male else "взяла "
@@ -241,7 +257,8 @@ func generate_flow_for_coming_up ():
 	story._introducer.remove_action (T00_Action.COME_UP)
 	story._introducer.remove_action (T00_Action.GREET)
 	# Подменяем название действия.
-	T00_Action.replace_name_for_type (T00_Action.ASK_ABOUT_CLUE_CONTAINER, "спросить про " + story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE)))
+	T00_Action.replace_name_for_type (T00_Action.ASK_ABOUT_CLUE_CONTAINER, "спросить, что в " + story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.PREPOSITIONAL, T00_WordNumber.SINGLE)))
+	#T00_Action.replace_name_for_type (T00_Action.ASK_ABOUT_CLUE_CONTAINER, "спросить про " + story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE)))
 	story._introducer.create_and_add_action (T00_Action.ASK_ABOUT_CLUE_CONTAINER)
 	story._clue_container.create_and_add_action (T00_Action.INSPECT)
 	
@@ -254,34 +271,85 @@ func generate_flow_for_clue_container_inspect ():
 	var story: S01_Story = T00_A_Globals.story
 	var w: T00_A_Words = T00_A_Globals.words
 	var clue_container_phrase: T00_SimplePhrase = story._clue_container.get_description_short ()
+	var hero_is_male: bool = get_hero_is_male ()
+	var hero_word_gender: int = T00_WordGender.MASCULINE if hero_is_male else T00_WordGender.FEMININE
 	
 	var s1: String = ""
 	match story._clue_container.get_container_type ().value:
 		
 		S01_ClueContainerType.TRANSPARENT_BAG.value:
-			s1 += "Это был самый обычный полиэтиленовый пакет." if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на пакет у себя в руках: самый обычный, из прозрачного полиэтилена."
+			#s1 += "Это был самый обычный полиэтиленовый пакет." if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на пакет у себя в руках: самый обычный, из прозрачного полиэтилена."
+			if _last_object_mentioned == MENTION_CLUE_CONTAINER:
+				s1 += "Это был самый обычный полиэтиленовый пакет."
+			else:
+				s1 += "Я "
+				s1 += w.posmotret.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, hero_word_gender, T00_WordNumber.SINGLE)
+				s1 += " на пакет у себя в руках: самый обычный, из прозрачного полиэтилена."
 			var items: Array[S01_ClueContainerItem] = story._clue_container.get_items ()
 			var num_items: int = items.size ()
 			if num_items == 1:
 				s1 += " На его дне "
 				# Лежал или лежала.
-				var item_phrase: T00_SimplePhrase = S01_ItemType.get_description_uninspected (items[0].get_item_type())
-				s1 += w.lezhat.get_form_for_noun (item_phrase.get_subject (), T00_WordTense.PAST, T00_WordNumber.SINGLE)
+				var item_phrase: T00_SimplePhrase = S01_ItemType.get_description_uninspected (items[0].get_item_type ())
+				var item_phrase_subject: T00_Noun = item_phrase.get_subject ()
+				s1 += w.lezhat.get_form_for_noun (item_phrase_subject, T00_WordTense.PAST, T00_WordNumber.SINGLE)
 				s1 += " "
 				# Маленький черный предмет.
 				s1 += item_phrase.get_form_for (T00_NounUsage.create_initial ())
-				s1 += "."
+				s1 += ". "
+				# Текст про знакомость предмета-зацепки.
+				s1 += get_clue_familiarity_text (item_phrase, true, hero_is_male)
 			# Ну мы ведь знаем, что предметов будет точно не больше двух, да? :/
 			else:
-				s1 += " На его дне лежала пара предметов."
+				s1 += " На его дне лежали "
+				#s1 += " На его дне лежала пара предметов: "
+				var clue_item: S01_ClueContainerItem = items[0]
+				var second_item: S01_ClueContainerItem = items[1]
+				if !clue_item._is_clue:
+					var temp_item: S01_ClueContainerItem = clue_item
+					clue_item = second_item
+					second_item = temp_item
+				var clue_item_phrase: T00_SimplePhrase = S01_ItemType.get_description_uninspected (clue_item.get_item_type ())
+				var clue_item_subject: T00_Noun = clue_item_phrase.get_subject ()
+				# Ключ от дома.
+				s1 += S01_ItemType.get_description_uninspected (second_item.get_item_type ()).get_form_for (T00_NounUsage.create_initial ())
+				s1 += " и "
+				# Предмет-зацепка.
+				s1 += clue_item_phrase.get_form_for (T00_NounUsage.create_initial ())
+				s1 += ". "
+				var clue_item_phrase_short: T00_SimplePhrase = S01_ItemType.get_description_uninspected_short (clue_item.get_item_type ())
+				s1 += get_clue_familiarity_text (clue_item_phrase_short, false, hero_is_male)
+			_last_object_mentioned = MENTION_CLUE_UNINSPECTED
 		
 		S01_ClueContainerType.PAPER_BAG.value:
-			s1 += "Он был сделан из желтой бумаги" if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на пакет у себя в руках: обычный желтый бумажный пакет"
+			if _last_object_mentioned == MENTION_CLUE_CONTAINER:
+				s1 += "Он был сделан из желтой бумаги"
+			else:
+				s1 += "Я "
+				s1 += w.posmotret.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, hero_word_gender, T00_WordNumber.SINGLE)
+				s1 += " на пакет у себя в руках: обычный желтый бумажный пакет"
+			var heaviness: S01_StringParamValue = story._clue_container.get_heaviness ()
+			if S01_Heaviness.LIGHT.equals (heaviness):
+				if _last_object_mentioned == MENTION_CLUE_CONTAINER:
+					s1 += " и, как мне показалось, почти ничего не весил — как будто внутри ничего и не было."
+				else:
+					s1 += ", который, как мне показалось, почти ничего не весил — как будто внутри ничего и не было."
+			elif S01_Heaviness.HEAVY.equals (heaviness):
+				if _last_object_mentioned == MENTION_CLUE_CONTAINER:
+					s1 += "; покачав его в руке, я почувствовал тяжесть предмета, заключенного внутри."
+					pass
+				else:
+					s1 += ", только с чем-то тяжелым внутри."
+			else:
+				s1 += "."
+			_last_object_mentioned = MENTION_CLUE_CONTAINER
 		
 		S01_ClueContainerType.CYLINER_BUNDLE.value:
 			if _last_object_mentioned != MENTION_CLUE_CONTAINER:
-				s1 += "Я посмотрел на сверток у себя в руках. "
-			s1 += "Он был округлым, почти цилиндрической формы – как тубус, обернутый бумагой"
+				s1 += "Я "
+				s1 += w.posmotret.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, hero_word_gender, T00_WordNumber.SINGLE)
+				s1 += " на сверток у себя в руках. "
+			s1 += "Он был округлым, почти цилиндрической формы — как тубус, обернутый бумагой"
 			var heaviness: S01_StringParamValue = story._clue_container.get_heaviness ()
 			if S01_Heaviness.LIGHT.equals (heaviness):
 				s1 += ", и совсем легким для своего размера."
@@ -289,20 +357,94 @@ func generate_flow_for_clue_container_inspect ():
 				s1 += ", и тяжелым, как будто внутри был кусок металла или камень."
 			else:
 				s1 += "."
+			_last_object_mentioned = MENTION_CLUE_CONTAINER
 		
 		S01_ClueContainerType.BOX.value:
-			s1 += "Она была небольшой, сантиметров пятнадцать в длину" if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на коробочку у себя в руках. Она была небольшой, сантиметров пятцадцать в длину"
+			if _last_object_mentioned != MENTION_CLUE_CONTAINER:
+				s1 += "Я "
+				s1 += w.posmotret.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, hero_word_gender, T00_WordNumber.SINGLE)
+				s1 += " на коробку у себя в руках. "
+			s1 += "Она была небольшой, сантиметров пятнадцать в длину"
+			#s1 += "Она была небольшой, сантиметров пятнадцать в длину" if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на коробочку у себя в руках. Она была небольшой, сантиметров пятнадцать в длину"
 			var heaviness: S01_StringParamValue = story._clue_container.get_heaviness ()
 			if S01_Heaviness.LIGHT.equals (heaviness):
 				s1 += ", и совсем легкой, как будто бы пустой."
 			elif S01_Heaviness.HEAVY.equals (heaviness):
-				s1 += ", и довольно тяжелой – по крайней мере, тяжелее, чем мне поначалу показалось."
+				s1 += ", и довольно тяжелой — по крайней мере, тяжелее, чем мне поначалу показалось."
 			else:
 				s1 += "."
+			_last_object_mentioned = MENTION_CLUE_CONTAINER
 	
 	story._clue_container.remove_action (T00_Action.INSPECT)
 	
 	_flow_sentences = [s1]
+	_flow_action_tree = story.create_action_tree ()
+
+
+func generate_flow_for_asking_about_container ():
+	
+	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
+	var hero_is_male: bool = get_hero_is_male ()
+	var introducer_is_male: bool = get_introducer_is_male ()
+	var hero_word_gender: int = T00_WordGender.MASCULINE if hero_is_male else T00_WordGender.FEMININE
+	var introducer_word_gender: int = T00_WordGender.MASCULINE if introducer_is_male else T00_WordGender.FEMININE
+	var x_is_male: bool = get_x_is_male ()
+	
+	var s1: String = ""
+	s1 += " — Что это? — Я вопросительно "
+	s1 += w.posmotret.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, hero_word_gender, T00_WordNumber.SINGLE)
+	s1 += " на офицера.\n — Ваше наследство. "
+	if story._clue_container.get_items ().size () == 1:
+		s1 += "Единственная вещь, указанная в завещании "
+		s1 += "вашего " if x_is_male else "вашей "
+		s1 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+		s1 += "..."
+	else:
+		s1 += "Вещи, указанные в завещании "
+		s1 += "вашего " if x_is_male else "вашей "
+		s1 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+		s1 += ", включая ключ от "
+		s1 += "его " if x_is_male else "ее "
+		s1 += "дома..."
+	
+	var s2: String = ""
+	s2 += "\n\nЛейтенант "
+	s2 += "прервался " if introducer_is_male else "прервалась "
+	s2 += "на пару секунд и "
+	s2 += "опустил " if introducer_is_male else "опустила "
+	s2 += "взгляд к столу, словно о чем-то вспоминая, а затем "
+	s2 += "продолжил" if introducer_is_male else "продолжила"
+	s2 += ":\n\n — "
+	s2 += "Мистер " if x_is_male else "Миссис "
+	s2 += story._x._last_name.get_form_for (T00_LastNameUsage.create_initial ())
+	s2 += " пожелал" if x_is_male else " пожелала"
+	s2 += ", чтобы именно "
+	s2 += "его " if x_is_male else "ее "
+	s2 += get_hero_to_x_relation_phrase ().get_form_for (T00_NounUsage.create_initial ()) + ", "
+	s2 += story._hero._first_name.get_form_for (T00_NounUsage.create_initial ()) + " "
+	s2 += story._hero._last_name.get_form_for (T00_LastNameUsage.create_initial ())
+	s2 += ", кем вы и являетесь, "
+	s2 += "стал " if hero_is_male else "стала "
+	s2 += "его наследником." if x_is_male else "ее наследницей."
+	
+	var s3: String = ""
+	s3 += " — У "
+	s3 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+	s3 += " было завещание? — "
+	s3 += "удивился я.\n" if hero_is_male else "удивилась я.\n"
+	s3 += " — Получается, что так, — "
+	s3 += "развел" if introducer_is_male else "развела"
+	s3 += " руками "
+	s3 += story._introducer._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE)
+	#s3 += story._introducer._last_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE, introducer_word_gender)
+	s3 += "."
+	
+	_hero_knows_about_testament = true
+	_introducer_action = INTRODUCER_ACTION_WAITING_FOR_SIGNING
+	_last_object_mentioned = MENTION_NONE
+	
+	_flow_sentences = [s1, s2, s3]
 	_flow_action_tree = story.create_action_tree ()
 
 
@@ -312,13 +454,55 @@ func get_introducer_first_description () -> String:
 	var is_male: bool = get_introducer_is_male ()
 	var age: int = T00_A_Globals.story._introducer.get_age ().value
 	if age < 25:
-		result += "молодой рыжеволосый парень с большими очками в толстой оправе и короткой стрижкой" if is_male else "молодая девушка с длинными темными волосами и ярким макияжем"
+		result += "молодой рыжеволосый парень с большими очками в толстой оправе и с короткой стрижкой" if is_male else "молодая девушка с длинными темными волосами и ярким макияжем"
 	elif age < 35:
 		result += "молодой человек с размашистой татуировкой, проходящей от плеча до самого запястья" if is_male else "молодая женщина с короткой стрижкой и маленькой родинкой над правым уголком рта"
 	else:
 		result += "мужчина средних лет с усами и залысиной, проступающей на макушке" if is_male else "темноволосая женщина средних лет с нездоровым румянцем на лице"
 	
 	return result
+
+
+func get_clue_familiarity_text (clue_phrase: T00_SimplePhrase, use_he_she_it: bool, hero_is_male: bool) -> String:
+	
+	var result: String = ""
+	var w: T00_A_Words = T00_A_Globals.words
+	var clue_phrase_subject: T00_Noun = clue_phrase.get_subject ()
+	
+	# Он / [Предмет-зацепка].
+	if use_he_she_it:
+		result += get_he_she_it_for_noun (clue_phrase_subject).capitalize ()
+	else:
+		result += clue_phrase.get_form_for (T00_NounUsage.create_initial ()).capitalize ()
+	
+	result += " то ли "
+	# Показался.
+	result += w.pokazatsya.get_form_for_noun (clue_phrase_subject, T00_WordTense.PAST, T00_WordNumber.SINGLE)
+	result += " мне "
+	result += w.znakomyi.get_form_for_noun (clue_phrase_subject, T00_WordNumber.SINGLE, T00_WordCase.INSTRUMENTAL)
+	result += ", то ли "
+	result += w.napomnit.get_form_for_noun (clue_phrase_subject, T00_WordTense.PAST, T00_WordNumber.SINGLE)
+	result += " о чем-то — я так и не "
+	# Мог.
+	result += w.moch.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, T00_WordGender.MASCULINE if hero_is_male else T00_WordGender.FEMININE, T00_WordNumber.SINGLE)
+	result += " понять, о чем именно."
+	
+	return result
+
+
+# ==================================================
+# ====================== UTILS =====================
+# ==================================================
+
+func get_he_she_it_for_noun (noun: T00_Noun) -> String:
+	
+	match noun._gender:
+		T00_WordGender.MASCULINE: return "он"
+		T00_WordGender.FEMININE: return "она"
+		T00_WordGender.NEUTER: return "оно"
+	
+	printerr ("Unknown gender type.")
+	return ""
 
 
 # ==================================================
@@ -361,5 +545,17 @@ func get_x_to_hero_relation_phrase () -> T00_SimplePhrase:
 		return S01_FriendshipRelation.get_phrase (relation, T00_A_Globals.story._x.get_gender ())
 	
 	printerr ("Unknown X to hero relation.")
+	return null
+
+
+func get_hero_to_x_relation_phrase () -> T00_SimplePhrase:
+	
+	var relation: S01_StringParamValue = T00_A_Globals.story.get_hero_to_x_relation ()
+	if relation.param_class == S01_ParamClass.FAMILY_RELATION:
+		return S01_FamilyRelation.get_phrase_official (relation)
+	elif relation.param_class == S01_ParamClass.FRIENDSHIP_RELATION:
+		return S01_FriendshipRelation.get_phrase (relation, T00_A_Globals.story._hero.get_gender ())
+	
+	printerr ("Unknown hero to X relation.")
 	return null
 

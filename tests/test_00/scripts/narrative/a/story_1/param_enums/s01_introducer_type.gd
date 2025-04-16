@@ -19,7 +19,10 @@ static func create_param_value (value: StringName) -> S01_StringParamValue:
 ## Возвращает массив, содержащий все варианты Значений Параметра класса INTRODUCER_TYPE, приемлемые для истории S01_Story.
 static func get_choices_for_story () -> Array[S01_StringParamValue]:
 	
-	return [POLICE_OFFICER, STRANGER, COURIER]
+	# DEBUG.
+	return [POLICE_OFFICER]
+	
+	#return [POLICE_OFFICER, STRANGER, COURIER]
 
 
 ## Случайный образом возвращает одно из Значений Параметра этого перечислителя (используется глобальный рандомайзер).

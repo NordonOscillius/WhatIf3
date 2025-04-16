@@ -4,7 +4,6 @@ class_name S01_ClueContainer extends S01_Parametric
 static var PNAME__CONTAINER_TYPE: StringName = &"container_type"
 static var PNAME__HEAVINESS: StringName = &"heaviness"
 
-#var _items: Array = []
 var _clue_item: S01_ClueContainerItem
 
 
@@ -15,20 +14,30 @@ func _init ():
 
 func generate ():
 	
+	var story: S01_Story = T00_A_Globals.story
+	
 	# Генерируем предмет зацепки.
 	_clue_item = S01_ClueContainerItem.new ()
 	_clue_item._is_clue = true
 	_clue_item.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.select_for_clue ())
-	#_items.push_back (clue)
 	add_child (_clue_item)
 	
+	# DEBUG.
 	# Если Интродакшен происходит в полицейском участке, то нужно передать наследство и ключ от дома.
-	var story: S01_Story = T00_A_Globals.story
-	if story.get_param (S01_Story.PNAME__INTRODUCER_TYPE).get_value_variant () == S01_IntroducerType.POLICE_OFFICER.value:
+	#var story: S01_Story = T00_A_Globals.story
+	#if story.get_param (S01_Story.PNAME__INTRODUCER_TYPE).get_value_variant () == S01_IntroducerType.POLICE_OFFICER.value:
+		#var key: S01_ClueContainerItem = S01_ClueContainerItem.new ()
+		#key._is_clue = false
+		#key.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.HOUSE_KEY)
+		#add_child (key)
+	
+	# С вероятностью 50% передаем и ключ от дома (сейчас я делаю только вариант с полицейским).
+	# DEBUG.
+	#if true:
+	if T00_A_Globals.randomizer.randf () >= .5:
 		var key: S01_ClueContainerItem = S01_ClueContainerItem.new ()
 		key._is_clue = false
 		key.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.HOUSE_KEY)
-		#_items.push_back (key)
 		add_child (key)
 	
 	# Подбираем тип контейнера по типу зацепки.

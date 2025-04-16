@@ -102,3 +102,19 @@ static func get_description_uninspected (item_type: S01_StringParamValue) -> T00
 	return null
 
 
+static func get_description_uninspected_short (item_type: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match item_type.value:
+		TOKEN_MARK.value: return T00_NounPhrase.new ().setup (w.predmet)
+		SMALL_KEY.value: return T00_NounPhrase.new ().setup (w.klyuchik)
+		SHAPED_STONE.value: return T00_NounPhrase.new ().setup (w.kamen)
+		SHEET_OF_PAPER.value: return T00_NounPhrase.new ().setup (w.listok)
+		STONE_BOX.value: return T00_NounPhrase.new ().setup (w.shkatulka)
+		HOUSE_KEY.value: return T00_NounPhrase.new ().setup (w.klyuch)
+	
+	printerr ("Unknown item type.")
+	return null
+
+

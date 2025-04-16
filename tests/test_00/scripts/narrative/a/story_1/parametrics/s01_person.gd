@@ -68,6 +68,20 @@ func pick_random_last_name (exclude: Array[T00_LastName] = []):
 	_last_name = choices[index]
 
 
+# Выбирает фамилию Икса по фамилии героя: если они родственники, то выбирает такую же, а если друзья - то другую.
+#func pick_last_name_for_x () -> T00_LastName:
+	#
+	#var story: S01_Story = T00_A_Globals.story
+	#var x_to_hero_relation: S01_StringParamValue = story.get_x_to_hero_relation ()
+	#if x_to_hero_relation.param_class == S01_ParamClass.FAMILY_RELATION:
+		#return story._hero._last_name
+	#elif x_to_hero_relation.param_class == S01_ParamClass.FRIENDSHIP_RELATION:
+		#return pick_random_last_name ([story._hero._last_name])
+	#
+	#printerr ("Unknown relation class.")
+	#return null
+
+
 # ==================================================
 # ==================== SHORTCUTS ===================
 # ==================================================

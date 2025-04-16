@@ -26,6 +26,9 @@ static func select_random () -> S01_StringParamValue:
 ## Выбирает тип контейнера по типу зацепки, лежащей в нем.
 static func select_for_clue (clue: S01_ClueContainerItem) -> S01_StringParamValue:
 	
+	# DEBUG.
+	#return TRANSPARENT_BAG
+	
 	assert (clue._is_clue)
 	var clue_type: S01_ParamValue = clue.get_param (S01_ClueContainerItem.PNAME__ITEM_TYPE)
 	match clue_type.get_value_variant ():

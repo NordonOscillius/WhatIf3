@@ -39,21 +39,24 @@ func generate ():
 	_x.set_param (S01_Person.PNAME__STORY_ROLE, S01_CharStoryRole.X)
 	add_child (_x)
 	
-	# Кем Икс приходится герою (родственник или друг), кем герой приходится Иксу и пол Икса.
+	# Кем Икс приходится герою (родственник или друг), кем герой приходится Иксу, пол Икса и полное имя Икса.
 	var x_to_hero_relation: S01_ParamValue = select_x_to_hero_relation ()
 	set_param (PNAME__X_TO_HERO_RELATION, x_to_hero_relation)
 	if x_to_hero_relation.param_class == S01_ParamClass.FAMILY_RELATION:
 		_x.set_param (S01_Person.PNAME__GENDER, S01_Gender.get_for_family_relation (x_to_hero_relation))
 		set_param (PNAME__HERO_TO_X_RELATION, S01_FamilyRelation.invert (x_to_hero_relation, _hero.get_gender ()))
+		_x._last_name = _hero._last_name
 	else:
 		_x.set_param (S01_Person.PNAME__GENDER, S01_Gender.select_random ())
 		set_param (PNAME__HERO_TO_X_RELATION, x_to_hero_relation)
+		_x.pick_random_last_name ([_hero._last_name])
+	_x.pick_random_first_name_by_gender ([_hero._first_name])
 	
 	_introducer = S01_Introducer.new ()
 	_introducer.set_param (S01_Person.PNAME__STORY_ROLE, S01_CharStoryRole.INTRODUCER)
 	_introducer.set_param (S01_Person.PNAME__GENDER, S01_Gender.select_random ())
-	_introducer.pick_random_first_name_by_gender ([_hero._first_name])
-	_introducer.pick_random_last_name ([_hero._last_name])
+	_introducer.pick_random_first_name_by_gender ([_hero._first_name, _x._first_name])
+	_introducer.pick_random_last_name ([_hero._last_name, _x._last_name])
 	# Как показывать Интродьюсера на панели действий.
 	_introducer.set_param (S01_Parametric.PNAME__ACTION_PANEL_NAME, S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, T00_RankLastNamePhrase.new ().setup (w.leytenant, _introducer._last_name, S01_Gender.get_word_gender_by_param (_introducer.get_gender ()))))
 	add_child (_introducer)

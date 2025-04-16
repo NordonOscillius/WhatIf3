@@ -7,17 +7,17 @@ static var STATE_FADE_OUT: int = 2
 
 static var TOP_PANEL_HEIGHT: int = 50
 static var TOP_PANEL_COLOR: Color = T00_Utils.hsl_to_rgb (0, 0, .04)
-static var ACTION_PANEL_HEIGHT: int = 240
+static var ACTION_PANEL_HEIGHT: int = 260
 static var ACTION_PANEL_COLOR: Color = T00_Utils.hsl_to_rgb (0, 0, .04)
 static var ACTION_LABEL_SIZE: Vector2 = Vector2 (280, 24)
 static var ACTION_LABEL_SPACING: Vector2 = Vector2 (32, 4)
 ## Смещение по вертикали от ВЕРХНЕГО КРАЯ ПАНЕЛИ ДЕЙСТВИЙ (не от лейбла пути).
-static var ACTION_LABEL_OFFSET_Y: int = 40
+static var ACTION_LABEL_OFFSET_Y: int = 60
 static var ACTION_LABEL_COLUMN_CAPACITY: int = 6
 static var PATH_LABEL_OFFSET_Y: int = 10
 static var PATH_LABEL_HEIGHT: int = 24
 static var PATH_LABEL_BORDER_HORIZONTAL: int = 200
-static var STORY_LABEL_BORDER_HORIZONTAL: int = 200
+static var STORY_LABEL_BORDER_HORIZONTAL: int = 400
 static var STORY_LABEL_BORDER_VERTICAL: int = 60
 
 var _state: int = STATE_FADE_IN
@@ -64,7 +64,8 @@ func _ready ():
 	_story_label.position.x = (viewport_size.x - _story_label.size.x) * .5
 	_story_label.position.y = TOP_PANEL_HEIGHT + STORY_LABEL_BORDER_VERTICAL
 	_story_label.text = _cur_beat._story_text
-	_story_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_story_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	#_story_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_story_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_story_label.modulate = Color (1, 1, 1, 0)
 	#_story_label.draw.connect (on_story_label_draw)
