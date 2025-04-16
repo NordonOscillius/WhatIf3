@@ -28,7 +28,7 @@ var _future_third_plural: String
 
 func setup (infinitive: String, past_masculine: String, past_feminine: String, past_neuter: String, past_plural: String,
 	present_first_single: String, present_first_plural: String, present_second_single: String, present_second_plural: String, present_third_single: String, present_third_plural: String,
-	future_first_single: String, future_first_plural: String, future_second_single: String, future_second_plural: String, future_third_single: String, future_third_plural: String):
+	future_first_single: String, future_first_plural: String, future_second_single: String, future_second_plural: String, future_third_single: String, future_third_plural: String) -> T00_Verb:
 	
 	_infinitive = infinitive
 	_past_masculine = past_masculine
@@ -49,6 +49,8 @@ func setup (infinitive: String, past_masculine: String, past_feminine: String, p
 	_future_second_plural = future_second_plural
 	_future_third_single = future_third_single
 	_future_third_plural = future_third_plural
+	
+	return self
 
 
 # ==================================================

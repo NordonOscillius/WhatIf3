@@ -267,6 +267,7 @@ func generate_flow_for_clue_container_inspect ():
 				# Лежал или лежала.
 				var item_phrase: T00_SimplePhrase = S01_ItemType.get_description_uninspected (items[0].get_item_type())
 				s1 += w.lezhat.get_form_for_noun (item_phrase.get_subject (), T00_WordTense.PAST, T00_WordNumber.SINGLE)
+				s1 += " "
 				# Маленький черный предмет.
 				s1 += item_phrase.get_form_for (T00_NounUsage.create_initial ())
 				s1 += "."
