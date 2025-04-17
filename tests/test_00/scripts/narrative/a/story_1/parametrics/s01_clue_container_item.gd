@@ -15,6 +15,12 @@ func _init ():
 	_name = &"clue container item"
 
 
+## Возвращает Значение Параметра, хранящее фразу, описывающую предмет на панели действий.
+func get_action_panel_name () -> S01_PhraseParamValue:
+	
+	return S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, S01_ItemType.get_description_medium (get_item_type ()))
+
+
 # ==================================================
 # ==================== SHORTCUTS ===================
 # ==================================================

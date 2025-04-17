@@ -111,10 +111,16 @@ func collect_interactive_children (result: Array[S01_Parametric]):
 	var i: int = 0
 	while i < num_children:
 		var child: S01_Parametric = _children[i]
-		if child._enable_interaction && child._actions.size ():
-			result.push_back (child)
+		if child._enable_interaction:
+			if child._actions.size ():
+				result.push_back (child)
 			child.collect_interactive_children (result)
 		i += 1
+		
+		#if child._enable_interaction && child._actions.size ():
+			#result.push_back (child)
+			#child.collect_interactive_children (result)
+		#i += 1
 
 
 ## Добавляет действие action в массив действий _action. Если такое действие уже присутствует в массиве, то действие не добавляется.

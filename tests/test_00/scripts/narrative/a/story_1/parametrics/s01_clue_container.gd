@@ -20,6 +20,8 @@ func generate ():
 	_clue_item = S01_ClueContainerItem.new ()
 	_clue_item._is_clue = true
 	_clue_item.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.select_for_clue ())
+	_clue_item.set_param (PNAME__ACTION_PANEL_NAME, _clue_item.get_action_panel_name ())
+	#_clue_item.set_param (PNAME__ACTION_PANEL_NAME, S01_ItemType.get_description_medium (_clue_item.get_item_type()))
 	add_child (_clue_item)
 	
 	# DEBUG.
@@ -38,6 +40,7 @@ func generate ():
 		var key: S01_ClueContainerItem = S01_ClueContainerItem.new ()
 		key._is_clue = false
 		key.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.HOUSE_KEY)
+		key.set_param (PNAME__ACTION_PANEL_NAME, key.get_action_panel_name ())
 		add_child (key)
 	
 	# Подбираем тип контейнера по типу зацепки.
@@ -82,6 +85,19 @@ func get_items () -> Array[S01_ClueContainerItem]:
 		i += 1
 	
 	return result
+
+
+## Добавляет действие типа action_type ко всем предметам типа S01_ClueContainerItem внутри контейнера.
+func create_and_add_action_to_all_items (action_type: StringName, sort_alphabetically: bool = false):
+	
+	var num_children: int = _children.size ()
+	var i: int = 0
+	while i < num_children:
+		var item: S01_ClueContainerItem = _children[i] as S01_ClueContainerItem
+		if item:
+			item.create_and_add_action (action_type, sort_alphabetically)
+		
+		i += 1
 
 
 func get_description_short () -> T00_SimplePhrase:

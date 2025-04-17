@@ -66,6 +66,8 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 					elif action_target == story._clue_container:
 						if action_type == T00_Action.INSPECT:
 							generate_flow_for_clue_container_inspect ()
+						if action_type == T00_Action.OPEN:
+							generate_flow_for_clue_container_open ()
 	
 	# Если в очереди еще остались непоказанные предложения, показываем очередное.
 	# Теперь эта проверка является излишней.
@@ -275,7 +277,8 @@ func generate_flow_for_clue_container_inspect ():
 	var hero_word_gender: int = T00_WordGender.MASCULINE if hero_is_male else T00_WordGender.FEMININE
 	
 	var s1: String = ""
-	match story._clue_container.get_container_type ().value:
+	var clue_container_type: S01_StringParamValue = story._clue_container.get_container_type ()
+	match clue_container_type.value:
 		
 		S01_ClueContainerType.TRANSPARENT_BAG.value:
 			#s1 += "Это был самый обычный полиэтиленовый пакет." if _last_object_mentioned == MENTION_CLUE_CONTAINER else "Я посмотрел на пакет у себя в руках: самый обычный, из прозрачного полиэтилена."
@@ -302,7 +305,6 @@ func generate_flow_for_clue_container_inspect ():
 			# Ну мы ведь знаем, что предметов будет точно не больше двух, да? :/
 			else:
 				s1 += " На его дне лежали "
-				#s1 += " На его дне лежала пара предметов: "
 				var clue_item: S01_ClueContainerItem = items[0]
 				var second_item: S01_ClueContainerItem = items[1]
 				if !clue_item._is_clue:
@@ -341,7 +343,10 @@ func generate_flow_for_clue_container_inspect ():
 				else:
 					s1 += ", только с чем-то тяжелым внутри."
 			else:
-				s1 += "."
+				if _last_object_mentioned == MENTION_CLUE_CONTAINER:
+					s1 += ", шершавой на ощупь. Ничего необычного."
+				else:
+					s1 += ", шершавый на ощупь. Ничего необычного."
 			_last_object_mentioned = MENTION_CLUE_CONTAINER
 		
 		S01_ClueContainerType.CYLINER_BUNDLE.value:
@@ -372,10 +377,51 @@ func generate_flow_for_clue_container_inspect ():
 			elif S01_Heaviness.HEAVY.equals (heaviness):
 				s1 += ", и довольно тяжелой — по крайней мере, тяжелее, чем мне поначалу показалось."
 			else:
-				s1 += "."
+				s1 += ", и добротной, из твердого толстого картона."
 			_last_object_mentioned = MENTION_CLUE_CONTAINER
 	
 	story._clue_container.remove_action (T00_Action.INSPECT)
+	if clue_container_type.equals (S01_ClueContainerType.TRANSPARENT_BAG):
+		# Добавить возможность рассмотреть предметы по отдельности.
+		# ...
+		pass
+	else:
+		story._clue_container.create_and_add_action (T00_Action.OPEN)
+	
+	_flow_sentences = [s1]
+	_flow_action_tree = story.create_action_tree ()
+
+
+func generate_flow_for_clue_container_open ():
+	
+	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
+	var hero_is_male: bool = get_hero_is_male ()
+	
+	var s1: String
+	match story._clue_container.get_container_type ().value:
+		
+		S01_ClueContainerType.TRANSPARENT_BAG.value:
+			# На прозрачный пакет герой не смотрит еще раз; вместо этого он может достать содержимое - конкретные предметы.
+			printerr ("Недопустимый вариант.")
+			return
+		S01_ClueContainerType.PAPER_BAG.value:
+			s1 += "Я отогнул край пакета и осмотрел содержимое. Внутри "
+			s1 += get_clue_container_contents_text (w.okazatsya)
+			s1 += "."
+		S01_ClueContainerType.CYLINER_BUNDLE.value:
+			s1 += "Я развязал бечевку, скреплявшую сверток, и стал разворачивать бумажную обертку. Внутри "
+			s1 += get_clue_container_contents_text (w.okazatsya)
+			s1 += "."
+			#s1 += "Я покрутил сверток в руках, отыскал краешек бумаги, служившей его оберткой, и стал ее разворачивать."
+		S01_ClueContainerType.BOX.value:
+			s1 += "Я положил коробку на колени и снял крышку. Внутри "
+			s1 += get_clue_container_contents_text (w.okazatsya)
+			s1 += "."
+			#s1 += "Я положил коробку на колени и поднял крышку. Внутри оказался..."
+	
+	story._clue_container.remove_action (T00_Action.OPEN)
+	story._clue_container.create_and_add_action_to_all_items (T00_Action.INSPECT)
 	
 	_flow_sentences = [s1]
 	_flow_action_tree = story.create_action_tree ()
@@ -399,23 +445,24 @@ func generate_flow_for_asking_about_container ():
 		s1 += "Единственная вещь, указанная в завещании "
 		s1 += "вашего " if x_is_male else "вашей "
 		s1 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-		s1 += "..."
+		s1 += "."
 	else:
 		s1 += "Вещи, указанные в завещании "
 		s1 += "вашего " if x_is_male else "вашей "
 		s1 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
 		s1 += ", включая ключ от "
 		s1 += "его " if x_is_male else "ее "
-		s1 += "дома..."
+		s1 += "дома."
+	
+	s1 += "\n\nЛейтенант "
+	s1 += "прервался " if introducer_is_male else "прервалась "
+	s1 += "на пару секунд и "
+	s1 += "опустил " if introducer_is_male else "опустила "
+	s1 += "взгляд к столу, словно о чем-то вспоминая, а затем "
+	s1 += "продолжил:" if introducer_is_male else "продолжила:"
 	
 	var s2: String = ""
-	s2 += "\n\nЛейтенант "
-	s2 += "прервался " if introducer_is_male else "прервалась "
-	s2 += "на пару секунд и "
-	s2 += "опустил " if introducer_is_male else "опустила "
-	s2 += "взгляд к столу, словно о чем-то вспоминая, а затем "
-	s2 += "продолжил" if introducer_is_male else "продолжила"
-	s2 += ":\n\n — "
+	s2 += "\n\n — "
 	s2 += "Мистер " if x_is_male else "Миссис "
 	s2 += story._x._last_name.get_form_for (T00_LastNameUsage.create_initial ())
 	s2 += " пожелал" if x_is_male else " пожелала"
@@ -427,18 +474,35 @@ func generate_flow_for_asking_about_container ():
 	s2 += ", кем вы и являетесь, "
 	s2 += "стал " if hero_is_male else "стала "
 	s2 += "его наследником." if x_is_male else "ее наследницей."
+	s2 += "\n"
+	
+	s2 += " — У "
+	s2 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+	s2 += " было завещание? — "
+	s2 += "удивился я.\n" if hero_is_male else "удивилась я.\n"
+	s2 += " — Получается, что так, — "
+	s2 += "развел" if introducer_is_male else "развела"
+	s2 += " руками "
+	s2 += story._introducer._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE)
+	#s2 += story._introducer._last_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE, introducer_word_gender)
+	s2 += ". — Мы и сами узнали об этом от нотариуса "
+	s2 += "пропавшего" if x_is_male else "пропавшей"
+	s2 += ". Он с вами не связывался?\n"
+	s2 += " — Пока нет.\n"
+	s2 += " — Значит, в скором времени должен."
 	
 	var s3: String = ""
-	s3 += " — У "
-	s3 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-	s3 += " было завещание? — "
-	s3 += "удивился я.\n" if hero_is_male else "удивилась я.\n"
-	s3 += " — Получается, что так, — "
-	s3 += "развел" if introducer_is_male else "развела"
-	s3 += " руками "
-	s3 += story._introducer._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE)
-	#s3 += story._introducer._last_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE, introducer_word_gender)
-	s3 += "."
+	s3 += "Лейтенант "
+	s3 += "почесал затылок, " if introducer_is_male else "поправила съехавшую на лоб прядь волос, "
+	s3 += "достал " if introducer_is_male else "достала "
+	s3 += "откуда-то листок бумаги и "
+	s3 += "передал " if introducer_is_male else "передала "
+	s3 += "мне.\n\n"
+	s3 += " — Подпишитесь о получении "
+	s3 += "предмета" if story._clue_container.get_items ().size () == 1 else "предметов"
+	s3 += ". Вот здесь."
+	
+	story._introducer.remove_action (T00_Action.ASK_ABOUT_CLUE_CONTAINER)
 	
 	_hero_knows_about_testament = true
 	_introducer_action = INTRODUCER_ACTION_WAITING_FOR_SIGNING
@@ -486,6 +550,38 @@ func get_clue_familiarity_text (clue_phrase: T00_SimplePhrase, use_he_she_it: bo
 	# Мог.
 	result += w.moch.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, T00_WordGender.MASCULINE if hero_is_male else T00_WordGender.FEMININE, T00_WordNumber.SINGLE)
 	result += " понять, о чем именно."
+	
+	return result
+
+
+## Возвращает текст, перечисляющий предметы, лежащие в контейнере. Например: "большой ключ и маленький черный предмет". Предмет-зацепка указывается последней. Опционально добавляет в начало строки форму глагола, соответствующую существительному или существительным: "лежали большой ключ и маленький черный предмет".
+func get_clue_container_contents_text (verb: T00_Verb, word_case: int = T00_WordCase.NOMINATIVE) -> String:
+	
+	var result: String = ""
+	
+	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
+	var clue_container: S01_ClueContainer = story._clue_container
+	
+	var items: Array[S01_ClueContainerItem] = clue_container.get_items ()
+	var num_items: int = items.size ()
+	var clue_item: S01_ClueContainerItem = clue_container._clue_item
+	var clue_item_phrase: T00_SimplePhrase = S01_ItemType.get_description_uninspected (clue_item.get_item_type ())
+	if num_items == 1:
+		if verb:
+			result += verb.get_form_for_noun (clue_item_phrase.get_subject (), T00_WordTense.PAST, T00_WordNumber.SINGLE)
+			result += " "
+		result += clue_item_phrase.get_form_for (T00_NounUsage.new ().setup (word_case, T00_WordNumber.SINGLE))
+	else:
+		var second_item: S01_ClueContainerItem = items[0]
+		if second_item._is_clue:
+			second_item = items[1]
+		if verb:
+			result += verb.get_form (T00_WordTense.PAST, T00_WordPerson.THIRD, T00_WordGender.UNKNOWN, T00_WordNumber.PLURAL)
+			result += " "
+		result += S01_ItemType.get_description_uninspected (second_item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (word_case, T00_WordNumber.SINGLE))
+		result += " и "
+		result += clue_item_phrase.get_form_for (T00_NounUsage.new ().setup (word_case, T00_WordNumber.SINGLE))
 	
 	return result
 
