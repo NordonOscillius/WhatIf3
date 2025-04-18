@@ -21,6 +21,7 @@ func generate ():
 	_clue_item._is_clue = true
 	_clue_item.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.select_for_clue ())
 	_clue_item.set_param (PNAME__ACTION_PANEL_NAME, _clue_item.get_action_panel_name ())
+	_clue_item.set_param (S01_ClueContainerItem.PNAME__SECRET_SIGN_TYPE, S01_SecretSignType.select_for_clue_item ())
 	#_clue_item.set_param (PNAME__ACTION_PANEL_NAME, S01_ItemType.get_description_medium (_clue_item.get_item_type()))
 	add_child (_clue_item)
 	
@@ -53,7 +54,7 @@ func generate ():
 
 func update_heaviness_assessment ():
 	
-	var objective_heaviness: S01_StringParamValue = S01_Heaviness.LIGHT
+	var objective_heaviness: S01_StringParamValue = S01_Heaviness.LIGHT.clone_shallow ()
 	var items: Array[S01_ClueContainerItem] = get_items ()
 	var i: int = items.size ()
 	while i:
@@ -66,7 +67,8 @@ func update_heaviness_assessment ():
 		S01_ClueContainerType.TRANSPARENT_BAG.value: subjective_heaviness = objective_heaviness
 		S01_ClueContainerType.PAPER_BAG.value: subjective_heaviness = S01_Heaviness.increase (objective_heaviness)
 		S01_ClueContainerType.CYLINER_BUNDLE.value: subjective_heaviness = objective_heaviness
-		S01_ClueContainerType.BOX.value: subjective_heaviness = S01_Heaviness.decrease (objective_heaviness)
+		S01_ClueContainerType.BOX.value: subjective_heaviness = objective_heaviness
+		#S01_ClueContainerType.BOX.value: subjective_heaviness = S01_Heaviness.decrease (objective_heaviness)
 	
 	set_param (PNAME__HEAVINESS, subjective_heaviness)
 

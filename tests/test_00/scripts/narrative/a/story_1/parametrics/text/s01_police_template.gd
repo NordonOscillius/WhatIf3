@@ -18,6 +18,7 @@ static var MENTION_NONE: StringName = &"none"
 static var MENTION_POLICEMAN: StringName = &"policeman"
 static var MENTION_CLUE_CONTAINER: StringName = &"clue_container"
 static var MENTION_CLUE_UNINSPECTED: StringName = &"clue_uninspected"
+static var MENTION_CLUE_INSPECTED: StringName = &"clue_inspected"
 
 var _state: int = STATE_EXPOSITION
 
@@ -68,6 +69,8 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 							generate_flow_for_clue_container_inspect ()
 						if action_type == T00_Action.OPEN:
 							generate_flow_for_clue_container_open ()
+					elif action_target is S01_ClueContainerItem:
+						generate_flow_for_inspecting_item (action_target as S01_ClueContainerItem)
 	
 	# Если в очереди еще остались непоказанные предложения, показываем очередное.
 	# Теперь эта проверка является излишней.
@@ -302,6 +305,7 @@ func generate_flow_for_clue_container_inspect ():
 				s1 += ". "
 				# Текст про знакомость предмета-зацепки.
 				s1 += get_clue_familiarity_text (item_phrase, true, hero_is_male)
+				s1 += ". "
 			# Ну мы ведь знаем, что предметов будет точно не больше двух, да? :/
 			else:
 				s1 += " На его дне лежали "
@@ -321,6 +325,7 @@ func generate_flow_for_clue_container_inspect ():
 				s1 += ". "
 				var clue_item_phrase_short: T00_SimplePhrase = S01_ItemType.get_description_uninspected_short (clue_item.get_item_type ())
 				s1 += get_clue_familiarity_text (clue_item_phrase_short, false, hero_is_male)
+				s1 += ". "
 			_last_object_mentioned = MENTION_CLUE_UNINSPECTED
 		
 		S01_ClueContainerType.PAPER_BAG.value:
@@ -383,6 +388,7 @@ func generate_flow_for_clue_container_inspect ():
 	story._clue_container.remove_action (T00_Action.INSPECT)
 	if clue_container_type.equals (S01_ClueContainerType.TRANSPARENT_BAG):
 		# Добавить возможность рассмотреть предметы по отдельности.
+		story._clue_container.create_and_add_action_to_all_items (T00_Action.INSPECT)
 		# ...
 		pass
 	else:
@@ -406,22 +412,50 @@ func generate_flow_for_clue_container_open ():
 			printerr ("Недопустимый вариант.")
 			return
 		S01_ClueContainerType.PAPER_BAG.value:
-			s1 += "Я отогнул край пакета и осмотрел содержимое. Внутри "
-			s1 += get_clue_container_contents_text (w.okazatsya)
-			s1 += "."
+			s1 += "Я "
+			s1 += "отогнул " if hero_is_male else "отогнула "
+			s1 += "край пакета и "
+			s1 += "осмотрел " if hero_is_male else "осмотрела "
+			s1 += "содержимое. Внутри "
 		S01_ClueContainerType.CYLINER_BUNDLE.value:
-			s1 += "Я развязал бечевку, скреплявшую сверток, и стал разворачивать бумажную обертку. Внутри "
-			s1 += get_clue_container_contents_text (w.okazatsya)
-			s1 += "."
+			s1 += "Я "
+			s1 += "развязал " if hero_is_male else "развязала "
+			s1 += "бечевку, скреплявшую сверток, и "
+			s1 += "стал " if hero_is_male else "стала "
+			s1 += "разворачивать бумажную обертку. Внутри "
 			#s1 += "Я покрутил сверток в руках, отыскал краешек бумаги, служившей его оберткой, и стал ее разворачивать."
 		S01_ClueContainerType.BOX.value:
-			s1 += "Я положил коробку на колени и снял крышку. Внутри "
-			s1 += get_clue_container_contents_text (w.okazatsya)
-			s1 += "."
+			s1 += "Я "
+			s1 += "положил " if hero_is_male else "положила "
+			s1 += "коробку на колени и "
+			s1 += "снял " if hero_is_male else "сняла "
+			s1 += "крышку. Внутри "
 			#s1 += "Я положил коробку на колени и поднял крышку. Внутри оказался..."
+	s1 += get_clue_container_contents_text (w.okazatsya)
+	s1 += "."
+	
+	_last_object_mentioned = MENTION_CLUE_UNINSPECTED
 	
 	story._clue_container.remove_action (T00_Action.OPEN)
 	story._clue_container.create_and_add_action_to_all_items (T00_Action.INSPECT)
+	
+	_flow_sentences = [s1]
+	_flow_action_tree = story.create_action_tree ()
+
+
+func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
+	
+	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	var s1: String = ""
+	
+	
+	_last_object_mentioned = MENTION_CLUE_INSPECTED
+	
+	item.remove_action (T00_Action.INSPECT)
+	if item._is_clue:
+		_hero_inspected_clue = true
 	
 	_flow_sentences = [s1]
 	_flow_action_tree = story.create_action_tree ()
@@ -549,13 +583,13 @@ func get_clue_familiarity_text (clue_phrase: T00_SimplePhrase, use_he_she_it: bo
 	result += " о чем-то — я так и не "
 	# Мог.
 	result += w.moch.get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, T00_WordGender.MASCULINE if hero_is_male else T00_WordGender.FEMININE, T00_WordNumber.SINGLE)
-	result += " понять, о чем именно."
+	result += " понять, о чем именно"
 	
 	return result
 
 
-## Возвращает текст, перечисляющий предметы, лежащие в контейнере. Например: "большой ключ и маленький черный предмет". Предмет-зацепка указывается последней. Опционально добавляет в начало строки форму глагола, соответствующую существительному или существительным: "лежали большой ключ и маленький черный предмет".
-func get_clue_container_contents_text (verb: T00_Verb, word_case: int = T00_WordCase.NOMINATIVE) -> String:
+## Возвращает текст, перечисляющий предметы, лежащие в контейнере. Например: "большой ключ и маленький черный предмет". Предмет-зацепка указывается последней. Опционально добавляет в начало строки форму глагола, соответствующую существительному или существительным: "лежали большой ключ и маленький черный предмет". Опционально добавляет в конец строки слова про то, что предмет показался знакомым.
+func get_clue_container_contents_text (verb: T00_Verb, word_case: int = T00_WordCase.NOMINATIVE, include_familiarity_text: bool = true) -> String:
 	
 	var result: String = ""
 	
@@ -572,6 +606,11 @@ func get_clue_container_contents_text (verb: T00_Verb, word_case: int = T00_Word
 			result += verb.get_form_for_noun (clue_item_phrase.get_subject (), T00_WordTense.PAST, T00_WordNumber.SINGLE)
 			result += " "
 		result += clue_item_phrase.get_form_for (T00_NounUsage.new ().setup (word_case, T00_WordNumber.SINGLE))
+		# Текст про знакомость предмета.
+		if include_familiarity_text:
+			result += ". "
+			result += get_clue_familiarity_text (clue_item_phrase, true, get_hero_is_male ())
+			#result += "."
 	else:
 		var second_item: S01_ClueContainerItem = items[0]
 		if second_item._is_clue:
@@ -582,6 +621,12 @@ func get_clue_container_contents_text (verb: T00_Verb, word_case: int = T00_Word
 		result += S01_ItemType.get_description_uninspected (second_item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (word_case, T00_WordNumber.SINGLE))
 		result += " и "
 		result += clue_item_phrase.get_form_for (T00_NounUsage.new ().setup (word_case, T00_WordNumber.SINGLE))
+		# Текст про знакомость предмета.
+		if include_familiarity_text:
+			result += ". "
+			var clue_item_short_phrase: T00_SimplePhrase = S01_ItemType.get_description_uninspected_short (clue_item.get_item_type ())
+			result += get_clue_familiarity_text (clue_item_short_phrase, false, get_hero_is_male ())
+			#result += "."
 	
 	return result
 

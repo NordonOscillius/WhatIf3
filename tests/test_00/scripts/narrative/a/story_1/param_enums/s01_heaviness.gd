@@ -35,6 +35,28 @@ static func decrease (heaviness: S01_StringParamValue) -> S01_StringParamValue:
 	return LIGHT
 
 
+static func debug_test ():
+	
+	print ("LIGHT: ", LIGHT.value, ", USUAL: ", USUAL.value, ", HEAVY: ", HEAVY.value)
+	print ("LIGHT + LIGHT = ", get_sum (LIGHT, LIGHT).value)
+	print ("LIGHT + USUAL = ", get_sum (LIGHT, USUAL).value)
+	print ("LIGHT + HEAVY = ", get_sum (LIGHT, HEAVY).value)
+	print ("USUAL + LIGHT = ", get_sum (USUAL, LIGHT).value)
+	print ("USUAL + USUAL = ", get_sum (USUAL, USUAL).value)
+	print ("USUAL + HEAVY = ", get_sum (USUAL, HEAVY).value)
+	print ("HEAVY + LIGHT = ", get_sum (HEAVY, LIGHT).value)
+	print ("HEAVY + USUAL = ", get_sum (HEAVY, USUAL).value)
+	print ("HEAVY + HEAVY = ", get_sum (HEAVY, HEAVY).value)
+	print ("LIGHT: ", LIGHT.value, ", USUAL: ", USUAL.value, ", HEAVY: ", HEAVY.value)
+	print ("Increased LIGHT: ", increase (LIGHT).value)
+	print ("Increased USUAL: ", increase (USUAL).value)
+	print ("Increased HEAVY: ", increase (HEAVY).value)
+	print ("Decreased LIGHT: ", decrease (LIGHT).value)
+	print ("Decreased USUAL: ", decrease (USUAL).value)
+	print ("Decreased HEAVY: ", decrease (HEAVY).value)
+	print ("LIGHT: ", LIGHT.value, ", USUAL: ", USUAL.value, ", HEAVY: ", HEAVY.value)
+
+
 static func get_sum (param_value_1: S01_StringParamValue, param_value_2: S01_StringParamValue) -> S01_StringParamValue:
 	
 	match param_value_1.value:

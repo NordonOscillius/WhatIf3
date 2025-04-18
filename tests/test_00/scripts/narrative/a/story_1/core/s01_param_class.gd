@@ -28,6 +28,8 @@ static var LIVING_PLACE: StringName = &"living_place"
 static var GENDER: StringName = &"gender"
 ## StringName для категории "Оценка тяжести предмета".
 static var HEAVINESS: StringName = &"heaviness"
+## StringName для категории "Тип секретного знака".
+static var SECRET_SIGN_TYPE: StringName = &"secret_sign_type"
 
 # Phrase Param Values.
 
