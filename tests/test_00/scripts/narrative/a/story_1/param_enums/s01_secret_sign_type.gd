@@ -1,4 +1,5 @@
 class_name S01_SecretSignType extends S01_ParamEnum
+## Перечислитель Значений Параметров категории "Тип секретного символа".
 
 
 ## Перечеркнутая спираль.
@@ -18,3 +19,14 @@ static func create_param_value (value: StringName) -> S01_StringParamValue:
 static func select_for_clue_item () -> S01_StringParamValue:
 	
 	return S01_ParamValue.pick_random_string_param_value ([SPIRAL, EYE, DICE])
+
+
+static func get_description_medium (sign_type: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	match sign_type.value:
+		SPIRAL.value: return null
+		EYE.value: return null
+		DICE.value: return null
+	
+	printerr ("Unknown sign type.")
+	return null

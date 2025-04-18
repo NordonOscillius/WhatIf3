@@ -16,10 +16,14 @@ var doch: T00_Noun
 var doctor: T00_Noun
 var drug: T00_Noun
 var fermer: T00_Noun
+var glaz: T00_Noun
 var kamen: T00_Noun
 var klyuch: T00_Noun
 var klyuchik: T00_Noun
 var korobka: T00_Noun
+var krug: T00_Noun
+var kubik: T00_Noun
+var kvadrat: T00_Noun
 var leytenant: T00_Noun
 var list: T00_Noun
 var listok: T00_Noun
@@ -34,10 +38,13 @@ var podruga: T00_Noun
 var predmet: T00_Noun
 var prodavets: T00_Noun
 var sestra: T00_Noun
+var shestiugolnik: T00_Noun
 var shkatulka: T00_Noun
+var spiral: T00_Noun
 var stroitel: T00_Noun
 var svyortok: T00_Noun
 var syn: T00_Noun
+var treugolnik: T00_Noun
 var uborschik: T00_Noun
 var uborschitsa: T00_Noun
 var uchitel: T00_Noun
@@ -96,16 +103,29 @@ var last_name_yang: T00_LastName
 # ================== ADJECTIVES ====================
 # ==================================================
 
+var belyi: T00_Adjective
 var bolshoy: T00_Adjective
 var bumazhnyi: T00_Adjective
 var chorniy: T00_Adjective
 var figurniy: T00_Adjective
+var igralniy: T00_Adjective
 var kamenniy: T00_Adjective
+var krasniy: T00_Adjective
 var krugliy: T00_Adjective
+var kvadratniy: T00_Adjective
 var malenkiy: T00_Adjective
 var nebolshoy: T00_Adjective
+var oranzheniy: T00_Adjective
+var otkrytiy: T00_Adjective
 var prodolgovatiy: T00_Adjective
 var prozrachniy: T00_Adjective
+var seriy: T00_Adjective
+var siniy: T00_Adjective
+var shestiugolniy: T00_Adjective
+var treugolniy: T00_Adjective
+var zachyorknutiy: T00_Adjective
+var zelyoniy: T00_Adjective
+var zhyoltiy: T00_Adjective
 var znakomyi: T00_Adjective
 
 
@@ -243,6 +263,13 @@ func init_nouns ():
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
+	glaz = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("глаз", "глаза", "глазу", "глаз", "глазом", "глазе"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("глаза", "глаз", "глазам", "глаза", "глазами", "глазах"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
 	kamen = T00_Utils.fluent (
 		T00_Noun.new ()
 		.__single_forms (T00_NounCaseForms.new ().setup ("камень", "камня", "камню", "камень", "камнем", "камне"))
@@ -270,6 +297,27 @@ func init_nouns ():
 		.__plural_forms (T00_NounCaseForms.new ().setup ("коробки", "коробок", "коробкам", "коробки", "коробками", "коробках"))
 		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.FEMININE)
+	)
+	krug = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("круг", "круга", "кругу", "круг", "кругом", "круге"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("круги", "кругов", "кругам", "круги", "кругами", "кругах"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	kubik = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("кубик", "кубика", "кубику", "кубик", "кубиком", "кубике"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("кубики", "кубиков", "кубикам", "кубики", "кубиками", "кубиках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	kvadrat = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("квадрат", "квадрата", "квадрату", "квадрат", "квадратом", "квадрате"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("квадраты", "квадратов", "квадратам", "квадраты", "квадратами", "квадратах"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
 	)
 	leytenant = T00_Utils.fluent (
 		T00_Noun.new ()
@@ -369,10 +417,24 @@ func init_nouns ():
 		.__animacy (T00_WordAnimacy.ANIMATE)
 		.__gender (T00_WordGender.FEMININE)
 	)
+	shestiugolnik = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("шестиугольник", "шестиугольника", "шестиугольнику", "шестиугольник", "шестиугольником", "шестиугольнике"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("шестиугольники", "шестиугольников", "шестиугольникам", "шестиугольники", "шестиугольниками", "шестиугольниках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
 	shkatulka = T00_Utils.fluent (
 		T00_Noun.new ()
 		.__single_forms (T00_NounCaseForms.new ().setup ("шкатулка", "шкатулки", "шкатулке", "шкатулку", "шкатулкой", "шкатулке"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("шкатулки", "шкатулок", "шкатулкам", "шкатулки", "шкатулками", "шкатулках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.FEMININE)
+	)
+	spiral = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("спираль", "спирали", "спирали", "спираль", "спиралью", "спирали"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("спирали", "спиралей", "спиралям", "спирали", "спиралями", "спиралях"))
 		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.FEMININE)
 	)
@@ -395,6 +457,13 @@ func init_nouns ():
 		.__single_forms (T00_NounCaseForms.new ().setup ("сын", "сына", "сыну", "сына", "сыном", "сыне"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("сыновья", "сыновей", "сыновьям", "сыновей", "сыновьями", "сыновьях"))
 		.__animacy (T00_WordAnimacy.ANIMATE)
+		.__gender (T00_WordGender.MASCULINE)
+	)
+	treugolnik = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("треугольник", "треугольника", "треугольнику", "треугольник", "треугольником", "треугольнике"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("треугольники", "треугольников", "треугольникам", "треугольники", "треугольниками", "треугольниках"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.MASCULINE)
 	)
 	uborschik = T00_Utils.fluent (
@@ -464,6 +533,13 @@ func init_nouns ():
 
 func init_adjectives ():
 	
+	belyi = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("белый", "белого", "белому", "белого", "белый", "белым", "белом"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("белая", "белой", "белой", "белую", "белую", "белой", "белой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("белое", "белого", "белому", "белое", "белое", "белым", "белом"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("белые", "белый", "белым", "белых", "белые", "белыми", "белых"))
+	)
 	bolshoy = (
 		T00_Adjective.new ()
 		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("большой", "большого", "большому", "большого", "большой", "большим", "большом"))
@@ -492,6 +568,13 @@ func init_adjectives ():
 		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("фигурное", "фигурного", "фигурному", "фигурное", "фигурное", "фигурным", "фигурном"))
 		.__plural_forms (T00_AdjCaseForms.new ().setup ("фигурные", "фигурных", "фигурным", "фигурных", "фигурные", "фигурными", "фигурных"))
 	)
+	igralniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("игральный", "игрального", "игральному", "игрального", "игральный", "игральным", "игральном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("игральная", "игральной", "игральной", "игральную", "игральную", "игральной", "игральной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("игральное", "игрального", "игральному", "игральное", "игральное", "игральным", "игральном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("игральные", "игральных", "игральным", "игральных", "игральные", "игральными", "игральных"))
+	)
 	kamenniy = (
 		T00_Adjective.new ()
 		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("каменный", "каменного", "каменному", "каменного", "каменный", "каменным", "каменном"))
@@ -499,12 +582,26 @@ func init_adjectives ():
 		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("каменное", "каменного", "каменному", "каменное", "каменное", "каменным", "каменном"))
 		.__plural_forms (T00_AdjCaseForms.new ().setup ("каменные", "каменных", "каменным", "каменных", "каменные", "каменными", "каменных"))
 	)
+	krasniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("красный", "красного", "красному", "красного", "красный", "красным", "красном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("красная", "красной", "красной", "красную", "красную", "красной", "красной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("красное", "красного", "красному", "красное", "красное", "красным", "красном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("красные", "красных", "красным", "красных", "красные", "красными", "красных"))
+	)
 	krugliy = (
 		T00_Adjective.new ()
 		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("круглый", "круглого", "круглому", "круглого", "круглый", "круглым", "круглом"))
 		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("круглая", "круглой", "круглой", "круглую", "круглую", "круглой", "круглой"))
 		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("круглое", "круглого", "круглому", "круглое", "круглое", "круглым", "круглом"))
 		.__plural_forms (T00_AdjCaseForms.new ().setup ("круглые", "круглых", "круглым", "круглых", "круглые", "круглыми", "круглых"))
+	)
+	kvadratniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("квадратный", "квадратного", "квадратному", "квадратного", "квадратный", "квадратным", "квадратном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("квадратная", "квадратной", "квадратной", "квадратную", "квадратную", "квадратной", "квадратной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("квадратное", "квадратного", "квадратному", "квадратное", "квадратное", "квадратным", "квадратном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("квадратные", "квадратных", "квадратным", "квадратных", "квадратные", "квадратными", "квадратных"))
 	)
 	malenkiy = (
 		T00_Adjective.new ()
@@ -520,6 +617,20 @@ func init_adjectives ():
 		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("небольшое", "небольшого", "небольшому", "небольшое", "небольшое", "небольшим", "небольшом"))
 		.__plural_forms (T00_AdjCaseForms.new ().setup ("небольшие", "небольших", "небольшим", "небольших", "небольшие", "небольшими", "небольших"))
 	)
+	oranzheniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("оранжевый", "оранжевого", "оранжевому", "оранжевого", "оранжевый", "оранжевым", "оранжевом"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("оранжевая", "оранжевой", "оранжевой", "оранжевую", "оранжевую", "оранжевой", "оранжевой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("оранжевое", "оранжевого", "оранжевому", "оранжевое", "оранжевое", "оранжевым", "оранжевом"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("оранжевые", "оранжевых", "оранжевым", "оранжевых", "оранжевые", "оранжевыми", "оранжевых"))
+	)
+	otkrytiy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("открытый", "открытого", "открытому", "открытого", "открытый", "открытым", "открытом"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("открытая", "открытой", "открытой", "открытую", "открытую", "открытой", "открытой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("открытое", "открытого", "открытому", "открытое", "открытое", "открытым", "открытом"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("открытые", "открытых", "открытым", "открытых", "открытые", "открытыми", "открытых"))
+	)
 	prodolgovatiy = (
 		T00_Adjective.new ()
 		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("продолговатый", "продолговатого", "продолговатому", "продолговатого", "продолговатый", "продолговатым", "продолговатом"))
@@ -533,6 +644,55 @@ func init_adjectives ():
 		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("прозрачная", "прозрачной", "прозрачной", "прозрачную", "прозрачную", "прозрачной", "прозрачной"))
 		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("прозрачное", "прозрачного", "прозрачному", "прозрачное", "прозрачное", "прозрачным", "прозрачном"))
 		.__plural_forms (T00_AdjCaseForms.new ().setup ("прозрачные", "прозрачных", "прозрачным", "прозрачных", "прозрачные", "прозрачными", "прозрачных"))
+	)
+	seriy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("серый", "серого", "серому", "серого", "серый", "серым", "сером"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("серая", "серой", "серой", "серую", "серую", "серой", "серой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("серое", "серого", "серому", "серое", "серое", "серым", "сером"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("серые", "серых", "серым", "серых", "серые", "серыми", "серых"))
+	)
+	siniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("синий", "синего", "синему", "синего", "синий", "синим", "синем"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("синяя", "синей", "синей", "синюю", "синюю", "синей", "синей"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("синее", "синего", "синему", "синее", "синее", "синим", "синем"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("синие", "синих", "синим", "синих", "синие", "синими", "синих"))
+	)
+	shestiugolniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("шестиугольный", "шестиугольного", "шестиугольному", "шестиугольного", "шестиугольный", "шестиугольным", "шестиугольном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("шестиугольная", "шестиугольной", "шестиугольной", "шестиугольную", "шестиугольную", "шестиугольной", "шестиугольной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("шестиугольное", "шестиугольного", "шестиугольному", "шестиугольное", "шестиугольное", "шестиугольным", "шестиугольном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("шестиугольные", "шестиугольных", "шестиугольным", "шестиугольных", "шестиугольные", "шестиугольными", "шестиугольных"))
+	)
+	treugolniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("треугольный", "треугольного", "треугольному", "треугольного", "треугольный", "треугольным", "треугольном"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("треугольная", "треугольной", "треугольной", "треугольную", "треугольную", "треугольной", "треугольной"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("треугольное", "треугольного", "треугольному", "треугольное", "треугольное", "треугольным", "треугольном"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("треугольные", "треугольных", "треугольным", "треугольных", "треугольные", "треугольными", "треугольных"))
+	)
+	zachyorknutiy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("зачеркнутый", "зачеркнутого", "зачеркнутому", "зачеркнутого", "зачеркнутый", "зачеркнутым", "зачеркнутом"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("зачеркнутая", "зачеркнутой", "зачеркнутой", "зачеркнутую", "зачеркнутую", "зачеркнутой", "зачеркнутой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("зачеркнутое", "зачеркнутого", "зачеркнутому", "зачеркнутое", "зачеркнутое", "зачеркнутым", "зачеркнутом"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("зачеркнутые", "зачеркнутых", "зачеркнутым", "зачеркнутых", "зачеркнутые", "зачеркнутыми", "зачеркнутых"))
+	)
+	zelyoniy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("зеленый", "зеленого", "зеленому", "зеленого", "зеленый", "зеленым", "зеленом"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("зеленая", "зеленой", "зеленой", "зеленую", "зеленую", "зеленой", "зеленой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("зеленое", "зеленого", "зеленому", "зеленое", "зеленое", "зеленым", "зеленом"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("зеленые", "зеленых", "зеленым", "зеленых", "зеленые", "зелеными", "зеленых"))
+	)
+	zhyoltiy = (
+		T00_Adjective.new ()
+		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("желтый", "желтого", "желтому", "желтого", "желтый", "желтым", "желтом"))
+		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("желтая", "желтой", "желтой", "желтую", "желтую", "желтой", "желтой"))
+		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("желтое", "желтого", "желтому", "желтое", "желтое", "желтым", "желтом"))
+		.__plural_forms (T00_AdjCaseForms.new ().setup ("желтые", "желтых", "желтым", "желтых", "желтые", "желтыми", "желтых"))
 	)
 	znakomyi = (
 		T00_Adjective.new ()

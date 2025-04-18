@@ -59,7 +59,7 @@ func equals (phrase: T00_SimplePhrase, deny_null_param: bool = false) -> bool:
 
 func get_subject () -> T00_Noun:
 	
-	printerr ("Impossible to define this phrase's subject (it's implicit).")
+	printerr ("It's impossible to define this phrase's subject (it's implicit).")
 	assert (false)
 	return null
 

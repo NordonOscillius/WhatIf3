@@ -447,13 +447,42 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 	
 	var story: S01_Story = T00_A_Globals.story
 	var w: T00_A_Words = T00_A_Globals.words
+	var hero_is_male: bool = get_hero_is_male ()
 	
 	var s1: String = ""
 	
+	if item._is_clue:
+		s1 += "Я "
+		s1 += "поднес " if hero_is_male else "поднесла "
+		s1 += S01_ItemType.get_description_uninspected_short (item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE)) + " "
+		s1 += "поближе к глазам."
+	
+	match item.get_item_type ().value:
+		S01_ItemType.TOKEN_MARK.value:
+			s1 += " Это был плоский "
+			# Шестиугольный.
+			s1 += S01_GeometricShape.get_adjectve_for_shape (item.get_geometric_shape ()).get_form_for (T00_AdjUsage.create_initial ())
+			s1 += " жетон "
+			# Черного.
+			s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+			s1 += " цвета, сделанный, похоже, из дерева. На одной из его сторон была выжжен символ: открытый глаз."
+			s1 += " Внезапно промелькнувшая мысль унесла меня далеко в детство, и перед моим внутренним взором предстало лицо брата. Меня осенило."
+		#S01_ItemType.SMALL_KEY.value:
+		S01_ItemType.SHAPED_STONE.value:
+			s1 += ""
+		S01_ItemType.SHEET_OF_PAPER.value:
+			s1 += ""
+		S01_ItemType.STONE_BOX.value:
+			s1 += ""
+		S01_ItemType.HOUSE_KEY.value:
+			s1 += ""
 	
 	_last_object_mentioned = MENTION_CLUE_INSPECTED
 	
 	item.remove_action (T00_Action.INSPECT)
+	# Дописать по-нормальному закомментированное выражение внизу.
+	# ...
+	#item.set_action_panel_name (S01_ItemType.get_description_short (item.get_item_type ()))
 	if item._is_clue:
 		_hero_inspected_clue = true
 	

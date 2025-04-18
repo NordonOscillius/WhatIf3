@@ -30,6 +30,10 @@ static var GENDER: StringName = &"gender"
 static var HEAVINESS: StringName = &"heaviness"
 ## StringName для категории "Тип секретного знака".
 static var SECRET_SIGN_TYPE: StringName = &"secret_sign_type"
+## StringName для категории "Цвет".
+static var COLOR: StringName = &"color"
+## StringName для категории "Геометрическая форма".
+static var GEOMETRIC_SHAPE: StringName = &"geometric_shape"
 
 # Phrase Param Values.
 

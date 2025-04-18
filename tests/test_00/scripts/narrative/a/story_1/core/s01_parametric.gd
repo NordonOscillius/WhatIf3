@@ -183,6 +183,9 @@ func sort_actions_alphabetically_callback (a: T00_Action, b: T00_Action) -> bool
 func get_action_panel_name () -> S01_PhraseParamValue:
 	return get_param (S01_ParamClass.ACTION_PANEL_NAME)
 
+func set_action_panel_name (param_value: S01_PhraseParamValue):
+	set_param (PNAME__ACTION_PANEL_NAME, param_value)
+
 
 # ==================================================
 # ==================== ACCESSORS ===================

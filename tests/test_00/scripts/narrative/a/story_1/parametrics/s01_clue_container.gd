@@ -19,10 +19,13 @@ func generate ():
 	# Генерируем предмет зацепки.
 	_clue_item = S01_ClueContainerItem.new ()
 	_clue_item._is_clue = true
-	_clue_item.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.select_for_clue ())
-	_clue_item.set_param (PNAME__ACTION_PANEL_NAME, _clue_item.get_action_panel_name ())
-	_clue_item.set_param (S01_ClueContainerItem.PNAME__SECRET_SIGN_TYPE, S01_SecretSignType.select_for_clue_item ())
-	#_clue_item.set_param (PNAME__ACTION_PANEL_NAME, S01_ItemType.get_description_medium (_clue_item.get_item_type()))
+	_clue_item.set_item_type (S01_ItemType.select_for_clue ())
+	_clue_item.set_action_panel_name (_clue_item.create_action_panel_name_uninspected ())
+	_clue_item.set_secret_sign_type (S01_SecretSignType.select_for_clue_item ())
+	_clue_item.set_color (S01_Color.select_for_item (_clue_item))
+	var shape: S01_StringParamValue = S01_GeometricShape.select_for_clue_item (_clue_item)
+	if shape:
+		_clue_item.set_geometric_shape (shape)
 	add_child (_clue_item)
 	
 	# DEBUG.
@@ -41,7 +44,8 @@ func generate ():
 		var key: S01_ClueContainerItem = S01_ClueContainerItem.new ()
 		key._is_clue = false
 		key.set_param (S01_ClueContainerItem.PNAME__ITEM_TYPE, S01_ItemType.HOUSE_KEY)
-		key.set_param (PNAME__ACTION_PANEL_NAME, key.get_action_panel_name ())
+		key.set_param (PNAME__ACTION_PANEL_NAME, key.create_action_panel_name_uninspected ())
+		key.set_param (S01_ClueContainerItem.PNAME__COLOR, S01_Color.select_for_item (key))
 		add_child (key)
 	
 	# Подбираем тип контейнера по типу зацепки.
