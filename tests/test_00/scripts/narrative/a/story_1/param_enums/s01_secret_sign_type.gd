@@ -23,10 +23,12 @@ static func select_for_clue_item () -> S01_StringParamValue:
 
 static func get_description_medium (sign_type: S01_StringParamValue) -> T00_SimplePhrase:
 	
+	var w: T00_A_Words = T00_A_Globals.words
+	
 	match sign_type.value:
-		SPIRAL.value: return null
-		EYE.value: return null
-		DICE.value: return null
+		SPIRAL.value: return T00_AdjNounPhrase.new ().setup (w.zachyorknutiy, w.spiral)
+		EYE.value: return T00_AdjNounPhrase.new ().setup (w.otkrytiy, w.glaz)
+		DICE.value: return T00_AdjNounPhrase.new ().setup (w.igralniy, w.kubik)
 	
 	printerr ("Unknown sign type.")
 	return null

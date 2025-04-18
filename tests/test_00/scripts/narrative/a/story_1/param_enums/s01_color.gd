@@ -41,21 +41,21 @@ static func select_for_item (item: S01_ClueContainerItem) -> S01_StringParamValu
 	return null
 
 
-## Создает и возвращает Простую Фразу, хранящую название цвета. Фраза не содержит субъекта (это T00_AdjPhrase или T00_ConstAdjPhrase) и относится к неявному неодушевленному существительному мужского рода (по умолчанию фраза будет возвращать, например, строку "зеленый" при запросе get_form_for() для винительного падежа). Для получения других результатов (результатов, относящихся к существительным другого рода) достаточно изменить свойства полученной фразы "на месте", не клонируя ее.
-static func get_phrase_for_color (color: S01_StringParamValue) -> T00_SimplePhrase:
+## Создает и возвращает Простую Фразу, хранящую название цвета. Фраза не содержит субъекта (это T00_AdjPhrase или T00_ConstAdjPhrase) и по умолчанию относится к неявному неодушевленному существительному мужского рода (по умолчанию фраза будет возвращать, например, строку "зеленый" при запросе get_form_for() для винительного падежа). Если необходимо отнести прилагательное в составе фразы к существительному другого рода или одушевленности, следует передать соответствующие значения параметров gender и animacy.
+static func get_phrase_for_color (color: S01_StringParamValue, gender: int = T00_WordGender.MASCULINE, animacy: int = T00_WordAnimacy.INANIMATE) -> T00_SimplePhrase:
 	
 	var w: T00_A_Words = T00_A_Globals.words
 	
 	match color.value:
-		BLACK.value: return T00_AdjPhrase.new ().setup (w.chorniy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		WHITE.value: return T00_AdjPhrase.new ().setup (w.belyi, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		DARK_RED.value: return T00_ConstAdjPhrase.new ().setup ("темно-", w.krasniy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		LIGHT_GRAY.value: return T00_ConstAdjPhrase.new ().setup ("светло-", w.seriy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		DARK_GRAY.value: return T00_ConstAdjPhrase.new ().setup ("темно-", w.seriy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		PALE_BLUE.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.siniy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		PALE_GREEN.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.zelyoniy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		PALE_ORANGE.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.oranzheniy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
-		PALE_YELLOW.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.zhyoltiy, T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
+		BLACK.value: return T00_AdjPhrase.new ().setup (w.chorniy, gender, animacy)
+		WHITE.value: return T00_AdjPhrase.new ().setup (w.belyi, gender, animacy)
+		DARK_RED.value: return T00_ConstAdjPhrase.new ().setup ("темно-", w.krasniy, gender, animacy)
+		LIGHT_GRAY.value: return T00_ConstAdjPhrase.new ().setup ("светло-", w.seriy, gender, animacy)
+		DARK_GRAY.value: return T00_ConstAdjPhrase.new ().setup ("темно-", w.seriy, gender, animacy)
+		PALE_BLUE.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.siniy, gender, animacy)
+		PALE_GREEN.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.zelyoniy, gender, animacy)
+		PALE_ORANGE.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.oranzheniy, gender, animacy)
+		PALE_YELLOW.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.zhyoltiy, gender, animacy)
 	
 	printerr ("Unknown color.")
 	return null

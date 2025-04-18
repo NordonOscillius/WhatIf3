@@ -115,7 +115,7 @@ var krugliy: T00_Adjective
 var kvadratniy: T00_Adjective
 var malenkiy: T00_Adjective
 var nebolshoy: T00_Adjective
-var oranzheniy: T00_Adjective
+var oranzheviy: T00_Adjective
 var otkrytiy: T00_Adjective
 var prodolgovatiy: T00_Adjective
 var prozrachniy: T00_Adjective
@@ -617,7 +617,7 @@ func init_adjectives ():
 		.__neuter_single_forms (T00_AdjCaseForms.new ().setup ("небольшое", "небольшого", "небольшому", "небольшое", "небольшое", "небольшим", "небольшом"))
 		.__plural_forms (T00_AdjCaseForms.new ().setup ("небольшие", "небольших", "небольшим", "небольших", "небольшие", "небольшими", "небольших"))
 	)
-	oranzheniy = (
+	oranzheviy = (
 		T00_Adjective.new ()
 		.__masculine_single_forms (T00_AdjCaseForms.new ().setup ("оранжевый", "оранжевого", "оранжевому", "оранжевого", "оранжевый", "оранжевым", "оранжевом"))
 		.__feminine_single_forms (T00_AdjCaseForms.new ().setup ("оранжевая", "оранжевой", "оранжевой", "оранжевую", "оранжевую", "оранжевой", "оранжевой"))
