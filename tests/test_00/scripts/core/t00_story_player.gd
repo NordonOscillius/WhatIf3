@@ -20,6 +20,10 @@ static var PATH_LABEL_BORDER_HORIZONTAL: int = 200
 static var STORY_LABEL_BORDER_HORIZONTAL: int = 400
 static var STORY_LABEL_BORDER_VERTICAL: int = 60
 
+#static var LABEL_FONT_FACE: FontFile = preload ("res://tests/test_00/res/fonts/Montserrat-Regular.ttf")
+#static var LABEL_FONT_FACE_THICK: FontFile = preload ("res://tests/test_00/res/fonts/Montserrat-Medium.ttf")
+#static var LABEL_FONT_FACE_THIN: FontFile = preload ("res://tests/test_00/res/fonts/Montserrat-Light.ttf")
+
 var _state: int = STATE_FADE_IN
 var _fade_speed: float = 8.0
 ## Непрозрачность элементов на экране. Единица соответствует полностью видимому интерфейсу.
@@ -55,6 +59,7 @@ func _ready ():
 	
 	# Центральный лейбл истории.
 	_story_label = Label.new ()
+	_story_label.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_USUAL)
 	_story_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var story_label_size: Vector2 = Vector2 (
 		viewport_size.x - STORY_LABEL_BORDER_HORIZONTAL * 2,
@@ -74,6 +79,7 @@ func _ready ():
 	
 	# Лейбл пути.
 	_path_label = T00_PathLabel.new ()
+	#_path_label.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_THIN)
 	_path_label.text = get_path_label_empty_text ()
 	_path_label.size = Vector2 (viewport_size.x - PATH_LABEL_BORDER_HORIZONTAL * 2, PATH_LABEL_HEIGHT)
 	_path_label.position = Vector2 ((viewport_size.x - _path_label.size.x) * .5, viewport_size.y - ACTION_PANEL_HEIGHT + PATH_LABEL_OFFSET_Y)

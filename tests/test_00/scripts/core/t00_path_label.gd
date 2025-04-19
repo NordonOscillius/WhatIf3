@@ -12,6 +12,7 @@ var _mouse_is_down: bool
 func _ready ():
 	
 	add_theme_color_override ("font_color", NORMAL_COLOR)
+	add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_THIN)
 	
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	mouse_entered.connect (on_mouse_entered)

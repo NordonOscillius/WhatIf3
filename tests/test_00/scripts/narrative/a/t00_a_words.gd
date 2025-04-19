@@ -41,6 +41,7 @@ var sestra: T00_Noun
 var shestiugolnik: T00_Noun
 var shkatulka: T00_Noun
 var spiral: T00_Noun
+var stranitsa: T00_Noun
 var stroitel: T00_Noun
 var svyortok: T00_Noun
 var syn: T00_Noun
@@ -435,6 +436,13 @@ func init_nouns ():
 		T00_Noun.new ()
 		.__single_forms (T00_NounCaseForms.new ().setup ("спираль", "спирали", "спирали", "спираль", "спиралью", "спирали"))
 		.__plural_forms (T00_NounCaseForms.new ().setup ("спирали", "спиралей", "спиралям", "спирали", "спиралями", "спиралях"))
+		.__animacy (T00_WordAnimacy.INANIMATE)
+		.__gender (T00_WordGender.FEMININE)
+	)
+	stranitsa = T00_Utils.fluent (
+		T00_Noun.new ()
+		.__single_forms (T00_NounCaseForms.new ().setup ("страница", "страницы", "странице", "страницу", "страницей", "странице"))
+		.__plural_forms (T00_NounCaseForms.new ().setup ("страницы", "страниц", "страницам", "страницы", "страницами", "страницах"))
 		.__animacy (T00_WordAnimacy.INANIMATE)
 		.__gender (T00_WordGender.FEMININE)
 	)

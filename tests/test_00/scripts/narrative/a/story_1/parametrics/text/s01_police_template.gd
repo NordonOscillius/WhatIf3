@@ -19,6 +19,7 @@ static var MENTION_POLICEMAN: StringName = &"policeman"
 static var MENTION_CLUE_CONTAINER: StringName = &"clue_container"
 static var MENTION_CLUE_UNINSPECTED: StringName = &"clue_uninspected"
 static var MENTION_CLUE_INSPECTED: StringName = &"clue_inspected"
+static var MENTION_HOUSE_KEY_INSPECTED: StringName = &"house_key_inspected"
 
 var _state: int = STATE_EXPOSITION
 
@@ -515,7 +516,7 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 			#s1 += " Это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. На обеих сторонах белого листа был напечатан текст на незнакомом языке; на одной из страниц текст завершался: должно быть, глава подходила к концу."
 			#s1 += " Похоже, это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. На обеих сторонах белого листа был напечатан текст на незнакомом языке; вторая страница была заполнена текстом лишь наполовину, а сразу после текста, посреди пустого пространства после него, следовал символ в виде игрального кубика. Должно быть, декоративный разделитель глав?"
 			#s1 += " Похоже, это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. На обеих сторонах белого листа был напечатан текст на незнакомом языке; вторая страница была заполнена текстом лишь наполовину. На пустом пространстве, следовавшем после текста, черными чернилами был нанесен символ в виде игрального кубика."
-			#s1 += " Похоже, это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. На обеих сторонах белого листа был напечатан текст на незнакомом языке; вторая страница была заполнена текстом лишь наполовину. На пустом пространстве страницы, следовавшем после текста, я увидел символ в виде игрального кубика."
+			##s1 += " Похоже, это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. На обеих сторонах белого листа был напечатан текст на незнакомом языке; вторая страница была заполнена текстом лишь наполовину. На пустом пространстве страницы, следовавшем после текста, я увидел символ в виде игрального кубика."
 			#s1 += " Похоже, это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. Бумага была белая; с одной стороны ее покрывал печатный текст на не знакомом мне языке, на другой стороне текст заканчивался"
 			#s1 += " Похоже, это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. Но одной стороне белого листа был напечатан текст на незнакомом языке"
 			#s1 += " Похоже, это была страница из какой-то книги, аккуратно вырезанная ножницами или ножом. На обеих сторонах белого листа был напечатан текст на незнакомом языке; вторая страница была заполнена текстом лишь наполовину, а сразу после текста, на оставшемся пустом пространстве"
@@ -576,31 +577,41 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 				#s1 += "Я повертел ключ в руках: большой и длинный, как от сувальдного замка, выполнен из белого металла."
 				pass
 	
-	var s2: String = ""
-	if item.get_item_type ().equals (S01_ItemType.SHEET_OF_PAPER):
-		s2 += "\"Нет, не разделитель...\"\n\n"
-		pass
+	# Если предмет - зацепка, то добавляем пару предложений про флешбэк и реакцию полицейского.
+	if item._is_clue:
+		var s2: String = ""
+		if item.get_item_type ().equals (S01_ItemType.SHEET_OF_PAPER):
+			s2 += "\"Нет, не разделитель...\"\n\n"
+		
+		s2 += "Внезапно промелькнувшая мысль унесла меня далеко в детство, и перед моим внутренним взором предстало лицо "
+		# Брата.
+		s2 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+		s2 += ". Меня осенило."
+		
+		var s3: String = ""
+		s3 += " — "
+		s3 += story._hero._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE)
+		s3 += ", что-то не так? — Вопрос офицера вернул меня к реальности."
+		
+		_last_object_mentioned = MENTION_CLUE_INSPECTED
+		
+		# Назначаем предмету новое название на панели действий: теперь герой знает, что это за предмет. (Но для ключа не назначаем. Это нелогично, просто костыль.)
+		item.set_action_panel_name (item.create_action_panel_name_inspected ())
+		_flow_sentences = [s1, s2, s3]
 	
-	s2 += "Внезапно промелькнувшая мысль унесла меня далеко в детство, и перед моим внутренним взором предстало лицо "
-	# Брата.
-	s2 += get_x_to_hero_relation_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-	s2 += ". Меня осенило."
-	
-	var s3: String = ""
-	s3 += " — "
-	s3 += story._hero._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE)
-	s3 += ", что-то не так? — Вопрос офицера вернул меня к реальности."
-	
-	_last_object_mentioned = MENTION_CLUE_INSPECTED
+	# Если предмет не является зацепкой, то останавливаемся на единственном абзаце.
+	else:
+		# Ключу название не назначаем. По-хорошему, надо бы назначать, но у меня уже неразбериха в ситуациях.
+		# Менять название будем тогда, когда герой узнает про завещание и про то, что это ключ от дома Икса.
+		#item.set_action_panel_name (item.create_action_panel_name_inspected ())
+		
+		_last_object_mentioned = MENTION_HOUSE_KEY_INSPECTED
+		_flow_sentences = [s1]
 	
 	item.remove_action (T00_Action.INSPECT)
-	# Дописать по-нормальному закомментированное выражение внизу.
-	# ...
-	#item.set_action_panel_name (S01_ItemType.get_description_short (item.get_item_type ()))
 	if item._is_clue:
 		_hero_inspected_clue = true
 	
-	_flow_sentences = [s1, s2, s3]
 	_flow_action_tree = story.create_action_tree ()
 
 
@@ -678,6 +689,11 @@ func generate_flow_for_asking_about_container ():
 	s3 += " — Подпишитесь о получении "
 	s3 += "предмета" if story._clue_container.get_items ().size () == 1 else "предметов"
 	s3 += ". Вот здесь."
+	
+	# Меняем название ключа на панели действий, если ключ существует.
+	var key: S01_ClueContainerItem = get_house_key_if_possible ()
+	if key:
+		key.set_action_panel_name (key.create_action_panel_name_inspected ())
 	
 	story._introducer.remove_action (T00_Action.ASK_ABOUT_CLUE_CONTAINER)
 	
@@ -842,4 +858,17 @@ func get_hero_to_x_relation_phrase () -> T00_SimplePhrase:
 	
 	printerr ("Unknown hero to X relation.")
 	return null
+
+
+## Ищет ключ от дома Икса внутри контейнера и возвращает его. Если ключ не найден, возвращает null.
+func get_house_key_if_possible () -> S01_ClueContainerItem:
+	
+	var items: Array[S01_ClueContainerItem] = T00_A_Globals.story._clue_container.get_items ()
+	if items.size () < 2:
+		return null
+	
+	var key_item: S01_ClueContainerItem = items[0]
+	if key_item._is_clue:
+		key_item = items[1]
+	return key_item
 

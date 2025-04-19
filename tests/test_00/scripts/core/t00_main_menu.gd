@@ -36,6 +36,7 @@ func _ready ():
 	_name_label.text = "История Икс"
 	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_name_label.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_BOLD)
 	_name_label.add_theme_font_size_override ("font_size", 60)
 	_name_label.add_theme_color_override ("font_color", T00_Utils.hsl_to_rgb (0, 0, .7))
 	_canvas_layer.add_child (_name_label)
@@ -58,6 +59,7 @@ func create_and_add_button (text: String, pressed_handler: Callable) -> Button:
 	button.text = text
 	button.focus_mode = Control.FOCUS_NONE
 	button.size = Vector2 (BUTTON_WIDTH, BUTTON_HEIGHT)
+	button.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_THICK)
 	button.pressed.connect (pressed_handler)
 	
 	_canvas_layer.add_child (button)

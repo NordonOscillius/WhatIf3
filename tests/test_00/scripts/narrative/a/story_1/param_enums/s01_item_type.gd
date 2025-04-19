@@ -119,6 +119,22 @@ static func get_description_uninspected_for_panel (item_type: S01_StringParamVal
 	return null
 
 
+static func get_description_inspected_for_panel (item_type: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match item_type.value:
+		TOKEN_MARK.value: return T00_AdjNounPhrase.new ().setup (w.chorniy, w.zheton)
+		SMALL_KEY.value: return T00_AdjNounPhrase.new ().setup (w.malenkiy, w.klyuchik)
+		SHAPED_STONE.value: return T00_AdjNounPhrase.new ().setup (w.figurniy, w.kamen)
+		SHEET_OF_PAPER.value: return T00_NounConstPhrase.new ().setup (w.stranitsa, " из книги")
+		STONE_BOX.value: return T00_AdjNounPhrase.new ().setup (w.kamenniy, w.shkatulka)
+		HOUSE_KEY.value: return T00_NounConstPhrase.new ().setup (w.klyuch, " от дома")
+	
+	printerr ("Unknown item type.")
+	return null
+
+
 static func get_description_uninspected_short (item_type: S01_StringParamValue) -> T00_SimplePhrase:
 	
 	var w: T00_A_Words = T00_A_Globals.words

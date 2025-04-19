@@ -32,6 +32,7 @@ func _ready ():
 	_label.text = "Сделано специально для What?If3 на Gamin.me"
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_label.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_THICK)
 	_label.add_theme_font_size_override ("font_size", 36)
 	_label.add_theme_color_override ("font_color", T00_Utils.hsl_to_rgb (0, 0, .7))
 	_label.mouse_filter = Control.MOUSE_FILTER_PASS

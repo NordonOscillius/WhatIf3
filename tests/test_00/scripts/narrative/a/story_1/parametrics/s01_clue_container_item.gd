@@ -21,11 +21,17 @@ func _init ():
 	_name = &"clue container item"
 
 
-## Возвращает Значение Параметра, хранящее фразу, описывающую предмет на панели действий.
+## Возвращает Значение Параметра, хранящее фразу, описывающую предмет на панели действий для случая, когда предмет еще не изучен.
 func create_action_panel_name_uninspected () -> S01_PhraseParamValue:
 	
 	return S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, S01_ItemType.get_description_uninspected_for_panel (get_item_type ()))
 	#return S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, S01_ItemType.get_description_medium (get_item_type ()))
+
+
+## Возвращает Значение Параметра, хранящее фразу, описывающую предмет на панели действий для случая, когда предмет уже изучен.
+func create_action_panel_name_inspected () -> S01_PhraseParamValue:
+	
+	return S01_PhraseParamValue.new (S01_ParamClass.ACTION_PANEL_NAME, S01_ItemType.get_description_inspected_for_panel (get_item_type ()))
 
 
 # ==================================================

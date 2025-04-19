@@ -20,6 +20,7 @@ func _init (node: T00_ActionNode):
 func _ready ():
 	
 	add_theme_color_override ("font_color", NORMAL_COLOR)
+	add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_THICK)
 	
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	mouse_entered.connect (on_mouse_entered)
