@@ -147,6 +147,26 @@ func create_action_tree () -> T00_ActionNode:
 	return action_tree
 
 
+## Ищет документ среди своих непосредственных потомков. Если документа не нашлось, создает новый экземпляр документа, добавляет его к своим потомкам и возвращает его.
+## Документ всегда должен находиться на первом уровне вложенности (т. е. быть непосредственным потомком Истории).
+func get_or_create_document () -> S01_Document:
+	
+	var document: S01_Document
+	var i: int = _children.size ()
+	while i:
+		i -= 1
+		var child: S01_Parametric = _children[i]
+		document = child as S01_Document
+		if document:
+			return document
+	
+	# Если документа не нашли, то создаем его и возвращаем.
+	document = S01_Document.new ()
+	document.set_action_panel_name (document.create_action_panel_name ())
+	add_child (document)
+	return document
+
+
 # ==================================================
 # ====================== TEXT ======================
 # ==================================================

@@ -54,7 +54,7 @@ static func get_phrase_for_color (color: S01_StringParamValue, gender: int = T00
 		DARK_GRAY.value: return T00_ConstAdjPhrase.new ().setup ("темно-", w.seriy, gender, animacy)
 		PALE_BLUE.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.siniy, gender, animacy)
 		PALE_GREEN.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.zelyoniy, gender, animacy)
-		PALE_ORANGE.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.oranzheniy, gender, animacy)
+		PALE_ORANGE.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.oranzheviy, gender, animacy)
 		PALE_YELLOW.value: return T00_ConstAdjPhrase.new ().setup ("бледно-", w.zhyoltiy, gender, animacy)
 	
 	printerr ("Unknown color.")

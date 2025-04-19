@@ -15,6 +15,11 @@ run/main_scene="res://tests/test_00/scenes/t00_startup.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[debug]
+
+gdscript/warnings/unsafe_property_access=2
+gdscript/warnings/unsafe_method_access=2
+
 [display]
 
 window/size/viewport_width=1280

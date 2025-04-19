@@ -9,13 +9,15 @@ static var INSPECT: StringName = &"inspect"
 static var COME_UP: StringName = &"come_up"
 static var ASK_ABOUT_CLUE_CONTAINER: StringName = &"ask_about_clue_container"
 static var OPEN: StringName = &"open"
+static var SIGN: StringName = &"sign"
 
 static var _names_by_type: Dictionary = {
 	GREET: "поздороваться",
 	INSPECT: "осмотреть",
 	COME_UP: "подойти",
 	ASK_ABOUT_CLUE_CONTAINER: "спросить, что внутри",
-	OPEN: "открыть"
+	OPEN: "открыть",
+	SIGN: "подписать"
 }
 
 var _type: StringName

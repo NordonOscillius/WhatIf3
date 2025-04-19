@@ -68,3 +68,43 @@ static func get_phrase_official (family_relation: S01_StringParamValue) -> T00_S
 	
 	printerr ("Unknown family relation type.")
 	return null
+
+
+## "Дедушка", а не "дед"; "мама" вместо "матери"; "папа" вместо "отца".
+static func get_phrase_nick (family_relation: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match family_relation.value:
+		FATHER.value: return T00_NounPhrase.new ().setup (w.papa)
+		MOTHER.value: return T00_NounPhrase.new ().setup (w.mama)
+		GRANDFATHER.value: return T00_NounPhrase.new ().setup (w.dedushka)
+		GRANDMOTHER.value: return T00_NounPhrase.new ().setup (w.babushka)
+		BROTHER.value: return T00_NounPhrase.new ().setup (w.brat)
+		SISTER.value: return T00_NounPhrase.new ().setup (w.sestra)
+		SON.value: return T00_NounPhrase.new ().setup (w.syn)
+		DAUGHTER.value: return T00_NounPhrase.new ().setup (w.doch)
+		GRANDSON.value: return T00_NounPhrase.new ().setup (w.vnuk)
+		GRANDDAUGHTER.value: return T00_NounPhrase.new ().setup (w.vnuchka)
+	
+	printerr ("Unknown family relation type.")
+	return null
+
+
+## Обычно маму, папу, дедушку или бабушку не называют по имени, когда обращаются к ним. Этот метод возвращает true, если к персонажу "можно" обратиться по имени.
+static func get_name_availability_for_appeal (family_relation: S01_StringParamValue) -> bool:
+	
+	match family_relation.value:
+		FATHER.value: return false
+		MOTHER.value: return false
+		GRANDFATHER.value: return false
+		GRANDMOTHER.value: return false
+		BROTHER.value: return true
+		SISTER.value: return true
+		SON.value: return true
+		DAUGHTER.value: return true
+		GRANDSON.value: return true
+		GRANDDAUGHTER.value: return true
+	
+	printerr ("Unknown family relation type.")
+	return false

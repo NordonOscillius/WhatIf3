@@ -151,3 +151,19 @@ static func get_description_uninspected_short (item_type: S01_StringParamValue) 
 	return null
 
 
+static func get_description_for_document (item_type: S01_StringParamValue) -> T00_SimplePhrase:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match item_type.value:
+		TOKEN_MARK.value: return T00_AdjNounPhrase.new ().setup (w.ploskiy, w.predmet)
+		SMALL_KEY.value: return T00_NounPhrase.new ().setup (w.klyuch)
+		SHAPED_STONE.value: return T00_AdjNounPhrase.new ().setup (w.kamenniy, w.predmet)
+		SHEET_OF_PAPER.value: return T00_NounConstPhrase.new ().setup (w.list, " бумаги с печатным текстом")
+		STONE_BOX.value: return T00_NounConstPhrase.new ().setup (w.shkatulka, " из камня")
+		HOUSE_KEY.value: return T00_NounPhrase.new ().setup (w.klyuch)
+	
+	printerr ("Unknown item type.")
+	return null
+
+

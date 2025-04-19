@@ -34,6 +34,8 @@ var _door_is_closed: bool = false
 var _hero_location: int = HERO_LOCATION_NEAR_DOOR
 var _introducer_pose: int = INTRODUCER_POSE_SITTING_STRAIGHT
 var _introducer_action: int = INTRODUCER_ACTION_WAITING_TO_COME_UP
+## Интродьюсер только что увидел, как герой задумался над зацепкой.
+var _introducer_have_seen_flashback: bool = false
 ## Герой изучил зацепку и готов вот-вот получить флешбэк.
 var _hero_inspected_clue: bool = false
 var _hero_knows_about_testament: bool = false
@@ -72,6 +74,11 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 							generate_flow_for_clue_container_open ()
 					elif action_target is S01_ClueContainerItem:
 						generate_flow_for_inspecting_item (action_target as S01_ClueContainerItem)
+					elif action_target == story.get_or_create_document ():
+						if action_type == T00_Action.INSPECT:
+							generate_flow_for_inspecting_document ()
+						elif action_type == T00_Action.SIGN:
+							generate_flow_for_signing_document ()
 	
 	# Если в очереди еще остались непоказанные предложения, показываем очередное.
 	# Теперь эта проверка является излишней.
@@ -532,23 +539,31 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 			# Если герой знает про завещание, то он знает и про то, что это ключ от дома пропавшего. Если же он не знает, что это ключ от дома пропавшего, то он должен вспомнить, что у того в доме как раз такой замок.
 			var x_to_hero_phrase: T00_SimplePhrase = get_x_to_hero_relation_phrase ()
 			if _hero_knows_about_testament:
-				s1 += "Я "
-				s1 += "посмотрел" if hero_is_male else "посмотрела"
-				s1 += " на ключ от дома "
-				# Брата.
-				s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-				s1 += ": длинный, тяжелый, полностью из металла "
-				# Темно-серого.
-				s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-				s1 += " цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я "
-				s1 += "приезжал к " if hero_is_male else "приезжала к "
-				# Брату.
-				s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.DATIVE, T00_WordNumber.SINGLE))
-				s1 += " в гости, "
-				s1 += "тот оставлял" if x_is_male else "та оставляла"
-				s1 += " мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его вставлять. А потом я просто "
-				s1 += "запомнил" if hero_is_male else "запомнила"
-				s1 += " рисунок бородок."
+				# TODO.
+				if _introducer_have_seen_flashback:
+					#s1 += " — Нет, нет, всё в порядке, — торопливо взглянув на полицейского, ответила я, и снова посмотрела на пакет с вещами."
+					#s1 += " — Нет, нет, всё в порядке, — торопливо ответила я и, бегло посмотрев на полицейского, вернулась к коробке с вещами."
+					#s1 += " — Нет, нет, всё в порядке, — торопливо ответила я и, бросив беглый взгляд на полицейского, вернулась к коробке с вещами. Ключ от дома брата был... (длинный, тяжелый)"
+					s1 += " — Нет, нет, всё в порядке, — торопливо ответила я и, бросив беглый взгляд на полицейского, вернулась к коробке с вещами. Вот ключ от дома брата:... (длинный, тяжелый)"
+					pass
+				else:
+					s1 += "Я "
+					s1 += "посмотрел" if hero_is_male else "посмотрела"
+					s1 += " на ключ от дома "
+					# Брата.
+					s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+					s1 += ": длинный, тяжелый, полностью из металла "
+					# Темно-серого.
+					s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+					s1 += " цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я "
+					s1 += "приезжал к " if hero_is_male else "приезжала к "
+					# Брату.
+					s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.DATIVE, T00_WordNumber.SINGLE))
+					s1 += " в гости, "
+					s1 += "тот оставлял" if x_is_male else "та оставляла"
+					s1 += " мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его вставлять. А потом я просто "
+					s1 += "запомнил" if hero_is_male else "запомнила"
+					s1 += " рисунок бородок."
 				
 				#s1 += "Я посмотрел на ключ от дома брата: длинный, тяжелый, полностью из металла темно-серого цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я приезжал к брату в гости, тот оставлял мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его вставлять. А потом я просто запомнил рисунок."
 				#s1 += "Я посмотрел на ключ от дома брата: длинный, тяжелый, полностью из металла темно-серого цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я гостил у брата, тот оставлял мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его надо вставлять. Позже я во всем разобрался, запомнив рисунок на конце ключа."
@@ -558,24 +573,28 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 				#s1 += "Я взял ключ от дома брата в руки: большой и длинный, из белого металла, а судя по форме, он от сувальдного замка. Да, это он и есть. В доме брата стоял как раз такой замок."
 				pass
 			else:
-				s1 += "Я "
-				s1 += "повертел" if hero_is_male else "повертела"
-				s1 += " ключ в руках: большой и длинный, сделан из металла "
-				# Белого.
-				s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-				s1 += " цвета, и, судя по форме, он от сувальдного замка. Похож на тот, что "
-				# Брат.
-				s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
-				s1 += " "
-				s1 += "оставлял" if x_is_male else "оставляла"
-				s1 += " мне, уезжая с утра на работу, когда я "
-				s1 += "гостил" if hero_is_male else "гостила"
-				s1 += " у него." if x_is_male else " у нее."
-				
-				#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. Похож на тот, что брат оставлял мне, уезжая с утра на работу, когда я гостил у него."
-				#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. В доме брата был как раз такой."
-				#s1 += "Я повертел ключ в руках: большой и длинный, как от сувальдного замка, выполнен из белого металла."
-				pass
+				# TODO.
+				if _introducer_have_seen_flashback:
+					s1 += " — Нет, нет, всё в порядке, — торопливо ответила я. Бросив беглый взгляд на полицейского, я вернулась к коробке с вещами и осмотрела ключ:... (большой и длинный)"
+				else:
+					s1 += "Я "
+					s1 += "повертел" if hero_is_male else "повертела"
+					s1 += " ключ в руках: большой и длинный, сделан из металла "
+					# Белого.
+					s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+					s1 += " цвета, и, судя по форме, он от сувальдного замка. Похож на тот, что "
+					# Брат.
+					s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
+					s1 += " "
+					s1 += "оставлял" if x_is_male else "оставляла"
+					s1 += " мне, уезжая с утра на работу, когда я "
+					s1 += "гостил" if hero_is_male else "гостила"
+					s1 += " у него." if x_is_male else " у нее."
+					
+					#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. Похож на тот, что брат оставлял мне, уезжая с утра на работу, когда я гостил у него."
+					#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. В доме брата был как раз такой."
+					#s1 += "Я повертел ключ в руках: большой и длинный, как от сувальдного замка, выполнен из белого металла."
+					pass
 	
 	# Если предмет - зацепка, то добавляем пару предложений про флешбэк и реакцию полицейского.
 	if item._is_clue:
@@ -594,6 +613,7 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 		s3 += ", что-то не так? — Вопрос офицера вернул меня к реальности."
 		
 		_last_object_mentioned = MENTION_CLUE_INSPECTED
+		_introducer_have_seen_flashback = true
 		
 		# Назначаем предмету новое название на панели действий: теперь герой знает, что это за предмет. (Но для ключа не назначаем. Это нелогично, просто костыль.)
 		item.set_action_panel_name (item.create_action_panel_name_inspected ())
@@ -697,11 +717,66 @@ func generate_flow_for_asking_about_container ():
 	
 	story._introducer.remove_action (T00_Action.ASK_ABOUT_CLUE_CONTAINER)
 	
+	# Добавляем документ в игру, добавляем к нему действия "изучить" и "подписать".
+	var document: S01_Document = story.get_or_create_document ()
+	document.create_and_add_action (T00_Action.INSPECT)
+	document.create_and_add_action (T00_Action.SIGN)
+	
 	_hero_knows_about_testament = true
 	_introducer_action = INTRODUCER_ACTION_WAITING_FOR_SIGNING
 	_last_object_mentioned = MENTION_NONE
 	
 	_flow_sentences = [s1, s2, s3]
+	_flow_action_tree = story.create_action_tree ()
+
+
+func generate_flow_for_inspecting_document ():
+	
+	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	var s1: String = ""
+	var clue_item: S01_ClueContainerItem = story._clue_container._clue_item
+	var items: Array[S01_ClueContainerItem] = story._clue_container.get_items ()
+	var num_items: int = items.size ()
+	if num_items > 1:
+		s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. Ниже был приведен список предметов, которые мне следовало получить; в нем были перечислены ключ от дома "
+		# Вероники / мамы.
+		s1 += get_x_to_hero_relation_nick_or_name_phrase ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+		s1 += " и "
+		# Плоский предмет.
+		s1 += S01_ItemType.get_description_for_document (clue_item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
+		#s1 += "черного"
+		var clue_item_color: S01_StringParamValue = clue_item.get_color ()
+		if clue_item_color:
+			s1 += " "
+			s1 += S01_Color.get_phrase_for_color (clue_item_color).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+			s1 += " цвета"
+		#s1 += " с символом "
+		## Спирали.
+		#s1 += S01_SecretSignType.get_description_short (clue_item.get_secret_sign_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+		s1 += "."
+	else:
+		s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. Ниже был приведен список предметов, которые мне следовало получить; он состоял из единственного пункта — "
+		s1 += "плоского черного предмета с символом спирали"
+		s1 += "."
+		#s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. Ниже был приведен список предметов, которые мне следовало получить; он состоял из единственного пункта — плоского черного предмета с символом спирали."
+	
+	#s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. Ниже был приведен список предметов, которые мне следовало получить; он состоял из двух пунктов: ключа от дома Вероники и плоского черного предмета с символом спирали."
+	#s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. В списке передаваемых предметов значился только один пункт — плоский предмет черного цвета"
+	
+	_flow_sentences = [s1]
+	_flow_action_tree = story.create_action_tree ()
+
+
+func generate_flow_for_signing_document ():
+	
+	var story: S01_Story = T00_A_Globals.story
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	var s1: String = ""
+	
+	_flow_sentences = [s1]
 	_flow_action_tree = story.create_action_tree ()
 
 
@@ -843,6 +918,22 @@ func get_x_to_hero_relation_phrase () -> T00_SimplePhrase:
 		return S01_FamilyRelation.get_phrase_official (relation)
 	elif relation.param_class == S01_ParamClass.FRIENDSHIP_RELATION:
 		return S01_FriendshipRelation.get_phrase (relation, T00_A_Globals.story._x.get_gender ())
+	
+	printerr ("Unknown X to hero relation.")
+	return null
+
+
+## Называет мать матерью, отца папой, деда дедушкой, а брата, сестру, друга или подругу по имени.
+func get_x_to_hero_relation_nick_or_name_phrase () -> T00_SimplePhrase:
+	
+	var relation: S01_StringParamValue = T00_A_Globals.story.get_x_to_hero_relation ()
+	if relation.param_class == S01_ParamClass.FAMILY_RELATION:
+		if S01_FamilyRelation.get_name_availability_for_appeal (relation):
+			return T00_NounPhrase.new ().setup (T00_A_Globals.story._x._first_name)
+		else:
+			return S01_FamilyRelation.get_phrase_nick (relation)
+	elif relation.param_class == S01_ParamClass.FRIENDSHIP_RELATION:
+		return T00_NounPhrase.new ().setup (T00_A_Globals.story._x._first_name)
 	
 	printerr ("Unknown X to hero relation.")
 	return null
