@@ -36,6 +36,9 @@ func _init ():
 
 func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	
+	if _template.is_over ():
+		_template = _template.get_next_template ()
+	
 	return _template.get_next_beat (action)
 
 

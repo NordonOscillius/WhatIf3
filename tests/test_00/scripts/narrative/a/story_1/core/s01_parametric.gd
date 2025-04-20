@@ -166,6 +166,23 @@ func remove_action (type: StringName, strict: bool = false):
 		printerr ("Action not found.")
 
 
+## Удаляет все действия, которые были добавлены к этому объекту (не включая потомков).
+func clear_actions ():
+	
+	_actions.clear ()
+
+
+## Удаляет все действия, которые были добавлены к этому объекту и всем его потомкам.
+func clear_actions_hierarchy ():
+	
+	var i: int = _children.size ()
+	while i:
+		i -= 1
+		var child: S01_Parametric = _children[i]
+		child.clear_actions ()
+		child.clear_actions_hierarchy ()
+
+
 func get_action_at (index: int) -> T00_Action:
 	
 	return _actions[index]

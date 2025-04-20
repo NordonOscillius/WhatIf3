@@ -10,6 +10,7 @@ static var INTRODUCER_POSE_SITTING_BACK: int = 1
 static var INTRODUCER_ACTION_WAITING_TO_COME_UP: int = 0
 static var INTRODUCER_ACTION_WAITING_FOR_QUESTIONS: int = 1
 static var INTRODUCER_ACTION_WAITING_FOR_SIGNING: int = 2
+static var INTRODUCER_ACTION_WAITING_FOR_GOODBYE: int = 3
 
 static var HERO_LOCATION_NEAR_DOOR: int = 0
 static var HERO_LOCATION_NEAR_TABLE: int = 1
@@ -29,6 +30,10 @@ var _flow_sentences: Array[String] = []
 var _flow_action_tree: T00_ActionNode
 ## Если меньше нуля, то при завершении потока _state не будет переключаться. Если больше или равно нулю, то при завершении потока _state переключится в это значение.
 var _flow_next_state: int = -1
+
+var _is_over: bool = false
+## Ссылка на следующий текстовый шаблон, который Повествователь должен использовать при завершении текущего. Механизм такой: когда этот шаблон подходит к концу, устанавливаем _next_template; затем готовим поток и показываем предложения одно за другим; на последнем предложении метод get_next_beat() проверит наличие _next_template и сам установит _is_over в true.
+var _next_template: S01_TextTemplate
 
 var _door_is_closed: bool = false
 var _hero_location: int = HERO_LOCATION_NEAR_DOOR
@@ -89,7 +94,12 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 		if _flow_sentences.size ():
 			beat._action_tree = null
 		else:
-			beat._action_tree = _flow_action_tree
+			# Если установили _next_template, значит, готовы переключиться на новый шаблон текста. Ставим _is_over в true, чтобы Повествователь смог переключить шаблон на новый.
+			if _next_template:
+				_is_over = true
+			# Иначе работаем в обычном режиме: на последнем предложении потока показываем дерево действий.
+			else:
+				beat._action_tree = _flow_action_tree
 		
 		# Если необходимо, переключаем _state в следующее значение.
 		if _flow_next_state >= 0:
@@ -101,6 +111,16 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	beat._story_text = "Ошибка в генерации текста."
 	beat._action_tree = null
 	return beat
+
+
+func is_over () -> bool:
+	
+	return _is_over
+
+
+func get_next_template () -> S01_TextTemplate:
+	
+	return _next_template
 
 
 func generate_flow_for_exposition ():
@@ -175,7 +195,12 @@ func generate_flow_for_introducer_look ():
 		s1 += "на меня выжидающе, как будто желая узнать, что я буду делать дальше."
 	elif _introducer_action == INTRODUCER_ACTION_WAITING_FOR_SIGNING:
 		s1 += "Офицер "
-		s1 += "ждала, когда я подпишу бумаги."
+		s1 += "ждал" if introducer_is_male else "ждала"
+		s1 += ", когда я подпишу бумаги."
+	elif _introducer_action == INTRODUCER_ACTION_WAITING_FOR_GOODBYE:
+		s1 += "Офицер "
+		s1 += "ждал" if introducer_is_male else "ждала"
+		s1 += ", когда я покину кабинет."
 	
 	_last_object_mentioned = MENTION_POLICEMAN
 	
@@ -814,10 +839,57 @@ func generate_flow_for_signing_document ():
 	
 	var story: S01_Story = T00_A_Globals.story
 	var w: T00_A_Words = T00_A_Globals.words
+	var hero_is_male: bool = get_hero_is_male ()
+	var introducer_is_male: bool = get_introducer_is_male ()
 	
 	var s1: String = ""
+	if _hero_read_document:
+		s1 += "Всё сходилось. Я "
+		s1 += "взял" if hero_is_male else "взяла"
+		s1 += " ручку, лежавшую на моей стороне стола, и "
+		s1 += "подписал" if hero_is_male else "подписала"
+		s1 += " бумагу."
+	else:
+		s1 += "Я взял" if hero_is_male else "Я взяла"
+		s1 += " ручку, лежавшую на моей стороне стола, и "
+		s1 += "подписал" if hero_is_male else "подписала"
+		s1 += " документ не глядя."
+		pass
+	s1 += "\n\n — Значит, мне следует ожидать звонка нотариуса? — "
+	s1 += "спросил" if hero_is_male else "спросила"
+	s1 += " я у офицера."
 	
-	_flow_sentences = [s1]
+	s1 += "\n — Всё верно, — "
+	s1 += "подтвердил " if introducer_is_male else "подтвердила "
+	s1 += story._introducer._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE)
+	s1 += ". И, приняв от меня подписанный листок, "
+	s1 += "подытожил" if introducer_is_male else "подытожила"
+	s1 += ": На этом всё. Спасибо, что уделили нам время. Всего хорошего."
+	
+	var s2: String = ""
+	s2 += "Прихватив с собой "
+	# Пакет.
+	s2 += story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
+	s2 += ", я "
+	s2 += "встал из-за стола и подошел к двери:" if hero_is_male else "встала из-за стола и подошла к двери:"
+	s2 += "\n\n — До свидания."
+	
+	var s3: String = ""
+	s3 += "o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o"
+	
+	_introducer_action = INTRODUCER_ACTION_WAITING_FOR_GOODBYE
+	
+	var document: S01_Document = story.get_or_create_document ()
+	document._is_signed = true
+	document.remove_action (T00_Action.SIGN)
+	
+	# Удаляем действия со всех объектов Истории.
+	story.clear_actions_hierarchy ()
+	
+	#_is_over = true
+	_next_template = S01_FlashbackTemplate.new ()
+	
+	_flow_sentences = [s1, s2, s3]
 	_flow_action_tree = story.create_action_tree ()
 
 
