@@ -203,6 +203,7 @@ func generate_flow_for_introducer_look ():
 		s1 += ", когда я покину кабинет."
 	
 	_last_object_mentioned = MENTION_POLICEMAN
+	_introducer_have_seen_flashback = false
 	
 	story._introducer.remove_action (T00_Action.INSPECT)
 	
@@ -684,6 +685,7 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 		#item.set_action_panel_name (item.create_action_panel_name_inspected ())
 		
 		_last_object_mentioned = MENTION_HOUSE_KEY_INSPECTED
+		_introducer_have_seen_flashback = false
 		_flow_sentences = [s1]
 	
 	item.remove_action (T00_Action.INSPECT)
@@ -781,6 +783,7 @@ func generate_flow_for_asking_about_container ():
 	document.create_and_add_action (T00_Action.SIGN)
 	
 	_hero_knows_about_testament = true
+	_introducer_have_seen_flashback = false
 	_introducer_action = INTRODUCER_ACTION_WAITING_FOR_SIGNING
 	_last_object_mentioned = MENTION_NONE
 	
@@ -830,6 +833,7 @@ func generate_flow_for_inspecting_document ():
 	document.remove_action (T00_Action.INSPECT)
 	
 	_hero_read_document = true
+	_introducer_have_seen_flashback = false
 	
 	_flow_sentences = [s1]
 	_flow_action_tree = story.create_action_tree ()
