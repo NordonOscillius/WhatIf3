@@ -167,3 +167,20 @@ static func get_description_for_document (item_type: S01_StringParamValue) -> T0
 	return null
 
 
+## Возвращает true, если к описанию предмета в документе в полиции следует добавить цвет.
+static func get_color_applicability_for_document (item_type: S01_StringParamValue) -> bool:
+	
+	var w: T00_A_Words = T00_A_Globals.words
+	
+	match item_type.value:
+		TOKEN_MARK.value: return true
+		SMALL_KEY.value: return false
+		SHAPED_STONE.value: return true
+		SHEET_OF_PAPER.value: return false
+		STONE_BOX.value: return true
+		HOUSE_KEY.value: return false
+	
+	printerr ("Unknown item type.")
+	return false
+
+

@@ -39,6 +39,8 @@ var _introducer_have_seen_flashback: bool = false
 ## Герой изучил зацепку и готов вот-вот получить флешбэк.
 var _hero_inspected_clue: bool = false
 var _hero_knows_about_testament: bool = false
+## Прочитал ли герой документ - акт приема-передачи.
+var _hero_read_document: bool = false
 var _last_object_mentioned: StringName
 
 
@@ -485,14 +487,15 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 		#S01_ItemType.SMALL_KEY.value:
 		
 		S01_ItemType.SHAPED_STONE.value:
-			s1 += " Он был потертый, с небольшими сколами по углам, а по форме напоминал призму с "
+			s1 += " Он был потертый, с небольшими сколами по углам, а по форме напоминал длинную призму с "
 			# Треугольным.
 			s1 += S01_GeometricShape.get_adjectve_for_shape (item.get_geometric_shape ()).get_form (T00_WordGender.MASCULINE, T00_WordNumber.SINGLE, T00_WordAnimacy.INANIMATE, T00_WordCase.INSTRUMENTAL)
-			s1 += " основанием. Материал камня имел "
+			s1 += " основанием. "
+			s1 += "Документ не врал: материал камня и вправду имел " if _hero_read_document else "Материал камня имел "
 			# Синий.
 			var color_phrase: T00_SimplePhrase = S01_Color.get_phrase_for_color (item.get_color (), T00_WordGender.MASCULINE, T00_WordAnimacy.INANIMATE)
 			s1 += color_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
-			s1 += " цвет; на одной из его сторон я заметил рельефный символ: "
+			s1 += " цвет; на одной из его сторон я заметил рельефный символ — "
 			# Открытый глаз.
 			s1 += S01_SecretSignType.get_description_medium (item.get_secret_sign_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
 			s1 += "."
@@ -533,7 +536,22 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 			#s1 += " Похоже, это была страница, вырванная из какой-то книги. На обеих сторонах листа был напечатан текст на незнакомом языке."
 		
 		S01_ItemType.STONE_BOX.value:
-			s1 += ""
+			if !_hero_read_document:
+				s1 += " Она была сделана из камня "
+				# Cветло-зеленого.
+				s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+				s1 += " цвета"
+			# Если герой прочитал документ о передаче предметов.
+			else:
+				s1 += " Она и вправду была "
+				s1 += S01_Color.get_phrase_for_color (item.get_color (), T00_WordGender.FEMININE).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE))
+			s1 += " и имела простую прямоугольную форму. С одной из ее сторон виднелось отверстие — замочная скважина. Перевернув шкатулку вверх дном, я "
+			s1 += "заметил" if hero_is_male else "заметила"
+			s1 += " вырезанный на ее дне барельефный символ в виде "
+			# Открытого глаза.
+			s1 += S01_SecretSignType.get_description_medium (item.get_secret_sign_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+			s1 += "."
+			#s1 += "Она была сделана из камня светло-зеленого цвета и имела простую прямоугольную форму. С одной из ее сторон виднелось отверстие - замочная скважина. Перевернув шкатулку вверх дном, я заметил вырезанный на ее дне барельефный символ в виде открытого глаза."
 		
 		S01_ItemType.HOUSE_KEY.value:
 			# Если герой знает про завещание, то он знает и про то, что это ключ от дома пропавшего. Если же он не знает, что это ключ от дома пропавшего, то он должен вспомнить, что у того в доме как раз такой замок.
@@ -544,7 +562,13 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 					#s1 += " — Нет, нет, всё в порядке, — торопливо взглянув на полицейского, ответила я, и снова посмотрела на пакет с вещами."
 					#s1 += " — Нет, нет, всё в порядке, — торопливо ответила я и, бегло посмотрев на полицейского, вернулась к коробке с вещами."
 					#s1 += " — Нет, нет, всё в порядке, — торопливо ответила я и, бросив беглый взгляд на полицейского, вернулась к коробке с вещами. Ключ от дома брата был... (длинный, тяжелый)"
-					s1 += " — Нет, нет, всё в порядке, — торопливо ответила я и, бросив беглый взгляд на полицейского, вернулась к коробке с вещами. Вот ключ от дома брата:... (длинный, тяжелый)"
+					s1 += " — Нет, нет, всё в порядке, — торопливо "
+					s1 += "ответил" if hero_is_male else "ответила"
+					s1 += " я и, бросив беглый взгляд на офицера, "
+					s1 += "вернулся" if hero_is_male else "вернулась"
+					s1 += " к коробке с вещами.\n\nВот ключ от дома "
+					# Брата.
+					s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
 					pass
 				else:
 					s1 += "Я "
@@ -552,18 +576,19 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 					s1 += " на ключ от дома "
 					# Брата.
 					s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-					s1 += ": длинный, тяжелый, полностью из металла "
-					# Темно-серого.
-					s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-					s1 += " цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я "
-					s1 += "приезжал к " if hero_is_male else "приезжала к "
-					# Брату.
-					s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.DATIVE, T00_WordNumber.SINGLE))
-					s1 += " в гости, "
-					s1 += "тот оставлял" if x_is_male else "та оставляла"
-					s1 += " мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его вставлять. А потом я просто "
-					s1 += "запомнил" if hero_is_male else "запомнила"
-					s1 += " рисунок бородок."
+				
+				s1 += ": длинный, тяжелый, полностью из металла "
+				# Темно-серого.
+				s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+				s1 += " цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я "
+				s1 += "приезжал к " if hero_is_male else "приезжала к "
+				# Брату.
+				s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.DATIVE, T00_WordNumber.SINGLE))
+				s1 += " в гости, "
+				s1 += "тот оставлял" if x_is_male else "та оставляла"
+				s1 += " мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его вставлять. А потом я просто "
+				s1 += "запомнил" if hero_is_male else "запомнила"
+				s1 += " рисунок бородок."
 				
 				#s1 += "Я посмотрел на ключ от дома брата: длинный, тяжелый, полностью из металла темно-серого цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я приезжал к брату в гости, тот оставлял мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его вставлять. А потом я просто запомнил рисунок."
 				#s1 += "Я посмотрел на ключ от дома брата: длинный, тяжелый, полностью из металла темно-серого цвета. Да, это он и есть — и даже бородки такой же формы. Помнится, когда я гостил у брата, тот оставлял мне свой ключ, и поначалу мне никак не удавалось запомнить, какой стороной его надо вставлять. Позже я во всем разобрался, запомнив рисунок на конце ключа."
@@ -575,26 +600,34 @@ func generate_flow_for_inspecting_item (item: S01_ClueContainerItem):
 			else:
 				# TODO.
 				if _introducer_have_seen_flashback:
-					s1 += " — Нет, нет, всё в порядке, — торопливо ответила я. Бросив беглый взгляд на полицейского, я вернулась к коробке с вещами и осмотрела ключ:... (большой и длинный)"
+					s1 += " — Нет, нет, всё в порядке, — торопливо "
+					s1 += "ответил" if hero_is_male else "ответила"
+					s1 += " я.\n\nБросив беглый взгляд на офицера, я "
+					s1 += "вернулся" if hero_is_male else "вернулась"
+					s1 += " к коробке с вещами и "
+					s1 += "осмотрел" if hero_is_male else "осмотрела"
+					s1 += " ключ"
 				else:
 					s1 += "Я "
 					s1 += "повертел" if hero_is_male else "повертела"
-					s1 += " ключ в руках: большой и длинный, сделан из металла "
-					# Белого.
-					s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
-					s1 += " цвета, и, судя по форме, он от сувальдного замка. Похож на тот, что "
-					# Брат.
-					s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
-					s1 += " "
-					s1 += "оставлял" if x_is_male else "оставляла"
-					s1 += " мне, уезжая с утра на работу, когда я "
-					s1 += "гостил" if hero_is_male else "гостила"
-					s1 += " у него." if x_is_male else " у нее."
-					
-					#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. Похож на тот, что брат оставлял мне, уезжая с утра на работу, когда я гостил у него."
-					#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. В доме брата был как раз такой."
-					#s1 += "Я повертел ключ в руках: большой и длинный, как от сувальдного замка, выполнен из белого металла."
-					pass
+					s1 += " ключ в руках"
+				
+				s1 += ": большой и длинный, сделан из металла "
+				# Белого.
+				s1 += S01_Color.get_phrase_for_color (item.get_color ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+				s1 += " цвета, и, судя по форме, он от сувальдного замка. Похож на тот, что "
+				# Брат.
+				s1 += x_to_hero_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
+				s1 += " "
+				s1 += "оставлял" if x_is_male else "оставляла"
+				s1 += " мне, уезжая с утра на работу, когда я "
+				s1 += "гостил" if hero_is_male else "гостила"
+				s1 += " у него." if x_is_male else " у нее."
+				
+				#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. Похож на тот, что брат оставлял мне, уезжая с утра на работу, когда я гостил у него."
+				#s1 += "Я повертел ключ в руках: большой и длинный, сделан из металла белого цвета, как будто бы от сувальдного замка. В доме брата был как раз такой."
+				#s1 += "Я повертел ключ в руках: большой и длинный, как от сувальдного замка, выполнен из белого металла."
+				pass
 	
 	# Если предмет - зацепка, то добавляем пару предложений про флешбэк и реакцию полицейского.
 	if item._is_clue:
@@ -746,9 +779,9 @@ func generate_flow_for_inspecting_document ():
 		s1 += " и "
 		# Плоский предмет.
 		s1 += S01_ItemType.get_description_for_document (clue_item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
-		#s1 += "черного"
+		# Черного.
 		var clue_item_color: S01_StringParamValue = clue_item.get_color ()
-		if clue_item_color:
+		if clue_item_color && S01_ItemType.get_color_applicability_for_document (clue_item.get_item_type ()):
 			s1 += " "
 			s1 += S01_Color.get_phrase_for_color (clue_item_color).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
 			s1 += " цвета"
@@ -758,12 +791,20 @@ func generate_flow_for_inspecting_document ():
 		s1 += "."
 	else:
 		s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. Ниже был приведен список предметов, которые мне следовало получить; он состоял из единственного пункта — "
-		s1 += "плоского черного предмета с символом спирали"
+		# Плоского предмета.
+		s1 += S01_ItemType.get_description_for_document (clue_item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+		# Черного.
+		var clue_item_color: S01_StringParamValue = clue_item.get_color ()
+		if clue_item_color && S01_ItemType.get_color_applicability_for_document (clue_item.get_item_type ()):
+			s1 += " "
+			s1 += S01_Color.get_phrase_for_color (clue_item_color).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+			s1 += " цвета"
 		s1 += "."
-		#s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. Ниже был приведен список предметов, которые мне следовало получить; он состоял из единственного пункта — плоского черного предмета с символом спирали."
 	
-	#s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. Ниже был приведен список предметов, которые мне следовало получить; он состоял из двух пунктов: ключа от дома Вероники и плоского черного предмета с символом спирали."
-	#s1 += "Заголовок документа гласил, что это акт приема-передачи имущества. В списке передаваемых предметов значился только один пункт — плоский предмет черного цвета"
+	var document: S01_Document = story.get_or_create_document ()
+	document.remove_action (T00_Action.INSPECT)
+	
+	_hero_read_document = true
 	
 	_flow_sentences = [s1]
 	_flow_action_tree = story.create_action_tree ()
