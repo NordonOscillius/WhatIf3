@@ -39,7 +39,14 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	if _template.is_over ():
 		_template = _template.get_next_template ()
 	
-	return _template.get_next_beat (action)
+	var beat: T00_Beat = _template.get_next_beat (action)
+	_book.push_back (beat)
+	
+	# Debug.
+	#print (get_book_text ())
+	
+	return beat
+	#return _template.get_next_beat (action)
 
 
 func generate_story ():

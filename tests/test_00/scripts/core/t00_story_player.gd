@@ -41,6 +41,10 @@ var _story_label: Label
 var _action_labels: Array[T00_ActionLabel] = []
 ## Лейбл, отображающий путь до текущего узла (_entered_node) в дереве действий.
 var _path_label: T00_PathLabel
+## Скролл-контейнер для книги.
+var _book_container: ScrollContainer
+## Лейбл, в котором прописан весь текст истории.
+var _book_label: Label
 
 var _game: T00_Game
 
@@ -86,6 +90,21 @@ func _ready ():
 	_path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_path_label.modulate = Color (1, 1, 1, 0)
 	add_child (_path_label)
+	
+	_book_container = ScrollContainer.new ()
+	_book_container.size = Vector2 (800, 600)
+	add_child (_book_container)
+	
+	# Лейбл книги.
+	_book_label = Label.new ()
+	_book_label.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_USUAL)
+	_book_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_book_label.size = Vector2 (
+		viewport_size.x - STORY_LABEL_BORDER_HORIZONTAL * 2,
+		viewport_size.y - TOP_PANEL_HEIGHT - ACTION_PANEL_HEIGHT - STORY_LABEL_BORDER_VERTICAL * 2
+	)
+	_book_label.text = "This is a text for the book label."
+	_book_container.add_child (_book_label)
 	
 	_fade_ratio = .0
 	

@@ -14,3 +14,19 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 	beat._story_text = "Это просто какой-то начальный текст."
 	beat._action_tree = null
 	return beat
+
+
+func get_book_text () -> String:
+	
+	var result: String = ""
+	
+	var num_beats: int = _book.size ()
+	var i: int = 0
+	while i < num_beats:
+		var beat: T00_Beat = _book[i]
+		if !beat._is_remark:
+			result += beat._story_text
+			result += "\n\n"
+		i += 1
+	
+	return result
