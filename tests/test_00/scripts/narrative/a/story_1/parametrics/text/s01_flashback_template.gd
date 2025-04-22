@@ -405,7 +405,55 @@ func generate_flow_for_exposition ():
 	s_symbol_5 += " улыбнулся" if x_is_male else " улыбнулась"
 	s_symbol_5 += ". — Тогда теперь это будет наш с тобой секретный символ. Если я захочу тайно связаться с тобой, то пришлю его тебе в любом виде: нарисую на бумаге или на дереве, или нацарапаю на железе. Так, чтобы никто не догадался. Отправлю почтой или передам через другого человека. И ты делай так же, если захочешь связаться со мной."
 	
-	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2 + "\n\n" + s_missing_3, s_missing_4, s_sacrifice_1, s_sacrifice_2, s_sacrifice_3, s_sacrifice_4, s_sacrifice_5, s_sacrifice_6, s_sacrifice_7, s_waiting, s_symbol_1, s_symbol_2, s_symbol_3, s_symbol_4, s_symbol_5]
+	var s_symbol_6: String = ""
+	s_symbol_6 += "Подумав, он добавил:" if x_is_male else "\n\nПодумав, она добавила:"
+	s_symbol_6 += "\n\n— Но пользоваться символом можно только в случае крайней необходимости."
+	
+	var s_symbol_7: String = ""
+	s_symbol_7 += "Я охотно кивнул." if hero_is_male else "Я охотно кивнула."
+	s_symbol_7 += "\n\n — А что делать, когда я получу послание?"
+	s_symbol_7 += "\n — Нам нужно тайное место, где мы могли бы встретиться. Такое, о котором никто не знает. — "
+	s_symbol_7 += "Он повернулся" if x_is_male else "Она повернулась"
+	s_symbol_7 += " в Минотавру, затем к Леди Ночи. — Кто-нибудь из твоих друзей слышал про эти камни?"
+	s_symbol_7 += "\n — Нет."
+	s_symbol_7 += "\n — Тогда наше место встречи будет прямо здесь, на этом холме. — "
+	s_symbol_7 += "Он указал" if x_is_male else "Она указала"
+	s_symbol_7 += " на тень, падавшую от высокого черного камня. — За камнем Леди Ночи."
+	
+	var s_ghost_1: String = ""
+	s_ghost_1 += "Сделав шаг в сторону секретного символа, нарисованного на земле, "
+	s_ghost_1 += "он затер" if x_is_male else "она затерла"
+	s_ghost_1 += " его ногой. Но тут же "
+	s_ghost_1 += "повернулся ко мне и спросил:" if x_is_male else "повернулась ко мне и спросила:"
+	s_ghost_1 += "\n\n — Ты слышал?" if hero_is_male else "\n\n — Ты слышала?"
+	s_ghost_1 += "\n\n Я отрицательно покачал головой и прислушался." if hero_is_male else "\n\n Я отрицательно покачала головой и прислушалась."
+	s_ghost_1 += "\n\n — Леди Ночь! — "
+	s_ghost_1 += "прошептал " if x_is_male else "прошептала "
+	# Девид.
+	s_ghost_1 += x_nickname_nomimative
+	s_ghost_1 += ", присев на корточки и посмотрев на статую. — Она отпустила Призрака!"
+	
+	var s_ghost_2: String = ""
+	s_ghost_2 += "Я присел" if hero_is_male else "Я присела"
+	s_ghost_2 += " вместе с ним, ничего не понимая, и "
+	s_ghost_2 += "спросил:" if hero_is_male else "спросила:"
+	s_ghost_2 += "\n\n — И теперь мы пойдем за ним? Где он?"
+	s_ghost_2 += "\n — Леди оставила его где-то в лесу, совсем недалеко от нас. Он вот-вот должен появиться."
+	
+	var s_ghost_3: String = ""
+	s_ghost_3 += "Поднявшийся ветер зашумел листвой и травой. Так и сидя на корточках, мы с "
+	#s_ghost_3 += "Девидом"
+	s_ghost_3 += x_nickname_instrumental
+	s_ghost_3 += " в ожидании смотрели в сторону леса; но никто не появлялся. Внезапно "
+	#s_ghost_3 += "Девид"
+	s_ghost_3 += x_nickname_nomimative
+	s_ghost_3 += " вскочил и бросился к деревьям." if x_is_male else " вскочила и бросилась к деревьям."
+	s_ghost_3 += "\n\n — Призрак! — "
+	s_ghost_3 += "выкрикрул он." if x_is_male else "выкрикрула она."
+	s_ghost_3 += "\n\n"
+	s_ghost_3 += "Я побежал вслед за ним." if hero_is_male else "Я побежала вслед за ним."
+	
+	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2 + "\n\n" + s_missing_3, s_missing_4, s_sacrifice_1, s_sacrifice_2, s_sacrifice_3, s_sacrifice_4, s_sacrifice_5, s_sacrifice_6, s_sacrifice_7, s_waiting, s_symbol_1, s_symbol_2, s_symbol_3, s_symbol_4, s_symbol_5, s_symbol_6, s_symbol_7, s_ghost_1, s_ghost_2, s_ghost_3]
 	_flow_action_tree = null
 	#_flow_action_tree = story.create_action_tree ()
 
