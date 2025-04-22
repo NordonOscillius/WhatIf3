@@ -80,6 +80,14 @@ func generate_flow_for_exposition ():
 	var x_nickname_instrumental: String = x_nickname_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE))
 	var x_nickname_prepositional: String = x_nickname_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.PREPOSITIONAL, T00_WordNumber.SINGLE))
 	
+	var x_relation_phrase: T00_SimplePhrase = get_x_to_hero_relation_phrase ()
+	var x_relation_nomimative: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
+	var x_relation_genitive: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.GENITIVE, T00_WordNumber.SINGLE))
+	var x_relation_dative: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.DATIVE, T00_WordNumber.SINGLE))
+	var x_relation_accusative: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
+	var x_relation_instrumental: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE))
+	var x_relation_prepositional: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.PREPOSITIONAL, T00_WordNumber.SINGLE))
+	
 	var s_hill: String = ""
 	s_hill += "Вооруженные свежесрезанными ветками-арбалетами, мы с "
 	# Девидом.
@@ -88,7 +96,7 @@ func generate_flow_for_exposition ():
 	s_hill += "\n\n — Мы уже почти на месте, — тяжело дыша, "
 	s_hill += "сказал " if x_is_male else "сказала "
 	# Девид.
-	s_hill += x_nickname_nomimative
+	s_hill += x_relation_nomimative
 	s_hill += ". — Надеюсь, мы не опоздали."
 	s_hill += "\n — Я тоже надеюсь, — "
 	s_hill += "ответил" if hero_is_male else "ответила"
@@ -226,7 +234,178 @@ func generate_flow_for_exposition ():
 	s_missing_4 += x_nickname_nomimative
 	s_missing_4 += ". — На то он и секретный: его знаем только я и Призрак."
 	
-	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2, s_missing_3, s_missing_4]
+	var s_sacrifice_1: String = ""
+	s_sacrifice_1 += "Я растерянно "
+	s_sacrifice_1 += "смотрел" if hero_is_male else "смотрела"
+	s_sacrifice_1 += " на остатки шалаша."
+	s_sacrifice_1 += "\n\n — Что же нам теперь делать? Мы можем его спасти? — "
+	s_sacrifice_1 += "спросил я." if hero_is_male else "спросила я."
+	s_sacrifice_1 += "\n\n"
+	s_sacrifice_1 += x_nickname_nomimative.capitalize ()
+	#s_sacrifice_1 += "Девид"
+	s_sacrifice_1 += " встал" if x_is_male else " встала"
+	s_sacrifice_1 += ", помолчал немного и тихо ответил:" if x_is_male else ", помолчала немного и тихо ответила:"
+	s_sacrifice_1 += "\n\n — Мы принесем жертву Леди Ночи, чтобы задобрить ее, и тогда она отпустит Призрака."
+	
+	var s_sacrifice_2: String = ""
+	s_sacrifice_2 += "На освещенной солнцем лужайке стало совсем тихо; даже ветер перестал шуметь в листьях деревьев."
+	s_sacrifice_2 += "\n\n — Какую жертву? — "
+	s_sacrifice_2 += "спросил" if hero_is_male else "спросила"
+	s_sacrifice_2 += " я. Иногда "
+	# Друг.
+	s_sacrifice_2 += x_relation_nomimative
+	s_sacrifice_2 += " пугал" if x_is_male else " пугала"
+	s_sacrifice_2 += " меня, заходя со своими фантазиями слишком далеко."
+	
+	var s_sacrifice_3: String = ""
+	s_sacrifice_3 += "Глаза "
+	# Девида.
+	s_sacrifice_3 += x_nickname_genitive
+	s_sacrifice_3 += " опустились к земле: казалось, "
+	s_sacrifice_3 += "он что-то искал" if x_is_male else "она что-то искала"
+	s_sacrifice_3 += ". Отойдя от шалаша шагов на десять, "
+	s_sacrifice_3 += "он нагнулся, поднял что-то с земли и подошел" if x_is_male else "она нагнулась, подняла что-то с земли и подошла"
+	s_sacrifice_3 += " ко мне, держа в руках маленькую еловую ветку."
+	s_sacrifice_3 += "\n\n — Сейчас мы пойдем в лес и наберем веточек точно такого же размера. Не больше и не меньше. Потом вернемся обратно на холм и отдадим ей всё, что нашли. Леди любит еловые ветки."
+	
+	var s_sacrifice_4: String = ""
+	s_sacrifice_4 += "Полчаса спустя мы с "
+	# Девидом.
+	s_sacrifice_4 += x_nickname_instrumental
+	s_sacrifice_4 += " стояли на вершине холма, рядом с камнем Леди Ночи. В руках у нас было по охапке колючих веточек."
+	s_sacrifice_4 += "\n\n — Ты когда-нибудь делал подношение богам? — "
+	s_sacrifice_4 += "спросил" if x_is_male else "спросила"
+	s_sacrifice_4 += " у меня "
+	# Девид.
+	s_sacrifice_4 += x_nickname_nomimative
+	s_sacrifice_4 += "."
+	s_sacrifice_4 += "\n — Нет."
+	s_sacrifice_4 += "\n — Тогда смотри."
+	
+	var s_sacrifice_5: String = ""
+	s_sacrifice_5 += "Он подошел к истукану, опустился" if x_is_male else "Она подошла к истукану, опустилась"
+	s_sacrifice_5 += " на корточки рядом с грудой черных камней, лежавших у подножия Леди Ночи, и "
+	s_sacrifice_5 += "стал" if x_is_male else "стала"
+	s_sacrifice_5 += " один за другим перекладывать их в сторону."
+	s_sacrifice_5 += "\n\n — Под камнями спрятан ее алтарь, — "
+	s_sacrifice_5 += "пояснил он" if x_is_male else "пояснила она"
+	s_sacrifice_5 += ". — Подойди, помоги мне до него добраться."
+	s_sacrifice_5 += "\n — А мне разве можно? — боязливо "
+	s_sacrifice_5 += "спросил я." if hero_is_male else "спросила я."
+	s_sacrifice_5 += "\n — Ну конечно. Ты же собираешься принести ей жертву."
+	
+	var s_sacrifice_6: String = ""
+	s_sacrifice_6 += "Я подошел к " if hero_is_male else "Я подошла к "
+	# Девиду.
+	s_sacrifice_6 += x_nickname_dative
+	s_sacrifice_6 += ", и вместе мы стали разгребать груду. Камни были крупные и тяжелые, размером с три-четыре моих кулака. Вскоре я "
+	s_sacrifice_6 += "увидел" if hero_is_male else "увидела"
+	s_sacrifice_6 += " алтарь — полое пространство округлой формы в основании большого камня. Оно было похоже на тайник: полметра в ширину, полметра в глубину и сантиметров тридцать в высоту."
+	
+	var s_sacrifice_7: String = ""
+	s_sacrifice_7 += " — Неси сюда ветки, — "
+	s_sacrifice_7 += "сказал " if x_is_male else "сказала "
+	# Девид.
+	s_sacrifice_7 += x_nickname_nomimative
+	s_sacrifice_7 += ".\n\n"
+	s_sacrifice_7 += "Я принес" if hero_is_male else "Я принесла"
+	s_sacrifice_7 += " подношение, и мы переложили его на алтарь богини. Дальше оставалось только завалить алтарь камнями, чтобы сохранить его в тайне. Когда дело было сделано, мы отошли подальше от статуи и уставились на нее."
+	
+	var s_waiting: String = ""
+	s_waiting += " — Что дальше? — "
+	s_waiting += "спросил я." if hero_is_male else "спросила я."
+	s_waiting += "\n — Теперь остается только ждать ответа Леди Ночи, — "
+	s_waiting += "сказал " if x_is_male else "сказала "
+	# Девид.
+	s_waiting += x_relation_nomimative
+	s_waiting += ". — Скоро она примет решение: отпускать Призрака или не отпускать."
+	s_waiting += "\n — А если она его не отпустит?"
+	s_waiting += "\n — Тогда будем решать вопрос по-другому. Но ты лучше об этом пока не думай."
+	
+	var s_symbol_1: String = ""
+	s_symbol_1 += "Я молча "
+	s_symbol_1 += "смотрел" if hero_is_male else "смотрела"
+	s_symbol_1 += " на мрачную Леди Ночь, теперь казавшуюся почти черной."
+	s_symbol_1 += "\n\n — "
+	# Девид.
+	s_symbol_1 += x_nickname_nomimative.capitalize ()
+	s_symbol_1 += ", почему у вас с Призраком есть тайный знак, а у меня нет?"
+	s_symbol_1 += "\n\n"
+	# Девид.
+	s_symbol_1 += x_nickname_nomimative.capitalize ()
+	s_symbol_1 += " задумался." if x_is_male else " задумалась."
+	s_symbol_1 += "\n\n — Так получилось. Мы с Призраком часто занимаемся опасными делами. Поэтому и придумали тайный символ на всякий случай."
+	s_symbol_1 += "\n — Я тоже хочу заниматься опасными делами!"
+	
+	var s_symbol_2: String = ""
+	# Девид.
+	s_symbol_2 += x_nickname_nomimative.capitalize ()
+	s_symbol_2 += " взглянул" if x_is_male else " взглянула"
+	s_symbol_2 += " на меня, а потом "
+	s_symbol_2 += "предложил:" if x_is_male else "предложила:"
+	s_symbol_2 += "\n\n — Хочешь, мы с тобой придумаем наш собственный секретный знак? Его будем знать только ты и я."
+	s_symbol_2 += "\n — Конечно! — "
+	s_symbol_2 += "обрадовался" if hero_is_male else "обрадовалась"
+	s_symbol_2 += " я. — А какой это будет знак?"
+	s_symbol_2 += "\n — Решай "
+	s_symbol_2 += "сам, — " if hero_is_male else "сама, — "
+	s_symbol_2 += "пожал" if x_is_male else "пожала"
+	s_symbol_2 += " плечами "
+	# Девид.
+	s_symbol_2 += x_nickname_nomimative
+	s_symbol_2 += ". — Любой символ, который тебе в голову придет. Просто нарисуй его мне, чтобы я "
+	s_symbol_2 += "запомнил." if x_is_male else "запомнила."
+	
+	var s_symbol_3: String = ""
+	s_symbol_3 += "Он отошел" if x_is_male else "Она отошла"
+	s_symbol_3 += " куда-то в сторону Минотавра и "
+	s_symbol_3 += "показал" if x_is_male else "показала"
+	s_symbol_3 += " на землю под ногами:"
+	s_symbol_3 += "\n\n — Вот, здесь трава почти не растет, почва должна быть рыхлой. Возьми палочку и рисуй."
+	s_symbol_3 += "\n\n"
+	s_symbol_3 += "Я побежал" if hero_is_male else "Я побежала"
+	s_symbol_3 += " в сторону деревьев, "
+	s_symbol_3 += "отыскал валявшуюся в хвое палочку и подошел к " if hero_is_male else "отыскала валявшуюся в хвое палочку и подошла к "
+	# Девиду.
+	s_symbol_3 += x_nickname_dative
+	s_symbol_3 += ". Травы здесь действительно росло немного, но почва была скорее каменистой, чем рыхлой; и всё же на ней вполне можно было рисовать. Я "
+	s_symbol_3 += "наклонился и стал чертить. А потом встал и посмотрел на " if hero_is_male else "наклонилась и стала чертить. А потом встала и посмотрела на "
+	# Девида.
+	s_symbol_3 += x_nickname_accusative
+	s_symbol_3 += "."
+	
+	var s_symbol_4: String = ""
+	
+	var sign_type: S01_StringParamValue = story._clue_container._clue_item.get_secret_sign_type ()
+	match sign_type.value:
+		S01_SecretSignType.EYE.value:
+			s_symbol_4 += " — Глаз, — проговорил он. — Открытый глаз." if x_is_male else " — Глаз, — проговорила она. — Открытый глаз."
+			s_symbol_4 += "\n — Да, — подтвердил я." if hero_is_male else "\n — Да, — подтвердила я."
+			s_symbol_4 += " — Четыре реснички сверху и три снизу. Так мы будем знать, что это именно тот знак, а не какой-то еще."
+		
+		S01_SecretSignType.DICE.value:
+			s_symbol_4 += " — Кубик, — проговорил он. — Игральный кубик." if x_is_male else " — Кубик, — проговорила она. — Игральный кубик."
+			s_symbol_4 += "\n — Да, — подтвердил я." if hero_is_male else "\n — Да, — подтвердила я."
+			s_symbol_4 += " — С тремя гранями. На верхней грани двойка, на левой — тройка, а на правой — пятерка. Так мы будем знать, что это именно тот знак, а не какой-то еще."
+		
+		S01_SecretSignType.SPIRAL.value:
+			s_symbol_4 += " — Спираль, — проговорил он. — Перечеркнутая спираль." if x_is_male else " — Спираль, — проговорила она. — Перечеркнутая спираль."
+			s_symbol_4 += "\n — Да, — подтвердил я." if hero_is_male else "\n — Да, — подтвердила я."
+			s_symbol_4 += " А прямая черта идет из ее центра до третьего витка, не дальше. Так мы будем знать, что это именно тот знак, а не какой-то еще."
+	
+	var s_symbol_5: String = ""
+	s_symbol_5 += " — Хорошо. Очень хорошо."
+	
+	if sign_type.equals (S01_SecretSignType.DICE):
+		s_symbol_5 += " И этот кубик — \"невозможный\". Видишь? Двойка стоит рядом с пятеркой. Такого в жизни не бывает."
+	
+	s_symbol_5 += " — "
+	# Девид.
+	s_symbol_5 += x_nickname_nomimative.capitalize ()
+	s_symbol_5 += " улыбнулся" if x_is_male else " улыбнулась"
+	s_symbol_5 += ". — Тогда теперь это будет наш с тобой секретный символ. Если я захочу тайно связаться с тобой, то пришлю его тебе в любом виде: нарисую на бумаге или на дереве, или нацарапаю на железе. Так, чтобы никто не догадался. Отправлю почтой или передам через другого человека. И ты делай так же, если захочешь связаться со мной."
+	
+	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2 + "\n\n" + s_missing_3, s_missing_4, s_sacrifice_1, s_sacrifice_2, s_sacrifice_3, s_sacrifice_4, s_sacrifice_5, s_sacrifice_6, s_sacrifice_7, s_waiting, s_symbol_1, s_symbol_2, s_symbol_3, s_symbol_4, s_symbol_5]
 	_flow_action_tree = null
 	#_flow_action_tree = story.create_action_tree ()
 
@@ -242,6 +421,18 @@ func get_x_to_hero_relation_nick_or_name_phrase () -> T00_SimplePhrase:
 			return S01_FamilyRelation.get_phrase_nick (relation)
 	elif relation.param_class == S01_ParamClass.FRIENDSHIP_RELATION:
 		return T00_NounPhrase.new ().setup (T00_A_Globals.story._x._first_name)
+	
+	printerr ("Unknown X to hero relation.")
+	return null
+
+
+func get_x_to_hero_relation_phrase () -> T00_SimplePhrase:
+	
+	var relation: S01_StringParamValue = T00_A_Globals.story.get_x_to_hero_relation ()
+	if relation.param_class == S01_ParamClass.FAMILY_RELATION:
+		return S01_FamilyRelation.get_phrase_official (relation)
+	elif relation.param_class == S01_ParamClass.FRIENDSHIP_RELATION:
+		return S01_FriendshipRelation.get_phrase (relation, T00_A_Globals.story._x.get_gender ())
 	
 	printerr ("Unknown X to hero relation.")
 	return null

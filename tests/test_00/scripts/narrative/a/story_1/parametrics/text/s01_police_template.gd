@@ -795,8 +795,17 @@ func generate_flow_for_inspecting_document ():
 	
 	var story: S01_Story = T00_A_Globals.story
 	var w: T00_A_Words = T00_A_Globals.words
+	var hero_is_male: bool = get_hero_is_male ()
 	
 	var s1: String = ""
+	
+	if _introducer_have_seen_flashback:
+		s1 += " — Нет, нет, всё в порядке, — торопливо "
+		s1 += "ответил" if hero_is_male else "ответила"
+		s1 += " я и, бросив беглый взгляд на офицера, "
+		s1 += "вернулся" if hero_is_male else "вернулась"
+		s1 += " к документу.\n\n"
+	
 	var clue_item: S01_ClueContainerItem = story._clue_container._clue_item
 	var items: Array[S01_ClueContainerItem] = story._clue_container.get_items ()
 	var num_items: int = items.size ()
@@ -887,9 +896,10 @@ func generate_flow_for_signing_document ():
 	s2 += "\n\n — До свидания."
 	
 	var s3: String = ""
-	s3 += "o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o"
+	s3 += "\no - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o\n"
 	
 	_introducer_action = INTRODUCER_ACTION_WAITING_FOR_GOODBYE
+	_introducer_have_seen_flashback = false
 	
 	var document: S01_Document = story.get_or_create_document ()
 	document._is_signed = true
