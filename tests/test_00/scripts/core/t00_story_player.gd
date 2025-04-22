@@ -20,9 +20,8 @@ static var PATH_LABEL_BORDER_HORIZONTAL: int = 200
 static var STORY_LABEL_BORDER_HORIZONTAL: int = 400
 static var STORY_LABEL_BORDER_VERTICAL: int = 60
 
-#static var LABEL_FONT_FACE: FontFile = preload ("res://tests/test_00/res/fonts/Montserrat-Regular.ttf")
-#static var LABEL_FONT_FACE_THICK: FontFile = preload ("res://tests/test_00/res/fonts/Montserrat-Medium.ttf")
-#static var LABEL_FONT_FACE_THIN: FontFile = preload ("res://tests/test_00/res/fonts/Montserrat-Light.ttf")
+static var BOOK_BORDER_HORIZONTAL: int = 400
+#static var BOOK_BORDER_VERTICAL: int = 60
 
 var _state: int = STATE_FADE_IN
 var _fade_speed: float = 8.0
@@ -41,10 +40,13 @@ var _story_label: Label
 var _action_labels: Array[T00_ActionLabel] = []
 ## Лейбл, отображающий путь до текущего узла (_entered_node) в дереве действий.
 var _path_label: T00_PathLabel
-## Скролл-контейнер для книги.
-var _book_container: ScrollContainer
+## Контейнер для книги.
+var _book_container: MarginContainer
 ## Лейбл, в котором прописан весь текст истории.
-var _book_label: Label
+var _book_label: RichTextLabel
+
+## Находится ли Таб в зажатом состоянии.
+var _tab_is_pressed: bool = false
 
 var _game: T00_Game
 
@@ -83,7 +85,6 @@ func _ready ():
 	
 	# Лейбл пути.
 	_path_label = T00_PathLabel.new ()
-	#_path_label.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_THIN)
 	_path_label.text = get_path_label_empty_text ()
 	_path_label.size = Vector2 (viewport_size.x - PATH_LABEL_BORDER_HORIZONTAL * 2, PATH_LABEL_HEIGHT)
 	_path_label.position = Vector2 ((viewport_size.x - _path_label.size.x) * .5, viewport_size.y - ACTION_PANEL_HEIGHT + PATH_LABEL_OFFSET_Y)
@@ -91,19 +92,33 @@ func _ready ():
 	_path_label.modulate = Color (1, 1, 1, 0)
 	add_child (_path_label)
 	
-	_book_container = ScrollContainer.new ()
-	_book_container.size = Vector2 (800, 600)
-	add_child (_book_container)
+	_book_container = MarginContainer.new ()
+	_book_container.size = get_viewport_rect ().size
+	_book_container.add_theme_constant_override ("margin_left", BOOK_BORDER_HORIZONTAL)
+	_book_container.add_theme_constant_override ("margin_right", BOOK_BORDER_HORIZONTAL)
+	_book_container.add_theme_constant_override ("margin_top", TOP_PANEL_HEIGHT)
+	_book_container.add_theme_constant_override ("margin_bottom", TOP_PANEL_HEIGHT)
+	_book_container.draw.connect (on_book_container_draw)
+	_book_container.mouse_filter = Control.MOUSE_FILTER_STOP
+	#add_child (_book_container)
 	
 	# Лейбл книги.
-	_book_label = Label.new ()
-	_book_label.add_theme_font_override ("font", T00_Globals.LABEL_FONT_FACE_USUAL)
+	_book_label = RichTextLabel.new ()
+	_book_label.scroll_following = true
+	_book_label.add_theme_font_override ("normal_font", T00_Globals.LABEL_FONT_FACE_USUAL)
 	_book_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_book_label.size = Vector2 (
 		viewport_size.x - STORY_LABEL_BORDER_HORIZONTAL * 2,
 		viewport_size.y - TOP_PANEL_HEIGHT - ACTION_PANEL_HEIGHT - STORY_LABEL_BORDER_VERTICAL * 2
 	)
-	_book_label.text = "This is a text for the book label."
+	#var string: String = ""
+	#var i: int = 0
+	#while i < 100:
+		#string += "This is a text for the book label. "
+		#i += 1
+	#_book_label.text = string
+	#_book_label.text = "This is a text for the book label."
+	_book_label.text = _game._narrator.get_book_text ()
 	_book_container.add_child (_book_label)
 	
 	_fade_ratio = .0
@@ -116,6 +131,15 @@ func _ready ():
 
 
 func _process (delta: float):
+	
+	if Input.is_physical_key_pressed (KEY_TAB) && !_tab_is_pressed:
+		_tab_is_pressed = true
+		if _book_container.get_parent () != self:
+			add_child (_book_container)
+	elif _tab_is_pressed && !Input.is_physical_key_pressed (KEY_TAB):
+		_tab_is_pressed = false
+		if _book_container.get_parent () == self:
+			remove_child (_book_container)
 	
 	match _state:
 		STATE_FADE_IN:
@@ -143,6 +167,8 @@ func _process (delta: float):
 				_entered_node = _cur_beat._action_tree
 				# Обновляем панель действий.
 				update_action_panel ()
+				# Устанавливаем текст лейбла книги.
+				_book_label.text = _game._narrator.get_book_text ()
 				# Начинаем делать текст видимым.
 				_state = STATE_FADE_IN
 			
@@ -331,4 +357,9 @@ func on_path_label_pressed ():
 	else:
 		pass
 
+
+func on_book_container_draw ():
+	
+	var view_size: Vector2 = get_viewport_rect ().size
+	_book_container.draw_rect (Rect2 (Vector2 (), view_size), Color (0, 0, 0, 1))
 

@@ -730,7 +730,7 @@ func generate_flow_for_asking_about_container ():
 	s1 += "продолжил:" if introducer_is_male else "продолжила:"
 	
 	var s2: String = ""
-	s2 += "\n\n — "
+	s2 += " — "
 	s2 += "Мистер " if x_is_male else "Миссис "
 	s2 += story._x._last_name.get_form_for (T00_LastNameUsage.create_initial ())
 	s2 += " пожелал" if x_is_male else " пожелала"
@@ -847,6 +847,14 @@ func generate_flow_for_signing_document ():
 	var introducer_is_male: bool = get_introducer_is_male ()
 	
 	var s1: String = ""
+	
+	if _introducer_have_seen_flashback:
+		s1 += " — Нет, нет, всё в порядке, — торопливо "
+		s1 += "ответил" if hero_is_male else "ответила"
+		s1 += " я и, бросив беглый взгляд на офицера, "
+		s1 += "вернулся" if hero_is_male else "вернулась"
+		s1 += " к документу.\n\n"
+	
 	if _hero_read_document:
 		s1 += "Всё сходилось. Я "
 		s1 += "взял" if hero_is_male else "взяла"
