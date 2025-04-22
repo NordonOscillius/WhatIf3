@@ -137,7 +137,7 @@ func generate_flow_for_exposition ():
 	s_lady_danger_1 += ", — она опасна. К ней могут приближаться лишь посвященные маги. И еще те, кто собирается принести ей жертву."
 	
 	var s_lady_danger_2: String = ""
-	s_lady_danger_2 += "\n\nЯ медленно и с опаской "
+	s_lady_danger_2 += "Я медленно и с опаской "
 	s_lady_danger_2 += "выбрался" if hero_is_male else "выбралась"
 	s_lady_danger_2 += " из тени темного истукана."
 	s_lady_danger_2 += "\n\n — А зачем надо приносить ей жертву?"
@@ -185,7 +185,48 @@ func generate_flow_for_exposition ():
 	s_cleft_2 += " на меня:"
 	s_cleft_2 += "\n\n — Пригнись и следуй за мной. Сейчас мы полезем через кусты. Этот путь замаскирован."
 	
-	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2]
+	var s_missing_1: String = ""
+	s_missing_1 += "Мы двинулись вперед, продираясь сквозь цепкую зелень. Оказалось, что в каменном кольце была незаметная брешь — узкий и низкий проход, скрытый от посторонних глаз живой изгородью кустарника. На другой стороне нас встретили еще более плотные заросли; "
+	# Дэвид.
+	s_missing_1 += x_nickname_nomimative
+	s_missing_1 += " полз" if x_is_male else " ползла"
+	s_missing_1 += " впереди, указывая мне путь. Выбравшись из очередного куста, "
+	s_missing_1 += "он выпрямился, а потом встал как вкопанный." if x_is_male else "она выпрямилась, а потом встала как вкопанная."
+	s_missing_1 += "\n\n — О, нет! — "
+	s_missing_1 += "воскликнул он." if x_is_male else "воскликнула она."
+	
+	var s_missing_2: String = ""
+	s_missing_2 += "Посреди лужайки лежала куча еловых веток — по всей видимости, всё, что осталось от шалаша Призрака. "
+	# Девид.
+	s_missing_2 += x_nickname_nomimative.capitalize ()
+	s_missing_2 += " подбежал" if x_is_male else " подбежала"
+	s_missing_2 += " к останкам жилища и "
+	s_missing_2 += "стал" if x_is_male else "стала"
+	s_missing_2 += " копаться в ветках."
+	
+	var s_missing_3: String = ""
+	s_missing_3 += " — Она забрала его! — "
+	s_missing_3 += "Он достал" if x_is_male else "Она достала"
+	s_missing_3 += " что-то из-под веток и "
+	s_missing_3 += "положил" if x_is_male else "положила"
+	s_missing_3 += " к себе в карман, а потом "
+	s_missing_3 += "посмотрел" if x_is_male else "посмотрела"
+	s_missing_3 += " на меня. — Леди Ночь забрала Призрака и держит его в плену!"
+	
+	var s_missing_4: String = ""
+	s_missing_4 += "Я ошалело "
+	s_missing_4 += "уставился" if hero_is_male else "уставилась"
+	s_missing_4 += " на него:" if x_is_male else " на нее:"
+	s_missing_4 += "\n\n — Откуда ты узнал?" if x_is_male else " — Откуда ты узнала?"
+	s_missing_4 += "\n — Призрак оставил мне знак. Секретный знак. На случай, если что-то пойдет не так. А теперь он в плену у Леди, в другом измерении."
+	s_missing_4 += "\n — Что это за знак?"
+	s_missing_4 += "\n — Я не могу тебе сказать, — "
+	s_missing_4 += "замялся " if x_is_male else "замялась "
+	# Девид.
+	s_missing_4 += x_nickname_nomimative
+	s_missing_4 += ". — На то он и секретный: его знаем только я и Призрак."
+	
+	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2, s_missing_3, s_missing_4]
 	_flow_action_tree = null
 	#_flow_action_tree = story.create_action_tree ()
 
