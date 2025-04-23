@@ -741,7 +741,7 @@ func generate_flow_for_asking_about_container ():
 	s2 += story._hero._last_name.get_form_for (T00_LastNameUsage.create_initial ())
 	s2 += ", кем вы и являетесь, "
 	s2 += "стал " if hero_is_male else "стала "
-	s2 += "его наследником." if x_is_male else "ее наследницей."
+	s2 += "его наследником." if hero_is_male else "ее наследницей."
 	s2 += "\n"
 	
 	s2 += " — У "

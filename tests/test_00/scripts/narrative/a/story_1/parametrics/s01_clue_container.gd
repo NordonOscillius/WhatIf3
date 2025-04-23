@@ -154,6 +154,16 @@ func get_word_gender () -> int:
 	return T00_WordGender.UNKNOWN
 
 
+## Возвращает глагол, соответствующий помещению в контейнер предмета, который для него предназначен. Например, "завернуть" или "положить" (в контейнер).
+func get_place_into_verb () -> T00_Verb:
+	
+	var type: S01_StringParamValue = get_container_type ()
+	if type.equals (S01_ClueContainerType.CYLINER_BUNDLE):
+		return T00_A_Globals.words.zavernut
+	
+	return T00_A_Globals.words.polozhit
+
+
 # ==================================================
 # ==================== SHORTCUTS ===================
 # ==================================================

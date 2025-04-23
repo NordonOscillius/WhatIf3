@@ -276,7 +276,9 @@ func generate_flow_for_exposition ():
 	# Девидом.
 	s_sacrifice_4 += x_nickname_instrumental
 	s_sacrifice_4 += " стояли на вершине холма, рядом с камнем Леди Ночи. В руках у нас было по охапке колючих веточек."
-	s_sacrifice_4 += "\n\n — Ты когда-нибудь делал подношение богам? — "
+	s_sacrifice_4 += "\n\n — Ты когда-нибудь "
+	s_sacrifice_4 += "делал" if hero_is_male else "делала"
+	s_sacrifice_4 += " подношение богам? — "
 	s_sacrifice_4 += "спросил" if x_is_male else "спросила"
 	s_sacrifice_4 += " у меня "
 	# Девид.
@@ -409,7 +411,7 @@ func generate_flow_for_exposition ():
 	s_symbol_5 += ". — Тогда теперь это будет наш с тобой секретный символ. Если я захочу тайно связаться с тобой, то пришлю его тебе в любом виде: нарисую на бумаге или на дереве, или нацарапаю на железе. Так, чтобы никто не догадался. Отправлю почтой или передам через другого человека. И ты делай так же, если захочешь связаться со мной."
 	
 	var s_symbol_6: String = ""
-	s_symbol_6 += "Подумав, он добавил:" if x_is_male else "\n\nПодумав, она добавила:"
+	s_symbol_6 += "Подумав, он добавил:" if x_is_male else "Подумав, она добавила:"
 	s_symbol_6 += "\n\n— Но пользоваться символом можно только в случае крайней необходимости."
 	
 	var s_symbol_7: String = ""
@@ -438,7 +440,9 @@ func generate_flow_for_exposition ():
 	
 	var s_ghost_2: String = ""
 	s_ghost_2 += "Я присел" if hero_is_male else "Я присела"
-	s_ghost_2 += " вместе с ним, ничего не понимая, и "
+	s_ghost_2 += " вместе с "
+	s_ghost_2 += "ним" if x_is_male else "ней"
+	s_ghost_2 += ", ничего не понимая, и "
 	s_ghost_2 += "спросил:" if hero_is_male else "спросила:"
 	s_ghost_2 += "\n\n — И теперь мы пойдем за ним? Где он?"
 	s_ghost_2 += "\n — Леди оставила его где-то в лесу, совсем недалеко от нас. Он вот-вот должен появиться."
@@ -564,7 +568,10 @@ func generate_flow_for_exposition ():
 	s_street_2 += "смотрел" if introducer_is_male else "смотрела"
 	s_street_2 += " на меня. Заметив мой взгляд, "
 	s_street_2 += "он подошел к окну и опустил жалюзи." if introducer_is_male else "она подошла к окну и опустила жалюзи."
-	s_street_2 += "\n\nЯ положил " if hero_is_male else "\n\nЯ положила "
+	s_street_2 += "\n\nЯ "
+	s_street_2 += story._clue_container.get_place_into_verb ().get_form (T00_WordTense.PAST, T00_WordPerson.FIRST, T00_WordGender.MASCULINE if hero_is_male else T00_WordGender.FEMININE, T00_WordNumber.SINGLE)
+	s_street_2 += " "
+	#s_street_2 += "\n\nЯ положил " if hero_is_male else "\n\nЯ положила "
 	# жетон.
 	s_street_2 += S01_ItemType.get_description_short (story._clue_container._clue_item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
 	s_street_2 += " в "
