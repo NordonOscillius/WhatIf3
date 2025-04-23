@@ -71,6 +71,7 @@ func generate_flow_for_exposition ():
 	var story: S01_Story = T00_A_Globals.story
 	var x_is_male: bool = get_x_is_male ()
 	var hero_is_male: bool = get_hero_is_male ()
+	var introducer_is_male: bool = get_introducer_is_male ()
 	
 	var x_nickname_phrase: T00_SimplePhrase = get_x_to_hero_relation_nick_or_name_phrase ()
 	var x_nickname_nomimative: String = x_nickname_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE))
@@ -87,6 +88,8 @@ func generate_flow_for_exposition ():
 	var x_relation_accusative: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
 	var x_relation_instrumental: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.INSTRUMENTAL, T00_WordNumber.SINGLE))
 	var x_relation_prepositional: String = x_relation_phrase.get_form_for (T00_NounUsage.new ().setup (T00_WordCase.PREPOSITIONAL, T00_WordNumber.SINGLE))
+	
+	var hero_name_nominative: String = story._hero._first_name.get_form (T00_WordCase.NOMINATIVE, T00_WordNumber.SINGLE)
 	
 	var s_hill: String = ""
 	s_hill += "Вооруженные свежесрезанными ветками-арбалетами, мы с "
@@ -442,18 +445,134 @@ func generate_flow_for_exposition ():
 	
 	var s_ghost_3: String = ""
 	s_ghost_3 += "Поднявшийся ветер зашумел листвой и травой. Так и сидя на корточках, мы с "
-	#s_ghost_3 += "Девидом"
+	# Девидом.
 	s_ghost_3 += x_nickname_instrumental
 	s_ghost_3 += " в ожидании смотрели в сторону леса; но никто не появлялся. Внезапно "
-	#s_ghost_3 += "Девид"
+	# Девид.
 	s_ghost_3 += x_nickname_nomimative
 	s_ghost_3 += " вскочил и бросился к деревьям." if x_is_male else " вскочила и бросилась к деревьям."
 	s_ghost_3 += "\n\n — Призрак! — "
 	s_ghost_3 += "выкрикрул он." if x_is_male else "выкрикрула она."
 	s_ghost_3 += "\n\n"
-	s_ghost_3 += "Я побежал вслед за ним." if hero_is_male else "Я побежала вслед за ним."
+	s_ghost_3 += "Я побежал" if hero_is_male else "Я побежала"
+	s_ghost_3 += " вслед за "
+	s_ghost_3 += "ним" if x_is_male else "ней"
+	s_ghost_3 += ", на противоположную сторону лужайки."
 	
-	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2 + "\n\n" + s_missing_3, s_missing_4, s_sacrifice_1, s_sacrifice_2, s_sacrifice_3, s_sacrifice_4, s_sacrifice_5, s_sacrifice_6, s_sacrifice_7, s_waiting, s_symbol_1, s_symbol_2, s_symbol_3, s_symbol_4, s_symbol_5, s_symbol_6, s_symbol_7, s_ghost_1, s_ghost_2, s_ghost_3]
+	var s_ghost_4: String = ""
+	# Девид.
+	s_ghost_4 += x_nickname_nomimative.capitalize ()
+	s_ghost_4 += " стоял" if x_is_male else " стояла"
+	s_ghost_4 += " у кромки деревьев и, как мне показалось, "
+	s_ghost_4 += "смотрел" if x_is_male else "смотрела"
+	s_ghost_4 += " куда-то в глубину леса."
+	s_ghost_4 += "\n\n — Призрак, ты вернулся! С тобой всё в порядке?"
+	
+	var s_ghost_5: String = ""
+	s_ghost_5 += "Я вгляделся" if hero_is_male else "Я вгляделась"
+	s_ghost_5 += " в лесную чащу, но ничего не "
+	s_ghost_5 += "увидел." if hero_is_male else "увидела."
+	s_ghost_5 += "\n\n — Где он? — "
+	s_ghost_5 += "спросил я у " if hero_is_male else "спросила я у "
+	# Девида.
+	s_ghost_5 += x_nickname_genitive
+	s_ghost_5 += "."
+	s_ghost_5 += "\n\nТот обернулся и как-то странно посмотрел на меня." if x_is_male else "\n\nТа обернулась и как-то странно посмотрела на меня."
+	s_ghost_5 += "\n\n — Вот, — ответил он" if x_is_male else "\n\n — Вот, — ответила она"
+	s_ghost_5 += ", показывая себе за спину и снова поворачиваясь лицом к лесу. — Призрак, это "
+	# Грегори.
+	s_ghost_5 += hero_name_nominative
+	s_ghost_5 += ". "
+	s_ghost_5 += hero_name_nominative
+	s_ghost_5 += ", знакомься: это Призрак."
+	
+	var s_ghost_6: String = ""
+	s_ghost_6 += "Я забыл" if hero_is_male else "Я забыла"
+	s_ghost_6 += " про нашу игру; в моих мыслях не было и намека на то, чтобы подыгрывать "
+	# Девиду.
+	s_ghost_6 += x_nickname_dative
+	s_ghost_6 += "."
+	s_ghost_6 += "\n\n — Он что, воображаемый? — "
+	s_ghost_6 += "спросил я у " if hero_is_male else "спросила я у "
+	s_ghost_6 += "него." if x_is_male else "нее."
+	
+	var s_ghost_7: String = ""
+	# Девид.
+	s_ghost_7 += x_nickname_nomimative.capitalize ()
+	s_ghost_7 += " снова "
+	s_ghost_7 += "обернулся" if x_is_male else "обернулась"
+	s_ghost_7 += " ко мне. Выражение "
+	s_ghost_7 += "его" if x_is_male else "ее"
+	s_ghost_7 += " лица казалось растерянным. "
+	s_ghost_7 += "Он посмотрел" if x_is_male else "Она посмотрела"
+	s_ghost_7 += " сначала на меня, затем на Призрака и, осекшись, "
+	s_ghost_7 += "рассмеялся:" if x_is_male else "рассмеялась:"
+	s_ghost_7 += "\n\n — Воображаемый! Да, воображаемый, — повернув лицо в сторону леса, продолжая смеяться, "
+	s_ghost_7 += "он как будто бы кивнул" if x_is_male else "она как будто бы кивнула"
+	s_ghost_7 += " невидимому собеседнику."
+	
+	var s_street_1: String = ""
+	s_street_1 += "Жирная капля только что начавшегося дождя стукнула меня прямо в макушку. Я так и "
+	s_street_1 += "стоял" if hero_is_male else "стояла"
+	s_street_1 += " у входа в полицейский участок "
+	match story._clue_container.get_container_type ().value:
+		S01_ClueContainerType.TRANSPARENT_BAG.value:
+			s_street_1 += "с пакетом"
+		S01_ClueContainerType.PAPER_BAG.value:
+			s_street_1 += "с пакетом"
+		S01_ClueContainerType.CYLINER_BUNDLE.value:
+			s_street_1 += "со свертком"
+		S01_ClueContainerType.BOX.value:
+			s_street_1 += "с коробкой"
+	
+	s_street_1 += " в руках, разглядывая "
+	
+	match story._clue_container._clue_item.get_item_type ().value:
+		S01_ItemType.TOKEN_MARK.value:
+			s_street_1 += "жетон"
+		S01_ItemType.SHAPED_STONE.value:
+			s_street_1 += "фигурный камень"
+		S01_ItemType.SHEET_OF_PAPER.value:
+			s_street_1 += "страницу"
+		S01_ItemType.STONE_BOX.value:
+			s_street_1 += "шкатулку"
+	
+	s_street_1 += " с символом "
+	
+	match story._clue_container._clue_item.get_secret_sign_type ().value:
+		S01_SecretSignType.EYE.value:
+			s_street_1 += "глаза. Четыре ресницы сверху, три снизу."
+		S01_SecretSignType.SPIRAL.value:
+			s_street_1 += "спирали. Прямая черта от центра, проходящая ровно до третьего витка."
+		S01_SecretSignType.DICE.value:
+			s_street_1 += "кубика. Двойка сверху, тройка слева, пятерка справа."
+	
+	s_street_1 += " За всё это время мы с "
+	# Девидом.
+	s_street_1 += x_nickname_instrumental
+	s_street_1 += " ни разу не пользовались секретным знаком; да и "
+	s_street_1 += "мог" if hero_is_male else "могла"
+	s_street_1 += " ли я подумать, что случай крайней необходимости может наступить?"
+	
+	var s_street_2: String = ""
+	s_street_2 += "Я поднял" if hero_is_male else "Я подняла"
+	s_street_2 += " взгляд к окну кабинета, из которого "
+	s_street_2 += "вышел" if hero_is_male else "вышла"
+	s_street_2 += " пару минут назад. Лейтенант "
+	s_street_2 += "стоял" if introducer_is_male else "стояла"
+	s_street_2 += " неподвижно, сложив руки за спиной, и "
+	s_street_2 += "смотрел" if introducer_is_male else "смотрела"
+	s_street_2 += " на меня. Заметив мой взгляд, "
+	s_street_2 += "он подошел к окну и опустил жалюзи." if introducer_is_male else "она подошла к окну и опустила жалюзи."
+	s_street_2 += "\n\nЯ положил " if hero_is_male else "\n\nЯ положила "
+	# жетон.
+	s_street_2 += S01_ItemType.get_description_short (story._clue_container._clue_item.get_item_type ()).get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
+	s_street_2 += " в "
+	# коробку.
+	s_street_2 += story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
+	s_street_2 += " и отправился домой." if hero_is_male else " и отправилась домой."
+	
+	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2 + "\n\n" + s_missing_3, s_missing_4, s_sacrifice_1, s_sacrifice_2, s_sacrifice_3, s_sacrifice_4, s_sacrifice_5, s_sacrifice_6, s_sacrifice_7, s_waiting, s_symbol_1, s_symbol_2, s_symbol_3, s_symbol_4, s_symbol_5, s_symbol_6, s_symbol_7, s_ghost_1, s_ghost_2, s_ghost_3, s_ghost_4, s_ghost_5, s_ghost_6, s_ghost_7, s_street_1, s_street_2]
 	_flow_action_tree = null
 	#_flow_action_tree = story.create_action_tree ()
 
@@ -501,6 +620,15 @@ func get_x_is_male () -> bool:
 	var is_male: bool = S01_Gender.MALE.equals (x_gender)
 	if !is_male && !S01_Gender.FEMALE.equals (x_gender):
 		printerr ("Unknown X gender.")
+	return is_male
+
+
+func get_introducer_is_male () -> bool:
+	
+	var introducer_gender: S01_ParamValue = T00_A_Globals.story._introducer.get_gender ()
+	var is_male: bool = S01_Gender.MALE.equals (introducer_gender)
+	if !is_male && !S01_Gender.FEMALE.equals (introducer_gender):
+		printerr ("Unknown introducer gender.")
 	return is_male
 
 
