@@ -47,6 +47,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 		# Если необходимо, переключаем _state в следующее значение.
 		if _flow_next_state >= 0:
 			_state = _flow_next_state
+			_flow_next_state = -1
 		
 		return beat
 	
@@ -228,7 +229,7 @@ func generate_flow_for_exposition ():
 	s_missing_4 += "Я ошалело "
 	s_missing_4 += "уставился" if hero_is_male else "уставилась"
 	s_missing_4 += " на него:" if x_is_male else " на нее:"
-	s_missing_4 += "\n\n — Откуда ты узнал?" if x_is_male else " — Откуда ты узнала?"
+	s_missing_4 += "\n\n — Откуда ты узнал?" if x_is_male else "\n\n — Откуда ты узнала?"
 	s_missing_4 += "\n — Призрак оставил мне знак. Секретный знак. На случай, если что-то пойдет не так. А теперь он в плену у Леди, в другом измерении."
 	s_missing_4 += "\n — Что это за знак?"
 	s_missing_4 += "\n — Я не могу тебе сказать, — "

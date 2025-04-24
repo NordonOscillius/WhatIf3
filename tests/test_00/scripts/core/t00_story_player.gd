@@ -62,6 +62,8 @@ func _ready ():
 	
 	# Получаем первый бит истории от Повествователя.
 	_cur_beat = _game._narrator.get_next_beat (null)
+	# Если первый же бит истории содержит дерево действий, устанавливаем текущую ноду в корень дерева.
+	_entered_node = _cur_beat._action_tree
 	
 	# Центральный лейбл истории.
 	_story_label = Label.new ()
@@ -128,6 +130,9 @@ func _ready ():
 	
 	_game._viewport.size_changed.connect (on_viewport_size_changed)
 	on_viewport_size_changed ()
+	
+	# Debug.
+	update_action_panel ()
 
 
 func _process (delta: float):

@@ -173,15 +173,17 @@ func get_or_create_document () -> S01_Document:
 
 func get_template () -> S01_TextTemplate:
 	
-	match get_param (PNAME__INTRODUCER_TYPE).get_value_variant ():
-		S01_IntroducerType.POLICE_OFFICER.value:
-			return S01_PoliceTemplate.new ()
-		S01_IntroducerType.COURIER.value:
-			return S01_PoliceTemplate.new ()
-			#return S01_CourierTemplate.new ()
-		S01_IntroducerType.STRANGER.value:
-			return S01_PoliceTemplate.new ()
-			#return S01_StrangerTemplate.new ()
+	return S01_TutorialTemplate.new ()
+	
+	#match get_param (PNAME__INTRODUCER_TYPE).get_value_variant ():
+		#S01_IntroducerType.POLICE_OFFICER.value:
+			#return S01_PoliceTemplate.new ()
+		#S01_IntroducerType.COURIER.value:
+			#return S01_PoliceTemplate.new ()
+			##return S01_CourierTemplate.new ()
+		#S01_IntroducerType.STRANGER.value:
+			#return S01_PoliceTemplate.new ()
+			##return S01_StrangerTemplate.new ()
 	
 	printerr ("Unknown introducer type.")
 	return null

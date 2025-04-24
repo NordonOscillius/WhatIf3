@@ -4,20 +4,27 @@ class_name T00_Action extends T00_ActionNode
 ## Экземпляр этого класса НЕ ДОЛЖЕН содержать потомков (_children.size () должен быть равен нулю).
 
 
+static var TUT_SKIP: StringName = &"tut_skip"
+static var TUT_CONTINUE: StringName = &"tut_continue"
+
 static var GREET: StringName = &"greet"
 static var INSPECT: StringName = &"inspect"
 static var COME_UP: StringName = &"come_up"
 static var ASK_ABOUT_CLUE_CONTAINER: StringName = &"ask_about_clue_container"
 static var OPEN: StringName = &"open"
 static var SIGN: StringName = &"sign"
+static var PICK_UP: StringName = &"pick_up"
 
 static var _names_by_type: Dictionary = {
+	TUT_SKIP: "пропустить",
+	TUT_CONTINUE: "продолжить",
 	GREET: "поздороваться",
 	INSPECT: "осмотреть",
 	COME_UP: "подойти",
 	ASK_ABOUT_CLUE_CONTAINER: "спросить, что внутри",
 	OPEN: "открыть",
-	SIGN: "подписать"
+	SIGN: "подписать",
+	PICK_UP: "взять"
 }
 
 var _type: StringName

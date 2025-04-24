@@ -104,6 +104,7 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 		# Если необходимо, переключаем _state в следующее значение.
 		if _flow_next_state >= 0:
 			_state = _flow_next_state
+			_flow_next_state = -1
 		
 		return beat
 	
