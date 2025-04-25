@@ -2,7 +2,10 @@ class_name S01_FlashbackTemplate extends S01_TextTemplate
 
 
 static var STATE_EXPOSITION: int = 0
+static var STATE_EXIT: int = 1
 
+
+var _main_menu_scene: PackedScene = preload ("res://tests/test_00/scenes/t00_main_menu.tscn")
 
 var _state: int = STATE_EXPOSITION
 
@@ -51,9 +54,12 @@ func get_next_beat (action: T00_Action = null) -> T00_Beat:
 		
 		return beat
 	
-	printerr ("Bad state.")
+	#printerr ("Bad state.")
 	beat._story_text = "Ошибка в генерации текста."
 	beat._action_tree = null
+	var error: int = T00_Globals.game.get_tree ().change_scene_to_packed (_main_menu_scene)
+	if error != OK:
+		print ("ERROR: ", error)
 	return beat
 
 
@@ -580,8 +586,15 @@ func generate_flow_for_exposition ():
 	s_street_2 += story._clue_container.get_description_short ().get_form_for (T00_NounUsage.new ().setup (T00_WordCase.ACCUSATIVE, T00_WordNumber.SINGLE))
 	s_street_2 += " и отправился домой." if hero_is_male else " и отправилась домой."
 	
-	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2 + "\n\n" + s_missing_3, s_missing_4, s_sacrifice_1, s_sacrifice_2, s_sacrifice_3, s_sacrifice_4, s_sacrifice_5, s_sacrifice_6, s_sacrifice_7, s_waiting, s_symbol_1, s_symbol_2, s_symbol_3, s_symbol_4, s_symbol_5, s_symbol_6, s_symbol_7, s_ghost_1, s_ghost_2, s_ghost_3, s_ghost_4, s_ghost_5, s_ghost_6, s_ghost_7, s_street_1, s_street_2]
+	var s_delimiter: String = "\no - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o - o\n"
+	
+	var s_ending_1: String = ""
+	s_ending_1 += "На этом месте история обрывается. Героя могло ждать куда больше приключений, если бы не амбиции автора."
+	s_ending_1 += "\n\nКликни по экрану, чтобы перейти в главное меню."
+	
+	_flow_sentences = [s_hill, s_stones_1, s_stones_2, s_top_1, s_lady_danger_1, s_lady_danger_2, s_trail_1, s_trail_2, s_cleft_1, s_cleft_2, s_missing_1, s_missing_2 + "\n\n" + s_missing_3, s_missing_4, s_sacrifice_1, s_sacrifice_2, s_sacrifice_3, s_sacrifice_4, s_sacrifice_5, s_sacrifice_6, s_sacrifice_7, s_waiting, s_symbol_1, s_symbol_2, s_symbol_3, s_symbol_4, s_symbol_5, s_symbol_6, s_symbol_7, s_ghost_1, s_ghost_2, s_ghost_3, s_ghost_4, s_ghost_5, s_ghost_6, s_ghost_7, s_street_1, s_street_2, s_delimiter, s_ending_1]
 	_flow_action_tree = null
+	_flow_next_state = STATE_EXIT
 	#_flow_action_tree = story.create_action_tree ()
 
 
